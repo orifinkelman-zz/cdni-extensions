@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-finkelman-cdni-rr-sva-extensions" ipr="trust200902">
+<rfc category="std" docName="draft-finkelman-cdni-rr-sva-extensions-02" ipr="trust200902">
   <front>
     <title abbrev="CDNI SVA Requst Routing Extensions">CDNI SVA Request Routing Extensions</title>
 
