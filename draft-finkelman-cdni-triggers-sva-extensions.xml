@@ -1,0 +1,1259 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="4"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<rfc category="std" docName="draft-finkelman-cdni-triggers-sva-extensions-02" ipr="trust200902">
+  <front>
+    <title abbrev="CDNI Triggers Interface SVA Extensions">CDNI Triggers Interface SVA Extensions</title>
+
+    <author fullname="Ori Finkelman" initials="O." surname="Finkelman">
+      <organization>Qwilt</organization>
+
+
+      <address>
+        <postal>
+          <street>6, Ha'harash</street>
+
+          <city>Hod HaSharon</city>
+
+          <region></region>
+
+          <code>4524079</code>
+
+          <country>Israel</country>
+        </postal>
+
+        <phone>+972-72-2221647</phone>
+
+        <email>orif@qwilt.com</email>
+      </address>
+    </author>
+
+    <author fullname="Sanjay Mishra" initials="S." surname="Mishra">
+      <organization>Verizon</organization>
+
+      <address>
+        <postal>
+          <street>13100 Columbia Pike</street>
+
+          <city>Silver Spring</city>
+
+          <region>MD</region>
+
+          <code>20904</code>
+
+          <country>USA</country>
+        </postal>
+
+        <phone></phone>
+
+        <email>sanjay.mishra@verizon.com</email>
+      </address>
+    </author>
+    
+    <date/>
+
+    <abstract>
+      <t>The Open Caching working group of the Streaming Video Alliance is focused 
+         on the delegation of video delivery request from commercial CDNs to a 
+         caching layer at the ISP. In that aspect, Open Caching is a specific use
+         case of CDNI, where the commercial CDN is the upstream CDN (uCDN) and the
+         ISP caching layer is the downstream CDN (dCDN).</t>
+    </abstract>
+
+    <note title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+         "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+         document are to be interpreted as described in <xref
+         target="RFC2119">RFC 2119</xref>.</t>
+    </note>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>This document defines the objects and extensions needed for Open Caching content management operations. 
+         For that purpose it extends CDNI Control Interface/Triggers <xref target="RFC8007"/>.
+         The basic operations are the ones defined in the RFC (i.e. purge, invalidate, pre-position).
+         For consistency, this document follows the CDNI notation of uCDN 
+         (the commercial CDN) and dCDN (the ISP caching layer). When using the term CP 
+         in this document we refer to a video content provider.</t>
+
+      <t>The CDNI metadata interface is described in <xref target="RFC8006"/>.</t>
+      <t>The CDNI footprint and capability interface is described in <xref target="RFC8008"/>.</t>
+      <t>The CDNI control interface / triggers is described in <xref target="RFC8007"/>.</t>
+
+      <section anchor="terminology" title="Terminology">
+        <t>This document reuses the terminology defined in <xref
+        target="RFC6707"/>, <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
+
+        <t>Additionally, the following terms are used throughout this document
+          and are defined as follows:</t>
+        <t>
+          <list style="symbols">
+            <t>SVA - Streaming Video Alliance</t>
+            <t>OC - SVA Open Caching</t>            
+            <t>CP - Content Provider</t>           
+          </list>
+        </t>
+      </section>
+      
+    </section>
+    
+    <section title="Interfaces Extensions Overview">
+      <t>
+         This document defines extensions for the CDNI Control Interface / Triggers <xref target="RFC8007"/> 
+         and defines FCI objects as per the CDNI Footprint and Capabilities Interface <xref target="RFC8008"/>.
+      </t>
+         
+      <section title="CDNI Control Interface / Triggers Extensions">
+        <section title="CI/T Objects">
+          <t>
+             This document specifies version 2 of the CI/T objects in order to support version 2 of the 
+             Trigger Specification as required below in <xref target="trigger-spec"/>.                  
+           </t>
+        </section>              
+
+        <section anchor="trigger-spec" title="Trigger Specification">
+          <t>
+             This document specifies version 2 of the Trigger Specification which is an enhancement of the Trigger 
+             Specification that includes all properties as defined in section 5.2.1 of <xref target="RFC8007"/> as 
+             well as the additional properties required by the use cases listed below in <xref target="content-selection"/>.                  
+           </t>
+        </section>              
+      
+        <section anchor="content-selection" title="Content Selection">
+          <t>
+             The trigger specification as defined in section 5.2.1 of <xref target="RFC8007"/> provides means to 
+             select content objects by matching a full content URL or patterns with wildcards. 
+             The Open Caching specifications requires two additional selection options.
+          </t>
+          <t><list style="symbols">
+             <t>
+               Regular Expression - Using regex a uCDN can create more complex rules to select the content objects 
+               for the cases of invalidation and purge. For example, purging specific content within a specific directory path. 
+             </t>
+             <t>
+               Content Playlist - Using video playlist files, a uCDN can trigger an operation that will be applied to 
+               a collection of distinct media files in a format that is natural for a streaming video content provider. 
+               A playlist may have several formats, specifically HTTP Live Streaming (HLS) *.m3u8 manifest <xref target="RFC8216"/>, 
+               Microsoft Smooth Streaming (MSS) *.ismc client manifest <xref target="MSS"/>, 
+               and Dynamic Adaptive Streaming over HTTP (DASH) *.mpd file <xref target="MPEG-DASH">[ISO/IEC 23009-1:2014]</xref>.
+             </t>     
+          </list></t>
+        </section>
+
+        <section anchor="trigger-extensibility" title="Trigger Extensibility">
+          <t>
+             The CDNI Control Interface / Triggers <xref target="RFC8007"/> defines a set of objects 
+             used by the trigger commands. These objects cover the basic trigger functionality. 
+             The specification of the Open Caching architecture requires additional properties to allow 
+             a more granular trigger execution operation. In  this document we define a mechanism for a generic 
+             trigger extension object wrapper for managing individual CDNI trigger extensions in an opaque manner, 
+             as well as an initial set of trigger extension objects.
+          </t>
+           
+          <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> under the namespace CIT 
+             for the initial set of trigger extension types:
+            <list style="symbols">
+              <t>CIT.LocationPolicy (for controlling the locations in which the trigger is executed)</t>
+              <t>CIT.TimePolicy (for scheduling a trigger to run in a specific time window)</t>            
+            </list>
+          </t>
+
+             
+           <t>Example use cases<list style="symbols">
+              <t>Pre-position with cache location policy</t>
+              <t>Purge content with cache location policy</t>
+              <t>Pre-position at a specific time</t>
+              <t>Purge by content acquisition time (e.g. purge all content acquired in the past X hours)</t>
+           </list></t>         
+        </section>
+        
+      </section>
+      
+      <section title="CDNI Footprint and Capabilities Interface Extensions">
+        <t>
+          Extending the trigger mechanism with optional properties requires the ability for the 
+          dCDN to advertise which optional properties it supports.
+        </t>
+        <t>
+           The CDNI Footprint and Capabilities Interface <xref target="RFC8008"/> enables the dCDN to advertise the 
+           capabilities it supports across different footprints. This document introduces FCI objects to support the 
+           advertisement of these optional properties. 
+        </t>
+        
+        <t>Example use cases<list style="symbols">
+             
+          <t>Trigger types: Advertise which trigger types are supported by the dCDN. 
+             CDNI defines three trigger types (purge, invalidate, pre-position), 
+             but it does not necessarily mean that all dCDNs support all of them. 
+             The uCDN may prefer to work only with dCDN that support what the uCDN needs.</t>
+
+          <t>Content selection rule types: Advertise which selection types are supported. 
+             For example, if adding content regex as a means to match on content URLs, 
+             not all dCDN would support it. For playlist mapping, advertise which types and versions
+             of protocols are supported, e.g. HLS.vX/DASH.vY/MSS.vX, DASH templates. 
+             Note that the version string or schema are protocol specific.</t>
+
+          <t>Trigger extensions: Advertise which trigger extensions object types are supported 
+             by the dCDN.</t>
+                                 
+        </list></t>
+      </section>            
+    </section>
+    
+    <section  title="CI/T Version 2">
+      <t>
+         <xref target="RFC8007"/> does not define a version number and versioning scheme. 
+				 We, therefore, designate the interface and objects as defined in section 5 of <xref target="RFC8007"/> as version 1.
+         The following sections define version 2 of the CI/T objects and their properties as extensions of version 1.
+      </t>
+      <section anchor="cit-objects-v2" title="CI/T Objects V2">
+        <t>
+           Version 2 of the CI/T interface requires the support of the following objects:
+        </t>
+        <t><list style="symbols">
+           <t>
+              CI/T Commands v2: A trigger command request using the payload type ci-trigger-command.v2.  
+              Version 2 MUST only use "trigger.v2" objects as defined in <xref target="trigger-spec-v2"/>, instead of "trigger" objects. 
+              All other properties of the trigger command are as defined in section 5.1.1 of <xref target="RFC8007"/>. 
+           </t>
+           
+           <t>
+              Trigger Status Resource v2: A trigger status resource response using the payload type ci-trigger-status.v2.  
+              Version 2 MUST only use "trigger.v2" objects as defined in <xref target="trigger-spec-v2"/>, instead of a "trigger" object. 
+              All other properties of the trigger status are as defined in section 5.1.2 of <xref target="RFC8007"/>. 
+           </t>
+           
+           <t>
+              Trigger Collections: The payload type ci-trigger-collection is used with no changes and as defined in 5.1.3 of <xref target="RFC8007"/>. 
+           </t>
+        </list></t>
+        <t>Usage example of version 2 of trigger command</t>
+
+        <figure>
+          <artwork><![CDATA[
+  REQUEST:
+  
+      POST /triggers HTTP/1.1
+      User-Agent: example-user-agent/0.1
+      Host: triggers.dcdn.example.com
+      Accept: */*
+      Content-Type: application/cdni; ptype=ci-trigger-command.v2
+      {
+        "trigger.v2": { <properties of a trigger.v2 object> },
+        "cdn-path": [ "AS64496:1" ]
+      }
+      
+  RESPONSE:
+
+      HTTP/1.1 201 Created
+      Date: Wed, 04 May 2016 08:48:10 GMT
+      Content-Length: 467
+      Content-Type: application/cdni; ptype=ci-trigger-status.v2
+      Location: https://triggers.dcdn.example.com/triggers/0
+      Server: example-server/0.1
+      
+      {
+         "ctime": 1462351690,
+         "etime": 1462351698,
+         "mtime": 1462351690,
+         "status": "pending",       
+         "trigger.v2": { <properties of a trigger.v2 object> }
+      }
+       ]]></artwork>
+        </figure> 
+
+        <t>Usage example of version 2 of trigger status for the trigger created in the 
+           above trigger command example:</t>
+
+        <figure>
+          <artwork><![CDATA[
+  REQUEST:
+  
+      GET /triggers/0 HTTP/1.1
+      User-Agent: example-user-agent/0.1
+      Host: triggers.dcdn.example.com
+      Accept: */*
+  
+  RESPONSE:
+  
+      HTTP/1.1 200 OK
+      Content-Length: 467
+      Expires: Wed, 04 May 2016 08:49:10 GMT
+      Server: example-server/0.1
+      ETag: "6990548174277557683"
+      Cache-Control: max-age=60
+      Date: Wed, 04 May 2016 08:48:10 GMT
+      Content-Type: application/cdni; ptype=ci-trigger-status.v2
+
+      {
+         "ctime": 1462351690,
+         "etime": 1462351698,
+         "mtime": 1462351690,
+         "status": "pending",       
+         "trigger.v2": { <properties of a trigger.v2 object> }
+      }
+
+       ]]></artwork>
+        </figure>         
+      </section>
+         
+      <section anchor="trigger-spec-v2" title="Properties of CI/T Version 2 objects">
+        <t>
+					 Version 2 of the Trigger Object Specification adds the following properties on top of the existing properties of the 
+           trigger specification defined in section 5.2.1 of <xref target="RFC8007"/>. 
+        </t>
+
+        <t><list style="empty">
+          <t>Property: content.regexs<list style="empty">
+      
+            <t>Description: Regexs of content URLs to which the CI/T trigger command applies.</t>
+            
+            <t>Type: A JSON array of RegexMatch objects (see <xref target="regex-match"/>).</t>
+            
+            <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present and non-empty.</t>
+          </list></t>
+          
+          <t>Property: content.playlists<list style="empty">
+
+            <t>Description: Playlists of content the CI/T trigger command applies to.</t>
+
+            <t>Type: A JSON array of Playlist objects (see <xref target="playlist"/>).</t>
+
+            <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present and non-empty.</t>
+          </list></t>
+          
+           <t>Property: extensions<list style="empty">
+
+              <t>Description: Array of trigger extension data.</t>
+
+              <t>Type: Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).</t>
+
+              <t>Mandatory-to-Specify: No. The default is no extensions.</t>
+           </list></t> 
+
+        </list></t>
+            
+        <t>Example of an invalidation trigger.v2 with a list of regex objects, a list of playlist objects, and extensions:</t>
+      
+        <figure>
+          <artwork><![CDATA[
+{
+  "trigger.v2": {
+    "type": "invalidate",
+    "content.regexs": [ <list of RegexMatch objects> ],
+    "content.playlists": [ <list of Playlist objects> ],
+    "extensions": [ <list of GenericTriggerExtension objects ]
+  },
+  "cdn-path": [ "AS64496:1" ]
+}
+
+       ]]></artwork>
+        </figure>
+      </section>
+      
+      <section anchor="regex-match" title="RegexMatch">
+        <t>A RegexMatch consists of a regular expression string a URI is matched against, and flags describing the type of match. 
+           It is encoded as a JSON object with following properties:</t>
+        
+        <t><list style="empty">
+          <t>Property: regex<list style="empty">
+
+            <t>Description: A regular expression for URI matching. </t>
+
+            <t>Type: A regular expression to match against the URI, i.e against the path-absolute and the query string parameters <xref target="RFC3986"/>. 
+               The regular expression string MUST be compatible with <xref target="PCRE841">PCRE</xref>.</t>
+
+            <t>Note: Because '\' has special meaning in JSON <xref target="RFC8259"/> as the escape character within JSON strings, 
+               the regular expression character '\' MUST be escaped as '\\'.</t>
+
+            <t>Mandatory: Yes.</t>
+          </list></t>
+          <t>Property: case-sensitive<list style="empty">
+          
+            <t>Description: Flag indicating whether or not case-sensitive matching should be used. </t>
+            
+            <t>Type: JSON boolean. Either "true" (the matching is case sensitive) or "false" (the matching is case insensitive).</t>
+            
+            <t>Mandatory: No; default is case-insensitive match (i.e., a value of "false").</t>
+          </list></t>
+          <t>Property: match-query-string<list style="empty">
+          
+            <t>Description: Flag indicating whether to include the query part of the URI when comparing against the regex.</t>
+            
+            <t>Type: JSON boolean. Either "true" (the full URI, including the query part, should be compared against the regex)
+               or "false" (the query part of the URI should be dropped before comparison with the given regex).</t>
+            
+            <t>Mandatory: No; default is "false".  The query part of the URI MUST be dropped before comparison with the given regex. 
+               This makes the regular expression simpler and safer for cases in which the query parameters are not relevant for the match.</t>
+          </list></t>
+        </list></t>
+
+        <t>Example of a case sensitive, no query parameters, regex match against:<vspace />
+           "^(https:\/\/video\.example\.com)\/([a-z])\/movie1\/([1-7])\/*(index.m3u8|\d{3}.ts)$".</t>
+        <t>This regex matches URLs of domain video.example.com 
+           where the path structure is /(single lower case letter)/(name-of-title)/(single digit between 1 to 7)/(index.m3u8 or a 3 digit number with ts extension).
+           For example: https://video.example.com/d/movie1/5/index.m3u8 or https://video.example.com/k/movie1/4/013.ts.</t>
+  
+        <figure>
+          <artwork><![CDATA[
+{ 
+ "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\\/movie1\
+           \/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",    
+ "case-sensitive": true,
+ "match-query-string": false
+}
+
+       ]]></artwork>
+        </figure>
+      </section>    
+
+      <section anchor="playlist" title="Playlist">
+        <t>A Playlist consists of a full URL and a media protocol identifier.
+           An implementation that supports a specific playlist media protocol MUST be able to parse playlist 
+           files of that protocol type and extract, possibly recursively, the URLs to all media objects 
+           and/or sub playlist files, and apply the trigger to each one of them separately.</t>
+
+        <t>Playlist is encoded as a JSON object with following properties:</t>
+          
+        <t><list style="empty">
+           <t>Property: playlist<list style="empty">
+
+             <t>Description: A URL to the playlist file.</t>
+
+             <t>Type: A URL represented as a JSON string.</t>
+
+             <t>Mandatory: Yes.</t>
+           </list></t>
+           <t>Property: media-protocol<list style="empty">
+            
+              <t>Description: Media protocol to be when parsing and interpreting this playlist. </t>
+              
+              <t>Type: MediaProtocol (see <xref target="media-protocol"/>).</t>
+              
+              <t>Mandatory: Yes.</t>
+           </list></t>
+        </list></t>
+        <t>Example of a HLS playlist:</t>
+    
+         <figure>
+          <artwork><![CDATA[
+{ 
+ "playlist": "https://www.example.com/hls/title/index.m3u8",    
+ "media-protocol": "hls"
+}
+
+       ]]></artwork>
+         </figure>
+
+      </section> 
+
+      <section anchor="media-protocol" title="MediaProtocol">
+        <t>Media Protocol objects are used to specify registered type of media protocol (see <xref target="IANA.CDNI.CIT.MediaProtocolReg"/>)
+           used for protocol related operations like pre-position according to playlist.</t>
+        <t>Type: JSON string</t>
+        <t>Example:</t>
+        <t>"dash"</t>
+      </section>
+    
+    
+      <section anchor="trigger-extensions" title="CI/T Trigger Extensions">
+        <t>
+          A "trigger.v2" object, as defined in <xref target="trigger-spec-v2"/> includes an optional array of 
+          trigger extension objects. A trigger extension contain properties that are used as directives for dCDN 
+          when executing the trigger command -- for example, location policies, time policies and so on. 
+          Each such CDNI Trigger extension is a specialization of a CDNI GenericTriggerExtension object. 
+          The GenericTriggerExtension object abstracts the basic information required for trigger distribution 
+          from the specifics of any given property (i.e., property semantics, enforcement options, etc.).
+          All trigger extensions are optional, and it is thus the responsibility of the extension 
+          specification to define a consistent default behavior for the case the extension is not present.
+        </t>
+        
+        <section anchor="enforcement-options" title="Enforcement Options">
+         <t>
+           The trigger enforcement options concept is in accordance with the metadata enforcement options 
+           as defined in section 3.2 of <xref target="RFC8006"/>.
+         </t>
+         <t>  
+           The GenericTriggerExtension object defines the properties contained within it
+           as well as whether or not the properties are "mandatory-to-enforce".
+           If the dCDN does not understand or support a mandatory-to-enforce
+           property, the dCDN MUST NOT execute the trigger command. If the extension is
+           not mandatory-to-enforce, then that GenericTriggerExtension object can be
+           safely ignored and the trigger command can be processed in accordance
+           with the rest of the CDNI Trigger spec.
+         </t>
+         <t>
+           Although a CDN MUST NOT execute a trigger command if a
+           mandatory-to-enforce extension cannot be enforced, it could still be
+           safe to redistribute that trigger (the "safe-to-redistribute"
+           property) to another CDN without modification.  For example, in the
+           cascaded CDN case, a transit CDN (tCDN) could convey
+           mandatory-to-enforce trigger extension to a dCDN.  For a trigger extension 
+           that does not require customization or translation (i.e., trigger extension 
+           that is safe-to-redistribute), the data representation received off the wire
+           MAY be stored and redistributed without being understood or supported
+           by the tCDN.  However, for trigger extension that requires translation,
+           transparent redistribution of the uCDN trigger values might not be
+           appropriate.  Certain triggers extensions can be safely, though perhaps not
+           optimally, redistributed unmodified.  For example, pre-position command might 
+           be executed in suboptimal times for some geographies if transparently
+           redistributed, but it might still work.
+         </t>
+         <t>
+           Redistribution safety MUST be specified for each GenericTriggerExtension
+           property. If a CDN does not understand or support a given
+           GenericTriggerExtension property that is not safe-to-redistribute, the CDN
+           MUST set the "incomprehensible" flag to true for that GenericTriggerExtension
+           object before redistributing it.  The "incomprehensible"
+           flag signals to a dCDN that trigger metadata was not properly transformed
+           by the tCDN.  A CDN MUST NOT attempt to execute a trigger that has been
+           marked as "incomprehensible" by a uCDN.
+         </t>
+         <t>
+           tCDNs MUST NOT change the value of mandatory-to-enforce or
+           safe-to-redistribute when propagating a trigger to a dCDN.  Although a
+           tCDN can set the value of "incomprehensible" to true, a tCDN MUST NOT
+           change the value of "incomprehensible" from true to false.
+         </t>
+         <t>         
+           <xref target="tcdn-actions"/> describes the action to be taken by a tCDN for the different
+           combinations of mandatory-to-enforce ("MtE") and safe-to-redistribute
+           ("StR") properties when the tCDN either does or does not understand
+           the trigger extension object in question:
+         </t> 
+           
+         <texttable anchor="tcdn-actions" title="Action to be taken by a tCDN for the different combinations of MtE and StR properties">
+           <ttcol align="left">MtE</ttcol>
+           <ttcol align="left">StR</ttcol>
+           <ttcol align="left">Extension object understood by tCDN</ttcol>
+           <ttcol align="left">Trigger action</ttcol>
+             <c>False</c>
+             <c>True</c>
+             <c>True</c>
+             <c>Can execute and redistribute.</c>
+             
+             <c>False</c>
+             <c>True</c>
+             <c>False</c>
+             <c>Can execute and redistribute.</c>
+
+             <c>False</c>
+             <c>False</c>
+             <c>False</c>
+             <c>Can execute. MUST set "incomprehensible" to true when redistributing.</c>
+
+             <c>False</c>
+             <c>False</c>
+             <c>True</c>
+             <c>Can execute. Can redistribute after transforming the trigger extension 
+                (if the CDN knows how to do so safely); otherwise, MUST set 
+                "incomprehensible" to true when redistributing.</c>
+
+             <c>True</c>
+             <c>True</c>
+             <c>True</c>
+             <c>Can execute and redistribute.</c>
+
+             <c>True</c>
+             <c>True</c>
+             <c>False</c>
+             <c>MUST NOT execute but can redistribute..</c>
+
+             <c>True</c>
+             <c>False</c>
+             <c>True</c>
+             <c>Can execute. Can redistribute after transforming the trigger extension 
+                (if the CDN knows how to do so safely); otherwise, MUST set 
+                "incomprehensible" to true when redistributing.</c>
+
+             <c>True</c>
+             <c>False</c>
+             <c>False</c>
+             <c>MUST NOT serve.  MUST set "incomprehensible" to true when redistributing.</c>
+
+         </texttable> 
+        
+         <t>         
+           <xref target="dcdn-actions"/> describes the action to be taken by a tCDN for the different
+           combinations of mandatory-to-enforce and "incomprehensible" ("Incomp")
+           properties, when the dCDN either does or does not understand
+           the trigger extension object in question:
+         </t> 
+           
+         <texttable anchor="dcdn-actions" title="Action to be taken by a dCDN for the different combinations of MtE and Incomp properties">
+           <ttcol align="left">MtE</ttcol>
+           <ttcol align="left">Incomp</ttcol>
+           <ttcol align="left">Extension object understood by dCDN</ttcol>
+           <ttcol align="left">Trigger action</ttcol>
+             <c>False</c>
+             <c>False</c>
+             <c>True</c>
+             <c>Can execute.</c>
+             
+             <c>False</c>
+             <c>True</c>
+             <c>True</c>
+             <c>Can execute but MUST NOT interpret/apply any trigger extension marked as "incomprehensible".</c>
+
+             <c>False</c>
+             <c>False</c>
+             <c>False</c>
+             <c>Can execute.</c>
+
+             <c>False</c>
+             <c>True</c>
+             <c>False</c>
+             <c>Can execute but MUST NOT interpret/apply any trigger extension marked as "incomprehensible".</c>
+
+             <c>True</c>
+             <c>False</c>
+             <c>True</c>
+             <c>Can execute.</c>
+
+             <c>True</c>
+             <c>True</c>
+             <c>True</c>
+             <c>MUST NOT execute.</c>
+
+             <c>True</c>
+             <c>False</c>
+             <c>False</c>
+             <c>MUST NOT execute.</c>
+
+             <c>True</c>
+             <c>True</c>
+             <c>False</c>
+             <c>MUST NOT execute.</c>
+
+         </texttable> 
+        
+        </section>
+
+        <section anchor="generic-extension-object" title="GenericExtensionObject">
+          <t>A GenericTriggerExtension object is a wrapper for managing individual CDNI 
+             Trigger extensions in an opaque manner.</t>
+
+          <t><list style="empty">
+            <t>Property: generic-trigger-extension-type<list style="empty">
+
+               <t>Description: Case-insensitive CDNI Trigger extension object type.</t>
+
+               <t>Type: String containing the CDNI Payload Type <xref target="RFC7736"/> of the object contained 
+                  in the generic-trigger-extension-value property (see table in <xref target="IANA.CDNI.payload"/>).</t>
+
+               <t>Mandatory-to-Specify: Yes.</t>
+            </list></t>
+            
+            <t>Property: generic-trigger-extension-value<list style="empty">
+
+               <t>Description: CDNI Trigger extension object.</t>
+
+               <t>Type: Format/Type is defined by the value of the
+                  generic-trigger-extension-type property above.</t>
+
+               <t>Mandatory-to-Specify: Yes.</t>
+            </list></t>
+
+            <t>Property: mandatory-to-enforce<list style="empty">
+
+               <t>Description: Flag identifying whether or not the enforcement of
+                  this trigger extension is mandatory.</t>
+
+               <t>Type: Boolean</t>
+
+               <t>Mandatory-to-Specify: No.  Default is to treat the trigger extension as
+                  mandatory-to-enforce (i.e., a value of True).</t>
+            </list></t>
+
+            <t>Property: safe-to-redistribute<list style="empty">
+
+               <t>Description: Flag identifying whether or not this trigger extension 
+                  can be safely redistributed without modification.</t>
+
+               <t>Type: Boolean</t>
+
+               <t>Mandatory-to-Specify: No.  Default is to allow transparent
+                  redistribution (i.e., a value of True).</t>
+            </list></t>
+
+            <t>Property: incomprehensible<list style="empty">
+
+               <t>Description: Flag identifying whether or not any CDN in the
+                  chain of delegation has failed to understand and/or failed to
+                  properly transform this trigger extension object.  Note: This flag only
+                  applies to trigger extension objects whose safe-to-redistribute property
+                  has a value of False.</t>
+
+               <t>Type: Boolean</t>
+
+               <t>Mandatory-to-Specify: No.  Default is comprehensible (i.e., a
+                  value of False).</t>
+            </list></t>
+                      
+          </list></t>            
+          <t>Example of a GenericTriggerExtension containing a specific trigger extension object:</t>
+
+      <figure>
+        <artwork><![CDATA[
+
+ {
+   "generic-trigger-extension-type": 
+     <Type of this trigger extension object>,
+   "generic-trigger-extension-value":
+     {
+       <properties of this trigger extension object>
+     },
+   "mandatory-to-enforce": true,
+   "safe-to-redistribute": true,
+   "incomprehensible": false
+ }
+
+     ]]></artwork>
+      </figure>
+        </section>
+      </section>        
+    </section>
+
+ 
+    <section anchor="trigger-extension-objects" title="Trigger Extension Objects">
+      <t>The objects defined below are intended to be used in the GenericTriggerExtension 
+         object's generic-trigger-extension-value field as defined in section 
+         <xref target="generic-extension-object"/>, and their generic-trigger-extension-type 
+         property MUST be set to the appropriate CDNI Payload Type as defined in <xref target="IANA.CDNI.payload"/> .
+      </t>
+
+      <section anchor="location-policy" title="LocationPolicy extension">
+        <t>A content operation may be relevant for a specific geographical region, or need to
+           be excluded from a specific region. In this case, the trigger should be applied
+           only to parts of the network that are either "included" or "not excluded" by the location policy. 
+           Note that the restrictions here are on the cache location rather than the client location.</t>
+           
+        <t>The LocationPolicy object defines which CDN or cache locations for which the trigger 
+           command is relevant.</t>
+
+        <t>Example use cases:<list style="symbols">
+               
+            <t>Pre-position: Certain contracts allow for pre-positioning or availability
+               of contract in all regions except for certain excluded regions in the world,
+               including caches. For example, some CPs content cannot ever knowingly touch
+               servers in a specific country, including cached content. Therefore, these regions 
+               MUST be excluded from a pre-positioning operation.</t>
+                                   
+            <t>Purge: In certain cases, content may have been located on servers in regions 
+               where the content must not reside. In such cases a purge operation to 
+               remove content specifically from that region, is required.</t>
+
+        </list></t>
+          
+        <t>Object specification<list style="empty">
+               
+              <t>Property: locations<list style="empty">
+
+                 <t>Description: An Access List that allows or denies (blocks) the trigger execution 
+                    per cache location.</t>
+
+                 <t>Type: Array of LocationRule objects (see Section 4.2.2.1 of <xref target="RFC8006"/>)</t>
+
+                 <t>Mandatory-to-Specify: Yes.</t>
+              </list></t>
+        </list></t>
+          
+        <t>
+           If a location policy object is not listed within the trigger command, the default behavior is to execute the
+           trigger in all available caches and locations of the dCDN.
+        </t>
+        <t>
+           The trigger command is allowed, or denied, for a specific cache location according to the 
+           action of the first location whose footprint matches against that cache's location.  
+           If two or more footprints overlap, the first footprint that matches against the cache's location 
+           determines the action a CDN MUST take. If the "locations" property is an empty list or if none of the 
+           listed footprints match the location of a specific cache location, then the result is equivalent to a "deny" action.
+        </t>                                 
+
+           
+        <t>The following is an example of pre-position trigger specification with a trigger-extensions array including 
+           a location policy that allows the trigger execution in the US but blocks its execution in Canada:</t>
+
+        <figure>
+          <artwork><![CDATA[
+   {
+     "trigger": {
+       "type": "preposition",
+       "content.urls": [
+           "https://www.example.com/a/b/c/1",
+           "https://www.example.com/a/b/c/2"
+       ],
+       "extensions": [
+          {
+             "generic-trigger-extension-type": "CIT.LocationPolicy",
+             "generic-trigger-extension-value":
+              {
+                 "locations": [
+                   { 
+                     "action": "allow",
+                     "footprints": [
+                       {
+                         "footprint-type": "countrycode",
+                         "footprint-value": ["us"]
+                       }
+                     ]
+                   },
+                   { 
+                     "action": "deny",
+                     "footprints": [
+                       {
+                         "footprint-type": "countrycode",
+                         "footprint-value": ["ca"]
+                       }
+                     ]
+                   }
+                 ]         
+              },
+             "mandatory-to-enforce": true,
+             "safe-to-redistribute": true,
+             "incomprehensible": false 
+        }
+       ]       
+     },
+     "cdn-path": [ "AS64496:1" ]
+   }
+       ]]></artwork>
+        </figure>
+      </section>   
+
+      <section anchor="time-policy" title="TimePolicy Extension">
+        <t>A uCDN may wish to perform content management operations on the dCDN in a specific schedule. 
+           The TimePolicy extensions allows the uCDN to instruct the dCDN to execute the trigger command in 
+           a desired time window.
+        </t>
+
+        <t><list style="empty">
+            <t>Example use cases<list style="symbols">                     
+                <t>Pre-position: A content provider wishes to pre-populate a new episode
+                   at off-peak time so that it would be ready on caches (for example home
+                   caches) at prime time when the episode is released for viewing. A scheduled operation
+                   enables the uCDN to direct the dCDN in what time frame to execute the trigger. The time 
+                   values are in UNIX epoch.</t>
+                <t>Regional schedule: When used in combination with the Location Policy defined 
+                   in <xref target="location-policy"/>, the uCDN can trigger separate commands for 
+                   different geographical regions, for each region using a different schedule. This allows
+                   the uCDN to control the execution time per region and, for example, direct the dCDN
+                   to execute at off-peak hours, as they are defined per region.</t>
+              </list></t>
+          </list></t>
+
+         <t>Object specification<list style="empty">
+               
+              <t>Property: window<list style="empty">
+
+                 <t>Description: A time frame in which the trigger should be executed.</t>
+
+                 <t>Type: TimeWindow object (see Section 4.2.3.2 of <xref target="RFC8006"/>)</t>
+
+                 <t>Mandatory-to-Specify: Yes.</t>
+              </list></t>
+          </list></t>
+
+          <t>
+             If a time policy object is not listed within the trigger command, the default behavior is to execute the
+             trigger in a time frame most suitable to the dCDN taking under consideration other constrains and / or obligations.
+          </t>
+
+        <t>Example of trigger specification with a scheduled time window between 09:00 01/01/2000 UTC and 
+           17:00 01/01/2000 UTC:</t>
+
+        <figure>
+          <artwork><![CDATA[
+   POST /triggers HTTP/1.1
+   User-Agent: example-user-agent/0.1
+   Host: dcdn.example.com
+   Accept: */*
+   Content-Type: application/cdni; ptype=ci-trigger-command
+   Content-Length: 352
+
+   {
+     "trigger": {
+       "type": "preposition",
+       "content.urls": [
+           "https://www.example.com/a/b/c/1",
+           "https://www.example.com/a/b/c/2"
+         ],
+       "extensions": [
+          {
+             "generic-trigger-extension-type": "CIT.TimePolicy",
+             "generic-trigger-extension-value":
+              {
+                "window": {
+                   "start": 946717200,
+                   "end": 946746000
+                }
+              }
+             "mandatory-to-enforce": true,
+             "safe-to-redistribute": true,
+             "incomprehensible": false 
+          }
+       ],      
+     },
+     "cdn-path": [ "AS64496:1" ]
+   }
+       ]]></artwork>
+        </figure>
+      </section>        
+    </section>
+
+    <section title="Footprint and Capabilities"> 
+      <t> 
+        This section covers the FCI objects required for advertisement of the extensions and properties introduced in this document.
+      </t>
+      <section title="CI/T Versions Capability Object">
+        <t>
+           The CI/T versions capability object is used to indicate support for one or more CI/T objects versions.
+           Note that the default version as originally defined in <xref target="RFC8007"/> MUST be implicitly supported
+           regardless of the versions listed in this capability object.
+        </t>
+           
+        <t><list style="empty">
+           <t>Property: versions<list style="empty">
+
+                 <t>Description: A list of version numbers.</t>
+
+                 <t>Type: An array of JSON strings</t>
+
+                 <t>Mandatory-to-Specify: No. The default is version 1. A missing or an empty versions list means that 
+								    only version 1 of the interface and objects is supported.</t>
+           </list></t>
+        </list></t>
+        <section anchor="versions-capability-object" title="CI/T Versions Capability Object Serialization">
+          <t>
+             The following shows an example of CI/T Versions Capability object serialization for a dCDN that supports 
+             versions 2 and 2.1 of the CI/T interface.
+          </t>
+          
+          <figure>
+           <artwork><![CDATA[
+
+   {
+     "capabilities": [
+       {
+         "capability-type": "FCI.TriggerVersion",
+         "capability-value": {
+           "versions": [ "1", "2", "2.1" ]
+         },
+         "footprints": [
+           <Footprint objects>
+         ]
+       }
+     ]
+   }
+        ]]></artwork>
+          </figure>
+        </section>
+      </section>
+      
+      <section title="CI/T Playlist Protocol Capability Object">
+        <t>
+           The CI/T Playlist Protocol capability object is used to indicate support for one or more MediaProtocols 
+           listed in <xref target="IANA.CDNI.CIT.MediaProtocolReg"/> by the playlists property of the "trigger.v2" object. 
+        </t>
+           
+        <t><list style="empty">
+           <t>Property: media-protocols<list style="empty">
+
+                 <t>Description: A list of media protocols.</t>
+
+                 <t>Type: A list of MediaProtocol (from the CDNI Triggers media protocol types <xref target="IANA.CDNI.CIT.MediaProtocolReg"/>)</t>
+
+                 <t>Mandatory-to-Specify: No. The default, in case of a missing or an empty list, is none supported.</t>
+           </list></t>
+        </list></t>
+        <section anchor="playlist-protocol-capability-object" title="CI/T Playlist Protocol Capability Object Serialization">
+          <t>
+             The following shows an example of CI/T Playlist Protocol Capability object serialization for a dCDN that supports 
+             "hls" and "dash".
+          </t>
+          
+          <figure>
+           <artwork><![CDATA[
+
+   {
+     "capabilities": [
+       {
+         "capability-type": "FCI.TriggerPlaylistProtocol",
+         "capability-value": {
+           "media-protocols": ["hls", "dash"]
+         },
+         "footprints": [
+           <Footprint objects>
+         ]
+       }
+     ]
+   }
+        ]]></artwork>
+          </figure>
+        </section>
+      </section>
+
+      <section title="CI/T Trigger Extension Capability Object">
+        <t>
+           The CI/T Generic Extension capability object is used to indicate support for one or more 
+           GenericExtensionObject types. 
+        </t>
+           
+        <t><list style="empty">
+           <t>Property: trigger-extension<list style="empty">
+
+                 <t>Description: A list of supported CDNI CI/T GenericExtensionObject types.</t>
+
+                 <t>Type: List of strings corresponding to entries from the "CDNI Payload Types" registry <xref target="RFC7736"/> 
+                    that are under the CIT namespace, and that correspond to CDNI CI/T GenericExtensionObject objects.
+                 </t>
+
+                 <t>Mandatory-to-Specify: No. The default, in case of a missing or an empty list, MUST be interpreted as "no GenericExtensionObject types are supported". 
+                    A non-empty list MUST be interpreted as containing "the only GenericExtensionObject types that are supported".
+                 </t>
+           </list></t>
+        </list></t>
+        <section anchor="trigger-extension-capability-object" title="CI/T Trigger Extension Capability Object Serialization">
+          <t>
+             The following shows an example of CI/T Trigger Extension Capability object serialization for a dCDN that supports 
+             the "CIT.LocationPolicy" and the "CIT.TimePolicy" objects.
+          </t>
+          
+          <figure>
+           <artwork><![CDATA[
+
+   {
+     "capabilities": [
+       {
+         "capability-type": "FCI.TriggerGenericExtension",
+         "capability-value": {
+           "trigger-extension": ["CIT.LocationPolicy", "CIT.TimePolicy"]
+         },
+         "footprints": [
+           <Footprint objects>
+         ]
+       }
+     ]
+   }
+        ]]></artwork>
+          </figure>
+        </section>
+      </section>
+      
+    </section>      
+  
+    <section anchor="IANA" title="IANA Considerations">
+
+      <section anchor="IANA.CDNI.payload" title="CDNI Payload Types">
+
+        <t>This document requests the registration of the following CDNI
+           Payload Types under the IANA CDNI Payload Type registry defined in <xref target="RFC7736"/>:</t>
+           
+
+        <texttable>
+          <ttcol align="left">Payload Type</ttcol>
+          <ttcol align="left">Specification</ttcol>
+
+          <c>ci-trigger-command.v2</c>
+          <c>RFCthis</c>
+          
+          <c>ci-trigger-status.v2</c>
+          <c>RFCthis</c>
+          
+          <c>CIT.LocationPolicy</c>
+          <c>RFCthis</c>
+          
+          <c>CIT.TimePolicy</c>
+          <c>RFCthis</c>     
+
+          <c>FCI.TriggerVersion</c>
+          <c>RFCthis</c>
+          
+          <c>FCI.TriggerPlaylistProtocol</c>
+          <c>RFCthis</c>
+          
+          <c>FCI.TriggerGenericExtension</c>
+          <c>RFCthis</c>                   
+       </texttable>
+
+        <t>[RFC Editor: Please replace RFCthis with the published RFC
+        number for this document.]</t>
+
+         <section anchor="IANA.CDNI.payload.ci-trigger-command.v2" title="CDNI ci-trigger-command.v2 Payload Type">
+          <t>Purpose: The purpose of this payload type is to distinguish version 2 of the CI/T command 
+            (and any associated capability advertisement)</t>
+          <t>Interface: CI/T</t>
+          <t>Encoding: see <xref target="cit-objects-v2"/></t>
+        </section>
+        
+        <section anchor="IANA.CDNI.payload.ci-trigger-status.v2" title="CDNI ci-trigger-status.v2 Payload Type">
+          <t>Purpose: The purpose of this payload type is to distinguish version 2 of the CI/T status resource response
+            (and any associated capability advertisement)</t>
+          <t>Interface: CI/T</t>
+          <t>Encoding: see <xref target="cit-objects-v2"/></t>
+        </section>
+
+        <section anchor="IANA.CDNI.payload.CIT.LocationPolicy" title="CDNI CI/T LocationPolicy Trigger Extension Type">
+          <t>Purpose: The purpose of this Trigger Extension type is to distinguish LocationPolicy CIT Trigger Extension objects.</t>
+          <t>Interface: CI/T</t>
+          <t>Encoding: see <xref target="location-policy"/></t>
+        </section>
+
+        <section anchor="IANA.CDNI.payload.CIT.TimePolicy" title="CDNI CI/T TimePolicy Trigger Extension Type">
+          <t>Purpose: The purpose of this Trigger Extension type is to distinguish TimePolicy CI/T Trigger Extension objects.</t>
+          <t>Interface: CI/T</t>
+          <t>Encoding: see <xref target="time-policy"/></t>
+        </section>
+
+        <section anchor="IANA.CDNI.payload.FCI.TriggersVersions" title="CDNI FCI CI/T Versions Payload Type">
+          <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for 
+             CI/T Triggers Versions objects</t>
+          <t>Interface: FCI</t>
+          <t>Encoding: see <xref target="versions-capability-object"/></t>
+        </section>
+
+        <section anchor="IANA.CDNI.payload.FCI.PlaylistProtocol" title="CDNI FCI CI/T Playlist Protocol Payload Type">
+          <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for 
+             CI/T Playlist Protocol objects</t>
+          <t>Interface: FCI</t>
+          <t>Encoding: see <xref target="playlist-protocol-capability-object"/></t>
+        </section>
+
+        <section anchor="IANA.CDNI.payload.FCI.ExtensionObject" title="CDNI FCI CI/T Extension Objects Payload Type">
+          <t>Purpose: The purpose of this payload type is to distinguish FCI advertisement objects for 
+             CI/T Extension objects</t>
+          <t>Interface: FCI</t>
+          <t>Encoding: see <xref target="trigger-extension-capability-object"/></t>
+        </section>
+        
+      </section>
+      
+      <section anchor="IANA.CDNI.CIT.MediaProtocolReg" title="CDNI CI/T Trigger Media protocol types">
+        <t>The IANA is requested to create a new "CDNI CI/T Trigger MediaProtocol Types"
+           subregistry in the "Content Delivery Networks Interconnection (CDNI)
+           Parameters" registry.  The "CDNI CI/T Trigger Media Protocol Types" namespace
+           defines the valid Media Protocol object values in Section <xref target="media-protocol"/>, 
+           used by the Playlist object.  Additions to the MediaProtocol namespace conform to the 
+           "Specification Required" policy as defined in section 4.6 of <xref target="RFC8126"/>, 
+           where the specification defines the MediaProtocol Type and the protocol to which it is associated.  
+           The designated expert will verify that new protocol definitions do not duplicate
+           existing protocol definitions and prevent gratuitous additions to the namespace.</t>
+
+        <t>The following table defines the initial MediaProtocol values corresponding
+           to the HLS, MSS, and DASH protocols:</t>
+        <texttable>
+          <ttcol align="left">MediaProtocol Type</ttcol>
+          <ttcol align="left">Description</ttcol>
+          <ttcol align="left">Type Specification</ttcol>
+          <ttcol align="left">Protocol Specification</ttcol>
+            <c>hls</c>
+            <c>HTTP Live Streaming</c>
+            <c>RFCthis</c>
+            <c><xref target="RFC8216">RFC 8216</xref></c>
+            
+            <c>mss</c>
+            <c>Microsoft Smooth Streaming</c>
+            <c>RFCthis</c>
+            <c><xref target="MSS">MSS</xref></c>
+              
+            <c>dash</c>
+            <c>Dynamic Adaptive Streaming over HTTP (MPEG-DASH)</c>
+            <c>RFCthis</c>
+            <c><xref target="MPEG-DASH">MPEG-DASH</xref></c>
+        </texttable>
+       <t>[RFC Editor: Please replace RFCthis with the published RFC number for this document.]</t>
+      </section>
+      
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>All security considerations listed in section 8 of <xref target="RFC8007"/> and section 7 of <xref target="RFC8008"/> 
+         apply to this document as well.</t>
+    </section>
+
+    <section anchor="Acknowledgments" title="Acknowledgments">
+      <t>TBD</t>
+    </section>
+    
+    <section anchor="Contributors" title="Contributors">
+      <t>The authors would like to thank all members of the SVA's Open Caching Working Group for their contribution in support of this document. </t>
+    </section>
+
+
+  </middle>
+
+  <back>
+    <references title="Normative References">
+
+
+      <?rfc include="reference.RFC.2119" ?>
+
+      <?rfc include="reference.RFC.3986" ?>
+     
+      <?rfc include="reference.RFC.8006" ?>
+
+      <?rfc include="reference.RFC.8007" ?>
+
+      <?rfc include="reference.RFC.8008" ?>
+        
+      <?rfc include="reference.RFC.8126" ?>
+      
+      <?rfc include="reference.RFC.8259" ?>
+    </references>
+
+    <references title="Informative References">      
+      <?rfc include="reference.RFC.6707" ?>
+ 
+      <?rfc include="reference.RFC.7736" ?>
+      
+      <?rfc include="reference.RFC.8216" ?>
+     
+      <reference anchor="PCRE841" target="http://www.pcre.org/">
+        <front>
+          <title>Perl Compatible Regular Expressions</title>
+          <author surname="Hazel" initials="P"/>
+          <date day="5" month="July" year="2017"/>
+        </front>
+        <seriesInfo name="Version" value="8.41"/>
+      </reference>
+    
+      <reference anchor="MPEG-DASH" target="http://www.iso.org/standard/65274.html">
+        <front>
+          <title>
+              Information technology -- Dynamic adaptive streaming over HTTP (DASH) -- Part 1: Media presentation description and segment format
+          </title>
+          <author>
+             <organization>ISO</organization>
+          </author>
+          <date month="05" year="2014"/>
+        </front>
+        <seriesInfo name="ISO/IEC" value="23009-1:2014"/>
+        <seriesInfo name="Edition" value="2"/>
+      </reference>
+
+      <reference anchor="MSS" target="https://msdn.microsoft.com/en-us/library/ff469518.aspx">
+        <front>
+          <title>
+              [MS-SSTR]: Smooth Streaming Protocol
+          </title>
+          <author>
+             <organization>Microsoft</organization>
+          </author>
+          <date month="September" year="2017"/>
+        </front>
+        <seriesInfo name="Protocol Revision" value="8.0"/>
+      </reference>
+
+      
+    </references>
+  </back>
+</rfc>
