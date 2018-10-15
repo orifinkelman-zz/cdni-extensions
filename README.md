@@ -1,2 +1,2 @@
-# cdni-extensions-
+# cdni-extensions
 cdni extensions internet drafts
