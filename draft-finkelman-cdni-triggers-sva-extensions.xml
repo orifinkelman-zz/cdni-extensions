@@ -157,8 +157,8 @@
           </t>
           <t><list style="symbols">
              <t>
-               Regular Expression - Using regex an uCDN can create more complex rules to select the 
-               content objects for the cases of invalidation and purge. For example, purging specific 
+               Regular Expression - Using regex a uCDN can create more complex rules to select the 
+               content objects for the cases of "invalidation" and "purge". For example, purging specific 
                content within a specific directory path. 
              </t>
              <t>
