@@ -61,13 +61,17 @@
     <date/>
 
     <abstract>
-      <t>The Open Caching working group of the Streaming Video Alliance is focused 
-         on the delegation of video delivery request from commercial CDNs to a 
-         caching layer at the ISP. In that aspect, Open Caching is a specific use
-         case of CDNI, where the commercial CDN is the upstream CDN (uCDN) and the
-         ISP caching layer is the downstream CDN (dCDN). The extensions specified in this
-         document to the CDNI CI/T interface are derived from requirements raised by 
-         Open Caching but are applicable to CDNI use cases in general.</t>
+      <t>
+         This document updates RFC 8007 to include generic extensions and more 
+				 granular content matching options, required by the Open Caching architecture. 
+				 The Open Caching working group of the Streaming Video Alliance is focused on 
+				 the delegation of video delivery request from commercial CDNs to a caching 
+				 layer at the ISP. In that aspect, Open Caching is a specific use case of CDNI, 
+				 where the commercial CDN is the upstream CDN (uCDN) and the ISP caching layer 
+				 is the downstream CDN (dCDN). The extensions specified in this document to the 
+				 CDNI Control Interface / Triggers are derived from requirements of Open Caching 
+				 but are applicable to CDNI use cases in general. 
+      </t>
     </abstract>
 
     <note title="Requirements Language">
@@ -503,11 +507,13 @@ RESPONSE:
             </list></t>
           </list></t>
 
-          <t>Example of a case sensitive, no query parameters, regex match against:<vspace />
-             "^(https:\/\/video\.example\.com)\/([a-z])\/movie1\/([1-7])\/*(index.m3u8|\d{3}.ts)$".</t>
-          <t>This regex matches URLs of domain video.example.com  where the path structure is 
-             /(single lower case letter)/(name-of-title)/(single digit between 1 to 7)/(index.m3u8 or a 3 digit number with ts extension).
-             For example: https://video.example.com/d/movie1/5/index.m3u8 or https://video.example.com/k/movie1/4/013.ts.</t>
+          <t>Example of a case sensitive, no query parameters, regex match against:</t>
+          <figure>
+            <artwork><![CDATA[
+"^(https:\/\/video\.example\.com)\/([a-z])\/
+ movie1\/([1-7])\/*(index.m3u8|\d{3}.ts)$"
+         ]]></artwork>
+          </figure>
     
           <figure>
             <artwork><![CDATA[
@@ -520,6 +526,17 @@ RESPONSE:
 
          ]]></artwork>
           </figure>
+
+          <t>This regex matches URLs of domain video.example.com  where the path structure is 
+             /(single lower case letter)/(name-of-title)/(single digit between 1 to 7)/(index.m3u8 or a 3 digit number with ts extension).
+             For example:</t>
+          <figure>
+            <artwork><![CDATA[
+https://video.example.com/d/movie1/5/index.m3u8
+or
+https://video.example.com/k/movie1/4/013.ts
+         ]]></artwork>
+          </figure>         
         </section>    
 
         <section anchor="playlist" title="Playlist">
@@ -918,10 +935,10 @@ RESPONSE:
      "extensions": [
         {
           "generic-trigger-extension-type": 
-             <Type of this errornous trigger extension object>,
+             <Type of this erroneous trigger extension object>,
           "generic-trigger-extension-value":
               {
-                <properties of this errornous trigger extension object>
+                <properties of this erroneous trigger extension object>
               },
         }
       ],
@@ -973,8 +990,8 @@ REQUEST:
         "type": "invalidate",
         "content.regexs": [ 
           { 
-            "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
-            \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",    
+            "regex": "^(https:\\/\\/video\\.example\\.com)\\/
+            ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",    
             "case-sensitive": true,
             "match-query-string": false
           },
@@ -1000,8 +1017,8 @@ RESPONSE:
          {
            "content.regexs": [
               { 
-                "regex": "^(https:\\/\\/video\\.example\\.com)\\/([a-z])\
-                \/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",    
+                "regex": "^(https:\\/\\/video\\.example\\.com)\\/
+                ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",    
                 "case-sensitive": true,
                 "match-query-string": false
               },                
@@ -1040,13 +1057,13 @@ REQUEST:
       "trigger.v2": {
         "type": "preposition",
         "content.playlists": [ 
-          { 
-            "playlist": "https://www.example.com/hls/title/index.m3u8",    
-            "media-protocol": "hls"
-          },
-          { <Playlist #2> },
-          ...
-          { <Playlist #N> },
+         { 
+          "playlist": "https://www.example.com/hls/title/index.m3u8",
+          "media-protocol": "hls"
+         },
+         { <Playlist #2> },
+         ...
+         { <Playlist #N> },
         ],
       },
       "cdn-path": [ "AS64496:0" ]
@@ -1062,24 +1079,24 @@ RESPONSE:
     Server: example-server/0.1
     
     {
-       "errors.v2": [ 
-         {
-           "content.playlists": [
-              { 
-                "playlist": "https://www.example.com/hls/title/index.m3u8",    
-                "media-protocol": "hls"
-              },                
-            ],
-           "description": "The dCDN was not able to parse the playlist",
-           "error": "econtent",
-           "cdn": "AS64500:0"
-         },
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "failed",       
-       "trigger.v2": { <content of trigger object from the command> }
+      "errors.v2": [ 
+       {
+         "content.playlists": [
+          { 
+            "playlist": "https://www.example.com/hls/title/index.m3u8",
+            "media-protocol": "hls"
+          },                
+         ],
+         "description": "The dCDN was not able to parse the playlist",
+         "error": "econtent",
+         "cdn": "AS64500:0"
+       },
+      ],
+      "ctime": 1462351690,
+      "etime": 1462351698,
+      "mtime": 1462351690,
+      "status": "failed",       
+      "trigger.v2": { <content of trigger object from the command> }
     }
          ]]></artwork>
           </figure>                     
@@ -1107,10 +1124,10 @@ REQUEST:
       "trigger.v2": {
         "type": "preposition",
         "content.playlists": [ 
-          { 
-            "playlist": "https://www.example.com/hls/title/index.m3u8",    
-            "media-protocol": "hls"
-          },
+         { 
+           "playlist": "https://www.example.com/hls/title/index.m3u8",    
+           "media-protocol": "hls"
+         },
         ],
         "extensions": [
             {
@@ -1503,7 +1520,8 @@ RESPONSE:
   <artwork>
 date-fullyear   = 4DIGIT
 date-month      = 2DIGIT  ; 01-12
-date-mday       = 2DIGIT  ; 01-28, 01-29, 01-30, 01-31 based on month/year
+date-mday       = 2DIGIT  ; 01-28, 01-29, 01-30, 01-31 based on 
+                          ; month/year
 time-hour       = 2DIGIT  ; 00-23
 time-minute     = 2DIGIT  ; 00-59
 time-second     = 2DIGIT  ; 00-59 leap seconds are not supported
