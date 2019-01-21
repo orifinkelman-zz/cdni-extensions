@@ -138,14 +138,18 @@
           <t>
              When dCDN is attaching the redirect target to a specific uCDN host or a list of uCDN hosts, the dCDN MUST 
              advertise the hosts within the Redirect Target Capability object as "redirecting-hosts". In that case, the 
-             uCDN can redirect to that dCDN address, only if the request is of one of these uCDN hosts.
+             uCDN can redirect to that dCDN address, only if the request was directed to one of these uCDN hosts.
           </t>
           <t>
-             A redirect target for DNS redirection is the FQDN to be used as a CNAME for the uCDN host (see <xref target="RFC1034"/>).
+             A redirect target for DNS redirection is an IP address used as an A record response or a FQDN used as an alias 
+             in a CNAME record response (see <xref target="RFC1034"/>) of the uCDN DNS router. Note that DNS routers take 
+             routing decisions based on either the DNS resolver's IP address or the client IP address when EDNS0 client-subnet 
+             is used (see <xref target="RFC7871"/>). The dCDN may choose to advertise redirect targets and footprints to 
+             cover both cases. A uCDN DNS router implemenation SHOULD prefer routing based on client IP address when it is available.
           </t>
           <t>
-             A redirect target for HTTP redirection is the hostname to be used as the first path segment in an absolute URI 
-             which is used as the Location header of the HTTP rediret response (see section 7.1.2 of <xref target="RFC7231"/>).
+             A redirect target for HTTP redirection is the URI to be used as a value of the Location header of a HTTP redirect 3xx response, 
+             typically a 302 (Found) (see section 7.1.2 of <xref target="RFC7231"/> and section 6.4 of <xref target="RFC7231"/>). 
           </t>
           <t><list style="empty">
              <t>Property: redirecting-hosts<list style="empty">
@@ -159,7 +163,7 @@
              </list></t>
              <t>Property: dns-target<list style="empty">
 
-               <t>Description: Target address for DNS CNAME delegation.</t>
+               <t>Description: Target address for DNS A record or CNAME record.</t>
 
                <t>Type: DnsTarget object (see <xref target="dns-target"/>)</t>
 
@@ -167,7 +171,7 @@
              </list></t>
              <t>Property: http-target<list style="empty">
 
-               <t>Description: Target URL for HTTP redirect.</t>
+               <t>Description: Target URI for HTTP redirect.</t>
 
                <t>Type: HttpTarget object (see <xref target="http-target"/>)</t>
 
@@ -207,15 +211,16 @@
           </figure>
 
             <section anchor="dns-target" title="DnsTarget">
-              <t>The DnsTarget object is the target address for CNAME delegation from the uCDN to the dCDN.</t>
+              <t>The DnsTarget object gives the instructions to construct the target address for the DNS response 
+                 for delegation from the uCDN to the dCDN.</t>
                               
               <t><list style="empty">
                 <t>Property: host<list style="empty">
 
-                   <t>Description: The host property is a hostname, without a port number.</t>
+                   <t>Description: The host property is a hostname or an IP address, without a port number.</t>
 
                    <t>Type: Endpoint object as defined in section 4.3.3 of <xref target="RFC8006"/> 
-                      with the limitation that it MUST only be a hostname, and it MUST NOT include a port number.</t>
+                      with the limitation that it MUST NOT include a port number.</t>
 
                    <t>Mandatory-to-Specify: Yes.</t>
                 </list></t>
@@ -244,13 +249,15 @@
             </section>
 
             <section anchor="http-target" title="HttpTarget">
-              <t>The HttpTarget object is the target address for http redirection from the uCDN to the dCDN.</t>
+              <t>The HttpTarget object gives the instructions to construct the target Location URI for http redirection 
+                 from the uCDN to the dCDN.</t>
                               
               <t><list style="empty">
                 <t>Property: host<list style="empty">
 
-                   <t>Description: Hostname or IP address and optional port, i.e., 
-                      the host and port as described in section 3.2 of <xref target="RFC3986"/>.</t>
+                   <t>Description: Hostname or IP address and an optional port, i.e., 
+                      the host and port of the authority component of the URI as described in 
+                      section 3.2 of <xref target="RFC3986"/>.</t>
 
                    <t>Type: Endpoint object as defined in section 4.3.3 of <xref target="RFC8006"/>.</t>
 
@@ -258,13 +265,13 @@
                 </list></t>
                 <t>Property: path-prefix<list style="empty">
 
-                   <t>Description: A path prefix for the HTTP redirect. The original path is appended after this prefix.</t>
+                   <t>Description: A path prefix for the HTTP redirect Location header. The original path is appended after this prefix.</t>
 
                    <t>Type: A prefix of a path-absolute as defined in section 3.3 of <xref target="RFC3986"/>. 
                       The prefix MUST end with a trailing slash, to indicate the end of the last path segment in the prefix.</t>
 
                    <t>Mandatory-to-Specify: No. If this property is absent or empty, the uCDN MUST NOT prepend a path prefix to 
-                      the original content path.</t>
+                      the original content path, i.e. the original path MUST appear in the location URI right after the authority component.</t>
                 </list></t>
                 <t>Property: include-redirecting-host<list style="empty">
 
@@ -318,7 +325,11 @@
           <t>Use cases<list style="symbols">
               <t>Failover: A dCDN request router receives a request but has no caches 
                  to which it can route the request. This can happen in the case of 
-                 failures or temporary network overload. In these cases, the router may
+                 failures or temporary network overload.</t>
+            
+              <t>No coverage: A dCDN request router receives a request from a client located
+                 in an area inside the footprint but not covered by the dCDN caches, or a client 
+                 located outside the dCDN footprint coverage. In such cases, the  router may 
                  choose to redirect the request back to the uCDN fallback address.</t>
 
               <t>Error: A cache may receive a request that it cannot properly serve, for 
@@ -330,8 +341,8 @@
              to redirect a client back to the uCDN. Fallback target is represented as endpoint objects as defined in 
              section 4.3.3 of <xref target="RFC8006"/>.</t>
                
-          <t>The uCDN fallback target address may be used as a DNS CNAME in case of DNS redirection mode or a host name
-             for HTTP redirect.</t>
+          <t>The uCDN fallback target address may be used as a DNS A record or CNAME record in case of DNS redirection 
+             mode or a host name for HTTP redirect.</t>
 
           <t>When using HTTP redirect to route a client request back to the uCDN, it is the dCDN's responsibility
              to use the original URL path as the client would have used for the original uCDN request, stripping, 
@@ -344,7 +355,7 @@
                <t>Description: Target address to which the dCDN can redirect the client.</t>
 
                <t>Type: Endpoint object as defined in section 4.3.3 of <xref target="RFC8006"/> 
-                  with the limitation that in case of DNS delegation, it MUST only be a hostname, and it MUST NOT include a port number.</t>
+                  with the limitation that in case of DNS delegation, it MUST NOT include a port number.</t>
 
                <t>Mandatory-to-Specify: Yes.</t>
             </list></t>
@@ -434,6 +445,8 @@
 
       <?rfc include="reference.RFC.7231" ?>
                        
+      <?rfc include="reference.RFC.7871" ?>
+                                              
       <?rfc include="reference.RFC.8006" ?>
 
       <?rfc include="reference.RFC.8007" ?>
