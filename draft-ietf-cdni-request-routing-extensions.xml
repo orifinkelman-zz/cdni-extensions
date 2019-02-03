@@ -446,8 +446,6 @@
 
       <?rfc include="reference.RFC.7231" ?>
                        
-      <?rfc include="reference.RFC.7871" ?>
-                                              
       <?rfc include="reference.RFC.8006" ?>
 
       <?rfc include="reference.RFC.8007" ?>
@@ -462,6 +460,9 @@
       <?rfc include="reference.RFC.7336" ?>   
            
       <?rfc include="reference.RFC.7736" ?>
+
+      <?rfc include="reference.RFC.7871" ?>
+                                              
 
     </references>
   </back>
