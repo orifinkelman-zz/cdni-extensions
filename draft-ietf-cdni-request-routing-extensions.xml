@@ -185,28 +185,28 @@
 
         <figure>
           <artwork><![CDATA[
+{
+  "capabilities": [
     {
-     "capabilities": [
-       {
-         "capability-type": "FCI.RedirectTarget",
-         "capability-value": {
-             "redirecting-hosts": [
-                "a.service123.ucdn.example.com", 
-                "b.service123.ucdn.example.com"
-             ]
-             "dns-target": {
-                "host": "service123.ucdn.example.dcdn.com"
-             }
-             "http-target": {
-                 <Properties of an HttpTarget object>
-             }
-         },
-         "footprints": [
-           <Footprint objects>
-         ]
-       }
-     ]
+      "capability-type": "FCI.RedirectTarget",
+      "capability-value": {
+          "redirecting-hosts": [
+             "a.service123.ucdn.example.com", 
+             "b.service123.ucdn.example.com"
+          ]
+          "dns-target": {
+             "host": "service123.ucdn.example.dcdn.com"
+          }
+          "http-target": {
+             <Properties of an HttpTarget object>
+          }
+      },
+      "footprints": [
+          <Footprint objects>
+      ]
     }
+  ]
+}
              ]]></artwork>
           </figure>
 
@@ -230,7 +230,7 @@
             <figure>
               <artwork><![CDATA[
  {
-     "host": "service123.ucdn.example.dcdn.com"
+    "host": "service123.ucdn.example.dcdn.com"
  }
                  ]]></artwork>
               </figure>
@@ -289,11 +289,11 @@
      
             <figure>
               <artwork><![CDATA[
- {
-     "host": "us-east1.dcdn.com",
-     "path-prefix": "/cache/1/",
-     "include-redirecting-host": true
- }
+{
+   "host": "us-east1.dcdn.com",
+   "path-prefix": "/cache/1/",
+   "include-redirecting-host": true
+}
                  ]]></artwork>
               </figure>
               <t>Example of a HTTP request for content at uCDN host "a.service123.ucdn.example.com" and the corresponding HTTP response with 
@@ -365,12 +365,13 @@
              the dCDN should use as fallback address to redirect back to the uCDN.</t>
 
           <figure>
-            <artwork><![CDATA[{
-     "generic-metadata-type": "MI.FallbackTarget",
-     "generic-metadata-value":
-       {
-         "host": "fallback-a.service123.ucdn.example"
-       }
+            <artwork><![CDATA[
+{
+   "generic-metadata-type": "MI.FallbackTarget",
+   "generic-metadata-value":
+    {
+       "host": "fallback-a.service123.ucdn.example"
+    }
 }
          ]]></artwork>
           </figure> 
