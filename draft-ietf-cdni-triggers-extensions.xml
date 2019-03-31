@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-01" updates='8007' ipr="trust200902">
+<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-02" updates='8007' ipr="trust200902">
   <front>
     <title abbrev="CDNI Control Interface / Triggers Extensions">CDNI Control Triggers Interface Extensions</title>
 
@@ -32,7 +32,7 @@
 
         <phone>+972-72-2221647</phone>
 
-        <email>orif@qwilt.com</email>
+        <email>ori.finkelman.ietf@gmail.com</email>
       </address>
     </author>
 
