@@ -29,8 +29,6 @@
           <country>Israel</country>
         </postal>
 
-        <phone>+972-72-2221647</phone>
-
         <email>ori.finkelman.ietf@gmail.com</email>
       </address>
     </author>
@@ -425,15 +423,22 @@
        </section>
     </section>
 
-    <section anchor="Security" title="Security and Privacy Considerations">
+    <section anchor="Security" title="Security Considerations">
       <t>This specification is in accordance with the CDNI Metadata Interface and the CDNI Request Routing: 
-         Footprint and Capabilities Semantics. As such, it is subject to the security and privacy considerations 
-         as defined in <xref target="RFC8006"/> and <xref target="RFC8008"/> respectively. Note specifically that
-         the Redirect Target FCI object exposes internal information of the dCDN network. A third party could
-         intercept the FCI transactions and use the information to attack the dCDN. An implemenation of the FCI 
-         MUST therefore use strong authentication and encryption and strcitly follow the directions as defined for 
-         the Metadata Interface in Section 8.3 of <xref target="RFC8006"/>.</t> 
+         Footprint and Capabilities Semantics. As such, it is subject to the security and privacy considerations as
+         defined in Section 8 of <xref target="RFC8006"/> and in Section 7 of <xref target="RFC8008"/> respectively. 
+      </t> 
+        <section anchor="Privacy" title="Confidentiality and Privacy">
+          <t>The redirect Target FCI object potentially exposes information about the internal strcture of the dCDN network. 
+             A third party could intercept the FCI transactions and use the information to attack the dCDN. An implemenation 
+             of the FCI MUST therefore use strong authentication and encryption and strictly follow the directions for securing
+             the interface as defined for the Metadata Interface in Section 8.3 of <xref target="RFC8006"/>.
+          </t> 
+        </section>
     </section>
+
+
+
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>TBD.</t>
