@@ -410,33 +410,80 @@
       <t>The CDNI Footprint Object is defined in the CDNI Metadata interface document, see section 4.2.2.2 of
           <xref target="RFC8006"/>. The object is composed of a footprint-type, referring to some of the simple data-types
           defined in section 4.3 of <xref target="RFC8006"/>, as well as an array of properties from the specified type.
-          Furthermore, in order to facilitate future specification of other optional "footprint-types",
+          Additionally, in order to facilitate future specification of other optional "footprint-types",
           a clear process for specifying optional footprint types in an IANA registry is also specified
           (see section 7.2 of <xref target="RFC8006"/>).
       </t>
-      <t>Additionally, section 5 of <xref target="RFC8008"/> defines the FCI Capability Advertisement Object,
-          that includes a list of CDNI Footprint Objects as multiple, additive footprint constraints:
-          the advertisement of different footprint types narrows the dCDN's candidacy cumulatively (see Appendix B of
-          <xref target="RFC8008"/>).
+      <t>The FCI Capability Advertisement Object also uses the CDNI Footprint object, as described in section 5 of
+          <xref target="RFC8008"/>. The object is built of "capability-type", "capability-value", and a "footprints"
+          array built of CDNI Footprint Objects, to specify the clients to which the capability applies.
       </t>
 
-      <t>This section specify new data-types to be used also as footprint-types,
-          extending both <xref target="RFC8006"/> and <xref target="RFC8008"/>.
+      <t>This section specify new data-types to be used by both <xref target="RFC8006"/> and <xref target="RFC8008"/>.
       </t>
 
 
       <section anchor="cdni-metadata-ipv4v6cidr-data-type" title="CDNI Metadata IPv4v6CIDR Data Type">
-        <t>Sections 4.3.5 and 4.3.6 of <xref target="RFC8006"/> specify the "IPv4CIDR" and "IPv6CIDR" footprint-types
-           (respectively), for listing different IP addresses blocks. When used as footprint constraints as part of a
-            FCI Advertisement Object, these footprint-types do not allow the combination of IPv4 and IPv6 client addresses,
-            as the constraints are additives and a client address cannot be both IPv4 and IPv6.
+        <t>As described in the CDNI Metadata interface, the Footprint Object is used as part of the LocationRule Object
+            (see section 4.2.2.1 of section <xref target="RFC8006"/>), where the LocationRule Object holds an array of
+            Footprint Objects. The action defined in the location rule should be applied on clients matching any of
+            the listed Footprint Objects: Adding a Footprint Object to the "footprints" array, extends the list of
+            clients to which the rule is applied.
+        </t>
+        <t> Like the CDNI Metadata interface LocationRule, the FCI Capability Advertisement Object
+            includes an array of CDNI Footprint Objects, this time as multiple, additive footprint constraints
+            (see Appendix B of <xref target="RFC8008"/>). Meaning, the advertisement of different footprint types narrows
+            the dCDN's candidacy cumulatively. This "narrowing" semantic is different from the "extending" semantic of the
+            usage in CDN Metadata interface.
         </t>
 
-        <t>Below is the "IPv4v6CIDR" simple data-type definition. By extending the list of data-types described in
-            section 4.3 of <xref target="RFC8006"/>, this data type allows the definition of additional properties
-            of CDNI Metadata objects. This data-type is also used as a footprint-type, additionally to the types
-            specified in section 4.2.2.2 of <xref target="RFC8006"/>, allowing a list of footprint constraints to
-            match both IPv4 and IPv6 client addresses.
+        <t>The different semantic of the footprints arrays have significance when trying to match both IPv4 clients
+            and IPv6 clients. Sections 4.3.5 and 4.3.6 of <xref target="RFC8006"/> specify the "IPv4CIDR" and "IPv6CIDR"
+            footprint-types (respectively), for listing different IP addresses blocks. These 2 footprint-types can be
+            used together when defining a CDNI Metadata interface LocationRule. Below is an example for such a
+            LocationRule Object: The "allow" action should take place for both IPv4 clients matching subnet
+            "192.0.2.0/24", as well as IPv6 client s matching subnet "2001:db8::/32". However, using the same
+            Footprint Object array for the FCI Capability Advertisement Object would result with an empty list of
+            clients, as the constraints are additives and a client address cannot be both IPv4 and IPv6.
+        </t>
+
+          <figure>
+              <artwork><![CDATA[
+{
+ "generic-metadata-type": "MI.LocationACL",
+ "generic-metadata-value":
+   {
+     "locations": [
+       {
+         "action": "allow",
+         "footprints": [
+           {
+             "footprint-type": "ipv4cidr",
+             "footprint-value": ["192.0.2.0/24"]
+           },
+           {
+             "footprint-type": "ipv6cidr",
+             "footprint-value": ["2001:db8::/32"]
+           }
+         ]
+       }
+     ]
+   }
+}
+]]>
+              </artwork>
+          </figure>
+
+
+        <t>To overcome the described limitation, and allow a list of footprint constraints that
+            match both IPv4 and IPv6 client addresses, below are defined the "IPv4v6CIDR" simple data-type as well as
+            a derived footprint-type.
+        </t>
+        <t><xref target="ipv4v6cidr-data-type-description"/> defines the "IPv4v6CIDR"
+            data-type, which can be either IPv4 or IPv6 address blocks. The section appends the list of data-types
+            described in section 4.3 of <xref target="RFC8006"/>, which are used as properties of CDNI Metadata objects.
+            The data-type is also defined as a footprint-type added to the types specified in section 4.2.2.2 of
+            <xref target="RFC8006"/>.
         </t>
 
         <section anchor="ipv4v6cidr-data-type-description" title="IPv4v6CIDR Data Type Description">
