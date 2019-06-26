@@ -103,11 +103,11 @@
          (the commercial CDN) and dCDN (the ISP caching layer).</t>
       
       <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> and CDNI Metadata Footprint Types
-          (section 7.2 in <xref target="RFC8006"/>) for the defined objects:
+          (section 7.2 of <xref target="RFC8006"/>) for the defined objects:
           <list style="symbols">
             <t>Redirect Target Capability (for dCDN advertising redirect target address)</t>
             <t>Fallback Target Metadata (for uCDN configuring fallback target address)</t>
-            <t>IPv4v6CIDR Footprint Type (for dCDN advertising a footprint consists of both
+            <t>IPv4v6CIDR Footprint Type (for dCDN advertising a footprint that consists of both
                 IPv4 and IPv6 client addresses)</t>
           </list>
       </t>
@@ -407,16 +407,16 @@
 
 
     <section anchor="cdni-metadata-footprint-types" title="CDNI Metadata Footprint Types">
-      <t>The CDNI Footprint Object is defined in section 4.2.2.2 of the CDNI Metadata interface document
-          <xref target="RFC8006"/>. The object is composed of a footprint-type, referring few of the simple data-types
+      <t>The CDNI Footprint Object is defined in the CDNI Metadata interface document, see section 4.2.2.2 of
+          <xref target="RFC8006"/>. The object is composed of a footprint-type, referring to some of the simple data-types
           defined in section 4.3 of <xref target="RFC8006"/>, as well as an array of properties from the specified type.
           Furthermore, in order to facilitate future specification of other optional "footprint-types",
           a clear process for specifying optional footprint types in an IANA registry is also specified
           (see section 7.2 of <xref target="RFC8006"/>).
       </t>
-      <t>Additionally, section 5 in <xref target="RFC8008"/> defines the FCI Capability Advertisement Object,
-          which includes a list of CDNI Footprint Objects as multiple, additive footprint constraints:
-          the advertisement of different footprint types narrows the dCDN's candidacy cumulatively (see Appendix B in
+      <t>Additionally, section 5 of <xref target="RFC8008"/> defines the FCI Capability Advertisement Object,
+          that includes a list of CDNI Footprint Objects as multiple, additive footprint constraints:
+          the advertisement of different footprint types narrows the dCDN's candidacy cumulatively (see Appendix B of
           <xref target="RFC8008"/>).
       </t>
 
@@ -428,8 +428,8 @@
       <section anchor="cdni-metadata-ipv4v6cidr-data-type" title="CDNI Metadata IPv4v6CIDR Data Type">
         <t>Sections 4.3.5 and 4.3.6 of <xref target="RFC8006"/> specify the "IPv4CIDR" and "IPv6CIDR" footprint-types
            (respectively), for listing different IP addresses blocks. When used as footprint constraints as part of a
-            FCI Advertisement Object, these footprint-types do not allow the combination of IPv4 and IPv6 client addresses.
-            Simply as the constraints are additives and a client address cannot be both IPv4 and IPv6.
+            FCI Advertisement Object, these footprint-types do not allow the combination of IPv4 and IPv6 client addresses,
+            as the constraints are additives and a client address cannot be both IPv4 and IPv6.
         </t>
 
         <t>Below is the "IPv4v6CIDR" simple data-type definition. By extending the list of data-types described in
@@ -439,7 +439,7 @@
             match both IPv4 and IPv6 client addresses.
         </t>
 
-        <section anchor="ipv4v6cidr-data-type-description" title="IP4v6CIDR Data Type Description">
+        <section anchor="ipv4v6cidr-data-type-description" title="IPv4v6CIDR Data Type Description">
           <t>Either a IPv4CIDR property or IPv6CIDR property, as described in sections 4.3.5 and 4.3.6 of
              <xref target="RFC8006"/> respectively.
           </t>
@@ -451,7 +451,7 @@
           </list></t>
         </section>
 
-        <section anchor="ipv4v6cidr-footprint-type-object-example" title="IP4v6CIDR Footprint-Type Object Example">
+        <section anchor="ipv4v6cidr-footprint-type-object-example" title="IPv4v6CIDR Footprint-Type Object Example">
           <t>Following is an extension of the example in section
              <xref target="redirect-target-capability-properties"/>, embedding a footprint object of type IPv4v6CIDR.
           </t>
