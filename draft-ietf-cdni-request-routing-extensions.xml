@@ -407,21 +407,10 @@
 
 
     <section anchor="cdni-metadata-footprint-types" title="CDNI Metadata Footprint Types">
-      <t>The CDNI Footprint Object is defined in the CDNI Metadata interface document, see section 4.2.2.2 of
-          <xref target="RFC8006"/>. The object is composed of a footprint-type, referring to some of the simple data-types
-          defined in section 4.3 of <xref target="RFC8006"/>, as well as an array of properties from the specified type.
-          Additionally, in order to facilitate future specification of other optional "footprint-types",
-          a clear process for specifying optional footprint types in an IANA registry is also specified
-          (see section 7.2 of <xref target="RFC8006"/>).
+      <t>This section specifies an extension to the CDNI Metadata footprint-types defined in 
+          section 4.2.2.2 of <xref target="RFC8006"/>. The footprint-type is based on a CDNI Metadata simple data-type, 
+          also defined as an extension of 4.3 of <xref target="RFC8006"/>.
       </t>
-      <t>The FCI Capability Advertisement Object also uses the CDNI Footprint object, as described in section 5 of
-          <xref target="RFC8008"/>. The object is built of "capability-type", "capability-value", and a "footprints"
-          array built of CDNI Footprint Objects, to specify the clients to which the capability applies.
-      </t>
-
-      <t>This section specify new data-types, extending both <xref target="RFC8006"/> and <xref target="RFC8008"/>.
-      </t>
-
 
       <section anchor="cdni-metadata-ipv4v6cidr-data-type" title="CDNI Metadata IPv4v6CIDR Data Type">
         <t> As described in section 5 of <xref target="RFC8008"/>, the FCI Capability Advertisement Object
@@ -476,7 +465,7 @@
         </t>
         <t>The "IPv4v6CIDR" data-type defined in <xref target="ipv4v6cidr-data-type-description"/>, 
             can be either IPv4 or IPv6 address blocks. The data-type is appended to the list of data-types
-            described in section 4.3 of <xref target="RFC8006"/>, which are used as properties of CDNI Metadata objects.
+            described in section 4.3 of <xref target="RFC8006"/> that are used as properties of CDNI Metadata objects.
             Furthermore, this data-type is also defined as a footprint-type added to the types specified in section 4.2.2.2 of
             <xref target="RFC8006"/>.
         </t>
@@ -578,7 +567,7 @@
                <ttcol align="left">Specification</ttcol>
 
                <c>ipv4v6cidr</c>
-               <c> IPv4/IPv6 address block</c>
+               <c>IPv4/IPv6 address block</c>
                <c>RFCthis</c>
 
            </texttable>
