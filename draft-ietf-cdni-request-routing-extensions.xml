@@ -102,7 +102,7 @@
          For consistency, this document follows the CDNI notation of uCDN 
          (the commercial CDN) and dCDN (the ISP caching layer).</t>
       
-      <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> and CDNI Metadata Footprint Types
+      <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> and a CDNI Metadata Footprint Type
           (section 7.2 of <xref target="RFC8006"/>) for the defined objects:
           <list style="symbols">
             <t>Redirect Target Capability (for dCDN advertising redirect target address)</t>
@@ -454,13 +454,13 @@
 
 
       <t>To overcome the described limitation and allow a list of footprint constraints that
-          matches both IPv4 and IPv6 client addresses, below are specified the "IPv4v6CIDR" simple data type as well as
+          matches both IPv4 and IPv6 client addresses, we introduce below the "IPv4v6CIDR" simple data type as well as
           a derived footprint type.
       </t>
 
       <section anchor="cdni-metadata-ipv4v6cidr-data-type" title="CDNI Metadata IPv4v6CIDR Data Type">
         <t>The "IPv4v6CIDR" data type specified in <xref target="cdni-metadata-ipv4v6cidr-data-type-description"/>, 
-            can be either IPv4 or IPv6 address blocks. The data type is appended to the list of data types
+            can be either IPv4 or IPv6 address blocks. The data type is added to the list of data types
             described in section 4.3 of <xref target="RFC8006"/> that are used as properties of CDNI Metadata objects.
         </t>
 
@@ -478,7 +478,7 @@
       </section>
 
       <section anchor="cdni-metadata-ipv4v6cidr-footprint-type-description" title="CDNI Metadata IPv4v6CIDR Footprint Type Description">
-        <t>The "IPv4v6CIDR" simple data type specified in <xref target="cdni-metadata-ipv4v6cidr-footprint-type"/>, is added
+        <t>The "IPv4v6CIDR" simple data type specified in <xref target="cdni-metadata-ipv4v6cidr-data-type"/>, is added
            to the data types listed as footprint types in section 4.2.2.2 of <xref target="RFC8006"/>.
          </t>
          <t>Below is an adjustment for the example in <xref target="cdni-metadata-ipv4v6cidr-data-type"/>, 
@@ -513,7 +513,7 @@
 
       <section anchor="IANA.payload" title="CDNI Payload Types">
 
-        <t>This document requests the registration of the following CDNI Payload Types 
+        <t>This document requests the registration of the following CDNI Payload Type 
            under the IANA "CDNI Payload Types" registry defined in <xref target="RFC7736"/>:</t>
 
         <texttable>
@@ -554,7 +554,7 @@
               namespace defines the valid values for Footprint Object Types, and is already populated with the types
               described in Section 4.2.2.2 of <xref target="RFC8006"/>.
           </t>
-          <t>The following table defines a request for the registration of the additional footprint types
+          <t>The following table defines a request for the registration of an additional footprint type
               as defined in <xref target="cdni-metadata-ipv4v6cidr-footprint-type"/>:
           </t>
 
