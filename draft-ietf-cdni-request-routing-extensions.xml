@@ -453,8 +453,8 @@
         </figure>
 
 
-      <t>To overcome the described limitation, and allow a list of footprint constraints that
-          match both IPv4 and IPv6 client addresses, below are specified the "IPv4v6CIDR" simple data type as well as
+      <t>To overcome the described limitation and allow a list of footprint constraints that
+          matches both IPv4 and IPv6 client addresses, below are specified the "IPv4v6CIDR" simple data type as well as
           a derived footprint type.
       </t>
 
