@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-request-routing-extensions-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-cdni-request-routing-extensions-04" ipr="trust200902">
   <front>
     <title abbrev="CDNI Request Routing Extensions">CDNI Request Routing Extensions</title>
 
@@ -169,7 +169,7 @@
 
                <t>Type: DnsTarget object (see <xref target="dns-target"/>)</t>
 
-               <t>Mandatory-to-Specify: No. but at least one of "dns-target" or "http-target" MUST be present and non empty.</t>
+               <t>Mandatory-to-Specify: No. but at least one of "dns-target" or "http-target" MUST be present and non-empty.</t>
             </list></t>
             <t>Property: http-target<list style="empty">
 
@@ -177,7 +177,7 @@
 
                <t>Type: HttpTarget object (see <xref target="http-target"/>)</t>
 
-               <t>Mandatory-to-Specify: No, but at least one of "dns-target" or "http-target" MUST be present and non empty.</t>
+               <t>Mandatory-to-Specify: No, but at least one of "dns-target" or "http-target" MUST be present and non-empty.</t>
             </list></t>
 
          </list></t>
@@ -443,14 +443,11 @@
 
 
     <section anchor="Acknowledgements" title="Acknowledgements">
-      <t>TBD.</t>
+      <t>The authors thank Nir B. Sopher for reality checks against production use cases, his contribution is significant to this document. 
+         The authors also thank Ben Niven-Jenkins for his review and feedback and Kevin J. Ma for his guidance throughout the development 
+         of this document including his regular reviews.</t>
     </section>
     
-    <section anchor="Contributors" title="Contributors">
-      <t>TBD.</t>
-    </section>
-
-
   </middle>
 
   <back>
