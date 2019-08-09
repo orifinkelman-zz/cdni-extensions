@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-request-routing-extensions-04" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-cdni-request-routing-extensions-05" ipr="trust200902">
   <front>
     <title abbrev="CDNI Request Routing Extensions">CDNI Request Routing Extensions</title>
 
@@ -198,10 +198,10 @@
              "b.service123.ucdn.example.com"
           ],
           "dns-target": {
-             "host": "service123.ucdn.example.dcdn.com"
+             "host": "service123.ucdn.dcdn.example.com"
           },
           "http-target": {
-              "host": "us-east1.dcdn.com",
+              "host": "us-east1.dcdn.example.com",
               "path-prefix": "/cache/1/",
               "include-redirecting-host": true          
           }
@@ -234,7 +234,7 @@
          <figure>
             <artwork><![CDATA[
  {
-    "host": "service123.ucdn.example.dcdn.com"
+    "host": "service123.ucdn.dcdn.example.com"
  }
          ]]></artwork>
          </figure>
@@ -248,7 +248,7 @@
  
  Response:
  a.service123.ucdn.example.com: 
- type CNAME, class IN, cname service123.ucdn.example.dcdn.com
+ type CNAME, class IN, cname service123.ucdn.dcdn.example.com
          ]]></artwork>
          </figure>  
       </section>
@@ -293,7 +293,7 @@
          <figure>
             <artwork><![CDATA[
 {
-   "host": "us-east1.dcdn.com",
+   "host": "us-east1.dcdn.example.com",
    "path-prefix": "/cache/1/",
    "include-redirecting-host": true
 }
@@ -309,7 +309,7 @@
  
  Response:
  HTTP/1.1 302 Found
- Location: http://us-east1.dcdn.com/cache/1/
+ Location: http://us-east1.dcdn.example.com/cache/1/
  a.service123.ucdn.example.com/vod/1/movie.mp4
          ]]></artwork>
          </figure>  
