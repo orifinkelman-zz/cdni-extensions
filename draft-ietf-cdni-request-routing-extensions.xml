@@ -60,29 +60,32 @@
     <date/>
 
     <abstract>
-      <t>The Open Caching working group of the Streaming Video Alliance is focused 
-         on the delegation of video delivery requests from commercial CDNs to a 
-         caching layer at the ISP. In that aspect, Open Caching is a specific use
-         case of CDNI, where the commercial CDN is the upstream CDN (uCDN) and the
-         ISP caching layer is the downstream CDN (dCDN). The extensions specified in this
+      <t>Open Caching is a use case of CDNI in which the commercial CDN is the upstream CDN (uCDN) and the
+         ISP caching layer serves as the downstream CDN (dCDN). The extensions specified in this
          document to the CDNI Metadata and FCI interfaces are derived from requirements raised by 
-         Open Caching but are applicable to CDNI use cases in general.</t>
+         Open Caching but are also applicable to CDNI use cases in general.</t>
     </abstract>
 
     <note title="Requirements Language">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in <xref
-      target="RFC2119">RFC 2119</xref>.</t>
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", 
+         "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", 
+         and "OPTIONAL" in this document are to be interpreted as described in 
+         <eref target="https://tools.ietf.org/html/bcp14">BCP 14</eref> 
+         <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, 
+         they appear in all capitals, as shown here.</t>
     </note>
   </front>
 
   <middle>
     <section title="Introduction">
-      <t>This document defines objects needed for Open Caching request routing. For that purpose it 
-         extends CDNI metadata <xref target="RFC8006"/> and CDNI Footprint and Capabilities <xref target="RFC8008"/>.
-         For consistency, this document follows the CDNI notation of uCDN 
-         (the commercial CDN) and dCDN (the ISP caching layer).</t>
+      <t>The Open Caching working group of the Streaming Video Alliance (SVA) is focused on the delegation of 
+         video delivery requests from commercial CDNs to a caching layer at the Internet Service Provider's (ISP) 
+         network. Open Caching is a specific use case of CDNI where the commercial CDN is the upstream CDN (uCDN) 
+         and the ISP caching layer is the downstream CDN (dCDN). This document defines and registers CDNI generic 
+         metadata object <xref target="RFC8006"/> and CDNI Footprint and Capabilities object <xref target="RFC8008"/> 
+         that are required for Open Caching request routing. For consistency with other CDNI documents this 
+         document follows the CDNI convention of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the 
+         commerical CDN and ISP caching layer respectively.</t>
       
       <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> for the defined objects:
           <list style="symbols">
@@ -93,14 +96,20 @@
         
       <section anchor="terminology" title="Terminology">
         <t>This document reuses the terminology defined in <xref
-        target="RFC6707"/>, <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
+        target="RFC6707"/>, <xref target="RFC7336"/>, <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>. Specifically, we use the following CDNI 
+        acronyms:
+          <list style="symbols">
+            <t>FCI - Footprint and Capability Interface (see <xref target="RFC8008"/>)</t>            
+            <t>MI - Metadata Interface (see <xref target="RFC8006"/>)</t> 
+            <t>uCDN, dCDN - Upstream CDN and Downstream CDN respectively (see <xref target="RFC7336"/>)</t>           
+          </list>
+        </t>
 
-        <t>Additionally, the following terms are used throughout this document
-        and are defined as follows:
+        <t>Additionally, the following terms are used throughout this document:
 
           <list style="symbols">
-            <t>RR - Request Router</t>            
-            <t>CP - Content Provider</t>           
+            <t>FQDN - Fully Qualified Domain Name</t>
+            <t>CDN - Content Delivery Network</t>
           </list>
         </t>
       </section>
@@ -151,6 +160,12 @@
          3xx response, typically a 302 (Found) (see section 7.1.2 of <xref target="RFC7231"/> and section 6.4 of 
          <xref target="RFC7231"/>). 
       </t>
+      <t>
+         If the redirect target capability object does not contain a target or the target is empty, the uCDN MUST interpret it as
+         "no target available for these uCDN hosts for the specified footprint". In case such a target was already advertised in a 
+         previous FCI object, the uCDN MUST interperet it as an update that deletes the previous redirect target.
+       </t> 
+
       <section anchor="redirect-target-capability-properties" title="Properties of Redirect Target Capability Object">
          <t>The Redirect Target capability object consists of the following properties:</t> 
          <t><list style="empty">
@@ -169,7 +184,7 @@
 
                <t>Type: DnsTarget object (see <xref target="dns-target"/>)</t>
 
-               <t>Mandatory-to-Specify: No. but at least one of "dns-target" or "http-target" MUST be present and non-empty.</t>
+               <t>Mandatory-to-Specify: No. If the dns-target is not present or empty the uCDN MUST interpret it as "no dns-target available".</t>
             </list></t>
             <t>Property: http-target<list style="empty">
 
@@ -177,13 +192,14 @@
 
                <t>Type: HttpTarget object (see <xref target="http-target"/>)</t>
 
-               <t>Mandatory-to-Specify: No, but at least one of "dns-target" or "http-target" MUST be present and non-empty.</t>
+               <t>Mandatory-to-Specify: No. If the http-target is not present or empty the uCDN MUST interpret it as "no http-target available".</t>
             </list></t>
 
          </list></t>
          <t>The following is an example of a Redirect Target capability object serialization that advertises a dCDN target address 
             that is attached to a specific list of uCDN "redirecting-hosts". A uCDN host that is included in that list can redirect 
-            to the advertised dCDN redirect target.
+            to the advertised dCDN redirect target. The capabilities object is serialized as a JSON object as defined in section 5 of 
+            <xref target="RFC8008"/>
          </t>
 
          <figure>
@@ -320,7 +336,7 @@
       <t>Open Caching requires that the uCDN provide a fallback target server to the 
          dCDN, to be used in cases where the dCDN cannot properly handle the request. 
          To avoid redirect loops, the fallback target server's address at the uCDN MUST be 
-         differnet from the original uCDN address from which the client was redirected 
+         different from the original uCDN address from which the client was redirected 
          to the dCDN. The uCDN MUST avoid further redirection when receiving the client request at 
          the fallback target. The fallback target is defined as a generic metadata object 
          (see section 3.2 of <xref target="RFC8006"/>)</t>
@@ -459,21 +475,24 @@
                        
       <?rfc include="reference.RFC.3986" ?>
 
+      <?rfc include="reference.RFC.6707" ?>
+
       <?rfc include="reference.RFC.7231" ?>
+                  
+      <?rfc include="reference.RFC.7336" ?>   
                        
       <?rfc include="reference.RFC.8006" ?>
 
       <?rfc include="reference.RFC.8007" ?>
 
       <?rfc include="reference.RFC.8008" ?>
+
+      <?rfc include="reference.RFC.8174" ?>
           
     </references>
 
     <references title="Informative References">
-      <?rfc include="reference.RFC.6707" ?>
       
-      <?rfc include="reference.RFC.7336" ?>   
-           
       <?rfc include="reference.RFC.7736" ?>
 
       <?rfc include="reference.RFC.7871" ?>
