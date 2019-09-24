@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-request-routing-extensions-05" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-cdni-request-routing-extensions-06" ipr="trust200902">
   <front>
     <title abbrev="CDNI Request Routing Extensions">CDNI Request Routing Extensions</title>
 
