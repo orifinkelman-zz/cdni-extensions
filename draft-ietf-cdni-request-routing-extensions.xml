@@ -680,8 +680,12 @@ End User              dCDN            uCDN fallback          uCDN RR
                        
       <?rfc include="reference.RFC.3986" ?>
 
+      <?rfc include="reference.RFC.6707" ?>
+
       <?rfc include="reference.RFC.7231" ?>
                   
+      <?rfc include="reference.RFC.7336" ?>
+
       <?rfc include="reference.RFC.7975" ?>  
                        
       <?rfc include="reference.RFC.8006" ?>
@@ -696,10 +700,6 @@ End User              dCDN            uCDN fallback          uCDN RR
 
     <references title="Informative References">
       
-      <?rfc include="reference.RFC.6707" ?>
-
-      <?rfc include="reference.RFC.7336" ?>  
-
       <?rfc include="reference.RFC.7736" ?>
 
       <?rfc include="reference.RFC.7871" ?>
