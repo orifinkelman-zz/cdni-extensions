@@ -65,8 +65,8 @@
          This document updates RFC 8007 to include generic extensions and more
          granular content matching options, required by the Open Caching architecture.
          The Open Caching working group of the Streaming Video Alliance is focused on
-         the delegation of video delivery request from commercial CDNs to a caching
-         layer at the ISP. In that aspect, Open Caching is a specific use case of CDNI,
+         the delegation of video delivery request from commercial Content Delivery Networks (CDNs) to a caching
+         layer at the ISP. In that aspect, Open Caching is a specific use case of Content Delivery Networks Interconnection (CDNI),
          where the commercial CDN is the upstream CDN (uCDN) and the ISP caching layer
          is the downstream CDN (dCDN). The extensions specified in this document to the
          CDNI Control Interface / Triggers are derived from requirements of Open Caching
@@ -88,8 +88,8 @@
          operations. For that purpose it extends CDNI Control Interface / Triggers <xref target="RFC8007"/>
          by adding new content selection options to the trigger specification and specifying a generic
          extension mechanism that enables adding future functions for controlling the trigger execution.
-         This document also defines and initial set of extension objects. This document gives examples
-         for the extensions specified herein, for complete examples of the trigger interface usage see
+         This document also defines an initial set of extension objects and provides examples
+         for the extensions. For full and complete examples of the trigger interface usage please see
          Section 6 of <xref target="RFC8007"/>.
       </t>
 
@@ -278,8 +278,8 @@
               array as defined in <xref target="error-description-v2"/>, instead of a "errors" array.
               All other properties of the trigger status v2 are as defined in Section 5.1.2 of
               <xref target="RFC8007"/>. The errors array "errors.v2" is a list of all errors that
-              occurred in any of the downstream CDNs along the execution path. When a downstream CDN,
-              dCDN-A, propagates a trigger to another downstream CDN, dCDN-B, it MUST also propagated
+              occurred in any of the downstream CDNs along the execution path. When a downstream CDN,for example, 
+              dCDN-A, propagates a trigger to another downstream CDN, say dCDN-B, it MUST also propagate
               back all errors reported by dCDN-B in the trigger status resource and add them to its
               own trigger status resource.
            </t>
@@ -384,17 +384,17 @@ RESPONSE:
           </t>
           <t>
              Error propagation - enable the uCDN to traceback an error to the dCDN in which it occurred.
-             CDNI triggers may be propagated over a chain of downstream CDNs. Let us take for example an
-             upstream (uCDN-A) CDN A that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating
-             to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed
+             CDNI triggers may be propagated over a chain of downstream CDNs.  For example, an
+             upstream CDN, call it UCDN-A, that is delegating to a downstream CDN, call it dCDN-B.  And, dCDN-B is delegating
+             to a downstream CDN, call it, dCDN-C. In this example, triggers sent from uCDN-A to dCDN-B may be redistributed
              from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it is essential for
              uCDN-A that sets the trigger, to be able to trace back an error to the downstream CDN where it occurred.
              This document adds a mechanism to propagate the ID of the faulty dCDN back to the uCDN by adding the CDN ID
-             to the error description. When a downstream dCDN-B propagates a trigger to another downstream
-             dCDN-C, it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
-             them to the errors array in its own status resource to be sent back to the originating uCDN-A.
-             This makes sure that the trigger originating upstream CDN will receive an array of errors that occurred
-             in all the CDNs along the execution path, each error carrying its own CDN identifier.
+             to the error description. When a downstream dCDN (dCDN-B) propagates a trigger to another downstream CDN
+             (dCDN-C), it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
+             them to the errors array in its own status resource to be sent back to the originating CDN, in this example, the uCDN-A.
+             This makes sure that the trigger originating in an upstream CDN will receive an array of errors that occurred
+             in all the downstream CDNs along the execution path, each error carrying its own CDN identifier.
           </t>
         </list></t>
       </section>
@@ -857,7 +857,7 @@ https://video.example.com/k/movie1/4/013.ts
           <t><list style="empty">
             <t>Properties: content.regexs, content.playlists<list style="empty">
               <t>
-                Description: Content Regex and Playlist references copied from the Trigger Specification.
+                Description: Content Regex and Playlist references are copied from the Trigger Specification.
                 Only those regexs and playlists to which the error applies are included in each property,
                 but those references MUST be exactly as they appear in the request; the dCDN MUST NOT change
                 or generalize the URLs or Regexs. Note that these properties are added on top of the already
@@ -1108,7 +1108,7 @@ RESPONSE:
             way the trigger is executed. In this example the receiving dCDN identified as "AS64500:0"
             does not support the first extension in the extensions array. dCDN "AS64500:0" further
             distributes this trigger to another downstream CDN that is identified as "AS64501:0", which
-            does not support the second extension in the extensions array. The error is propagate from
+            does not support the second extension in the extensions array. The error is propagated from
             "AS64501:0" to "AS64500:0" and the errors.v2 array reflects both errors.
           </t>
           <figure>
@@ -1319,12 +1319,12 @@ RESPONSE:
            time frame to execute the trigger.
         </t>
         <t>
-           A uCDN may wish to to schedule a trigger such that the dCDN will execute it in local time,
+           A uCDN may wish to schedule a trigger such that the dCDN will execute it in local time,
            as it is measured in each region. For example, a uCDN may wish the dCDN to pull the content
            at off-peak hours, between 2AM-4AM, however, as a CDN is distributed across multiple time
            zones, the UTC definition of 2AM depends on the actual location.
         </t>
-        <t>We define two alternatives for localized scheduling:<list style="symbols">
+        <t>This document defines two alternatives for localized scheduling:<list style="symbols">
            <t>Regional schedule: When used in conjunction with the Location Policy defined
               in <xref target="location-policy"/>, the uCDN can trigger separate commands for
               different geographical regions, for each region using a different schedule. This allows
@@ -1375,7 +1375,7 @@ RESPONSE:
           <t>
              If a time policy object is not listed within the trigger command, the default behavior
              is to execute the trigger in a time frame most suitable to the dCDN taking under consideration
-             other constrains and / or obligations.
+             other constrains and/or obligations.
           </t>
 
         <t>Example of a generic trigger extension object containing a time policy object that schedules the
@@ -1417,7 +1417,7 @@ RESPONSE:
             </list></t>
             <t>Property: end<list style="empty">
 
-              <t>Description: The end time of the window.</t>
+              <t>Description: The end-time of the window.</t>
 
               <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
 
@@ -1465,7 +1465,7 @@ RESPONSE:
           <t><list style="empty">
             <t>Property: start<list style="empty">
 
-              <t>Description: The start time of the window.</t>
+              <t>Description: The start-time of the window.</t>
 
               <t>Type: JSON string formatted as DateLocalTime as defined in
                  <xref target="date-local-time"/>.
@@ -1893,7 +1893,7 @@ Month Number  Month/Year           Maximum value of date-mday
 
     <section anchor="Contributors" title="Contributors">
       <t>The authors would like to thank all members of the "Streaming Video Alliance" (SVA) Open Caching Working Group for
-         their contribution in support of this document. </t>
+         their contribution in support of this document. Authors also thank Kevin Ma for his reviews and comments. </t>
     </section>
 
 
