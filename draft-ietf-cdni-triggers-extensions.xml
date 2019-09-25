@@ -385,7 +385,7 @@ RESPONSE:
           <t>
              Error propagation - enable the uCDN to traceback an error to the dCDN in which it occurred.
              CDNI triggers may be propagated over a chain of downstream CDNs.  For example, an
-             upstream CDN, call it UCDN-A, that is delegating to a downstream CDN, call it dCDN-B.  And, dCDN-B is delegating
+             upstream CDN, call it uCDN-A, that is delegating to a downstream CDN, call it dCDN-B.  And, dCDN-B is delegating
              to a downstream CDN, call it, dCDN-C. In this example, triggers sent from uCDN-A to dCDN-B may be redistributed
              from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it is essential for
              uCDN-A that sets the trigger, to be able to trace back an error to the downstream CDN where it occurred.
@@ -1893,7 +1893,7 @@ Month Number  Month/Year           Maximum value of date-mday
 
     <section anchor="Contributors" title="Contributors">
       <t>The authors would like to thank all members of the "Streaming Video Alliance" (SVA) Open Caching Working Group for
-         their contribution in support of this document. Authors also thank Kevin Ma for his reviews and comments. </t>
+         their contribution in support of this document. Authors also thank Kevin J.&nbsp;Ma for his reviews and comments. </t>
     </section>
 
 
