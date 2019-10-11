@@ -134,7 +134,7 @@
          and they may also change over time, for example as a result of network problems. Given this variable 
          and dynamic nature of the redirect target address, it may not be suitable to advertise it during bootstrap. 
          A more dynamic and footprint oriented interface is required. Section 4.3 of <xref target="RFC7336"/> suggests 
-         that it could be one of the roles of the FCI <xref target="RFC8008"/>. Following this suggestion we have, 
+         that it could be one of the roles of the FCI <xref target="RFC8008"/>. Following this suggestion, we have 
          therefore, chosen to use the CDNI Footprint and Capabilities interface for redirect target address advertisement.
       </t>
          
@@ -194,7 +194,7 @@
             </list></t>
             <t>Property: dns-target<list style="empty">
 
-               <t>Description: Target address for a DNS A record, AAAA record or CNAME record.</t>
+               <t>Description: Target address for a DNS A record, AAAA record, or CNAME record.</t>
 
                <t>Type: DnsTarget object (see <xref target="dns-target"/>)</t>
 
@@ -350,7 +350,7 @@
       <section anchor="redirect-target-usage-example" title="Usage Example">
          <t>
            Before requests can be routed from the uCDN to the dCDN the CDNs must exchange service configurations
-           between them. Using the MI the uCDN advertises out-of-band its hosts to the dCDN, each host is designated 
+           between them. Using the MI, the uCDN advertises out-of-band its hosts to the dCDN, each host is designated 
            by a host name and has its own specific metadata (see Section 4.1.2 of <xref target="RFC8006"/>.
            The dCDN, using the FCI, advertises, also out-of-band, the redirect target address object defined in 
            <xref target="redirect-target-capability-properties"/> for the relevant uCDN hosts.
@@ -461,7 +461,7 @@ End User                  dCDN                   uCDN RR
          to redirect a client back to the uCDN. Fallback target is represented as endpoint objects as defined in 
          section 4.3.3 of <xref target="RFC8006"/>.</t>
          
-      <t>The uCDN fallback target address may be used as a DNS A record, AAAA record or CNAME record in case of DNS redirection 
+      <t>The uCDN fallback target address may be used as a DNS A record, AAAA record, or CNAME record in case of DNS redirection 
          or a hostname for HTTP redirect.</t>
 
       <t>When using HTTP redirect to route a client request back to the uCDN, it is the dCDN's responsibility
