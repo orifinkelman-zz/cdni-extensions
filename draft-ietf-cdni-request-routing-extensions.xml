@@ -257,7 +257,7 @@
          ]]></artwork>
          </figure>
       </section> 
-      <section anchor="dns-target" title="DnsTarget">
+      <section anchor="dns-target" title="DnsTarget Object">
          <t>The DnsTarget object gives the target address for the DNS response to delegate from the uCDN to the dCDN.</t>
                            
          <t><list style="empty">
@@ -295,7 +295,7 @@
          </figure>  
       </section>
 
-      <section anchor="http-target" title="HttpTarget">
+      <section anchor="http-target" title="HttpTarget Object">
          <t>The HttpTarget object gives the necessary information to construct the target Location URI for HTTP redirection.</t>
                         
          <t><list style="empty">
