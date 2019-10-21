@@ -60,30 +60,25 @@
     <date/>
 
     <abstract>
-      <t>Open Caching is a use case of Content Delivery Networks Interconnetion (CDNI) in which the commercial 
-         Content Delivery Network (CDN) is the upstream CDN (uCDN) and the ISP caching layer serves as the 
-         downstream CDN (dCDN). The extensions specified in this document to the CDNI Metadata and FCI interfaces 
-         are derived from requirements raised by Open Caching but are also applicable to CDNI use cases in general.</t>
+      <t>Open Caching is a use case of Content Delivery Networks Interconnection (CDNI) in which the commercial
+         Content Delivery Network (CDN) is the upstream CDN (uCDN) and the ISP caching layer serves as the
+         downstream CDN (dCDN). The extensions specified in this document to the CDNI Metadata Interface (MI) and
+         the Footprint and Capabilities Interface (FCI) are derived from requirements raised by Open Caching but
+         are also applicable to CDNI use cases in general.</t>
     </abstract>
 
-    <note title="Requirements Language">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", 
-         "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
-         document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> 
-         when, and only when, they appear in all capitals, as shown here.</t>
-    </note>
   </front>
 
   <middle>
     <section title="Introduction">
-      <t>The Open Caching working group of the Streaming Video Alliance (SVA) is focused on the delegation of 
+      <t>The Open Caching working group of the Streaming Video Alliance (SVA) is focused on the delegation of
          video delivery requests from commercial CDNs to a caching layer at the Internet Service Provider's (ISP) 
          network. Open Caching is a specific use case of CDNI where the commercial CDN is the upstream CDN (uCDN) 
          and the ISP caching layer is the downstream CDN (dCDN). This document defines and registers CDNI generic 
          metadata object <xref target="RFC8006"/> and CDNI Footprint and Capabilities object <xref target="RFC8008"/> 
          that are required for Open Caching request routing. For consistency with other CDNI documents this 
          document follows the CDNI convention of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the 
-         commerical CDN and ISP caching layer respectively.</t>
+         commercial CDN and ISP caching layer respectively.</t>
       
       <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> for the defined objects:
           <list style="symbols">
@@ -99,7 +94,7 @@
             <t>CDN - Content Delivery Network</t>
           </list>
         </t>
-        <t>Additionaly, this document reuses the terminology defined in <xref target="RFC6707"/>, 
+        <t>Additionally, this document reuses the terminology defined in <xref target="RFC6707"/>,
            <xref target="RFC7336"/>, <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>. 
            Specifically, we use the following CDNI acronyms:
           <list style="symbols">
@@ -107,13 +102,20 @@
             <t>MI - Metadata Interface (see <xref target="RFC8006"/>)</t> 
             <t>uCDN, dCDN - Upstream CDN and Downstream CDN respectively (see <xref target="RFC7336"/>)</t> 
             <t>RT - Redirection Target. Endpoint for redirection from uCDN to dCDN.</t> 
-            <t>RR - Request Router. An element responsible for routing user requests.</t>         
+            <t>RR - Request Router. An element responsible for routing user requests, typically using HTTP redirect
+               or DNS CNAME, depending on the use case.</t>    
           </list>
         </t>
       </section>
 
-    </section>
+      <section title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", 
+         "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this 
+         document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> 
+         when, and only when, they appear in all capitals, as shown here.</t>
+      </section>
 
+    </section>
 
     <section anchor="redirect-target-capability" title="Redirect Target Capability">
       <t>Iterative request redirection is defined in Section 1.1 of <xref target="RFC7336"/> and elaborated
@@ -128,7 +130,7 @@
         </t>
       </list></t>
       <t>
-         In this document we adopt the same defintion of the RT for the Iterative Request Redirect use case.
+         In this document we adopt the same definition of the RT for the Iterative Request Redirect use case.
          This use case requires the provisioning of the RT address to be used by the uCDN in order to redirect 
          to the dCDN. RT addresses can vary between different footprints, for example, between different regions, 
          and they may also change over time, for example as a result of network problems. Given this variable 
@@ -166,7 +168,7 @@
          of the uCDN DNS router. Note that DNS routers make routing decisions based on either the DNS resolver's IP 
          address or the client IP address when EDNS0 client-subnet is used (see <xref target="RFC7871"/>). 
          The dCDN may choose to advertise redirect targets and footprints to cover both cases. A uCDN DNS router 
-         implemenation SHOULD prefer routing based on client IP address when it is available.
+         implementation SHOULD prefer routing based on client IP address when it is available.
       </t>
       <t>
          A redirect target for HTTP redirection is the URI to be used as the value for the Location header of a HTTP redirect 
@@ -176,7 +178,7 @@
       <t>
          If the redirect target capability object does not contain a target or the target is empty, the uCDN MUST interpret it as
          "no target available for these uCDN hosts for the specified footprint". In case such a target was already advertised in a 
-         previous FCI object, the uCDN MUST interperet it as an update that deletes the previous redirect target.
+         previous FCI object, the uCDN MUST interpret it as an update that deletes the previous redirect target.
        </t> 
 
 
@@ -298,6 +300,16 @@
 
                <t>Mandatory-to-Specify: Yes.</t>
             </list></t>
+            <t>Property: scheme<list style="empty">
+
+               <t>Description: A URI scheme to be used in the redirect response location construction.</t>
+
+               <t>Type: A URI scheme as defined in Section 3.1 of <xref target="RFC3986"/> represented as a JSON string. The scheme MUST be 
+                  either "http" or "https".</t>
+
+               <t>Mandatory-to-Specify: No. If this property is absent or empty the uCDN request router MUST use the same scheme as was 
+                  used in the original request before redirection.</t>
+            </list></t>
             <t>Property: path-prefix<list style="empty">
 
                <t>Description: A path prefix for the HTTP redirect Location header. The original path is appended after this prefix.</t>
@@ -308,6 +320,7 @@
                <t>Mandatory-to-Specify: No. If this property is absent or empty, the uCDN MUST NOT prepend a path prefix to 
                   the original content path, i.e., the original path MUST appear in the location URI right after the authority component.</t>
             </list></t>
+
             <t>Property: include-redirecting-host<list style="empty">
 
                <t>Description: A flag indicating whether or not to include the redirecting host as the first path segment after the path-prefix.
@@ -320,19 +333,20 @@
                <t>Mandatory-to-Specify: No. Default value is False.</t>
             </list></t>         
          </list></t>
-         <t>Example of HttpTarget object with a path-prefix and include-redirecting-host:</t>
+         <t>Example of HttpTarget object with a "scheme", a "path-prefix", and "include-redirecting-host" properties:</t>
 
          <figure>
             <artwork><![CDATA[
 {
    "host": "us-east1.dcdn.example.com",
+   "scheme": "https",
    "path-prefix": "/cache/1/",
    "include-redirecting-host": true
 }
          ]]></artwork>
          </figure>
             <t>Example of a HTTP request for content at uCDN host "a.service123.ucdn.example.com" and the corresponding HTTP response with 
-               Location header used for redirecting the client to the dCDN using the the http-target in the above example:</t>
+               a Location header, used for redirecting the client to the dCDN, constructed according to the HttpTarget object from the above example:</t>
          <figure>
             <artwork><![CDATA[
  Request:
@@ -341,7 +355,7 @@
  
  Response:
  HTTP/1.1 302 Found
- Location: http://us-east1.dcdn.example.com/cache/1/
+ Location: https://us-east1.dcdn.example.com/cache/1/
  a.service123.ucdn.example.com/vod/1/movie.mp4
          ]]></artwork>
          </figure>  
@@ -383,7 +397,7 @@
              The uCDN advertises a host (s123.ucdn.example.com) with the host metadata. 
            </t>
            <t>
-             The dCDN adveritses its FCI objects to the uCDN including a FCI.RedirectTarget object that contains 
+             The dCDN advertises its FCI objects to the uCDN including a FCI.RedirectTarget object that contains 
              the redirect target address (us-east1.dcdn.example.com) specified for that uCDN host.  
            </t>
          </list></t>
@@ -541,7 +555,7 @@ End User                  dCDN                   uCDN RR
              contains a MI.FallbackTarget object.
            </t>
            <t>
-             The dCDN adveritses its FCI objects to the uCDN including a FCI.RedirectTarget object that contains 
+             The dCDN advertises its FCI objects to the uCDN including a FCI.RedirectTarget object that contains 
              the redirect target address (us-east1.dcdn.example.com) specified for that uCDN host.  
           </t>
          </list></t>
@@ -652,8 +666,8 @@ End User              dCDN            uCDN fallback          uCDN RR
          defined in Section 8 of <xref target="RFC8006"/> and in Section 7 of <xref target="RFC8008"/> respectively. 
       </t> 
         <section anchor="Privacy" title="Confidentiality and Privacy">
-          <t>The redirect Target FCI object potentially exposes information about the internal strcture of the dCDN network. 
-             A third party could intercept the FCI transactions and use the information to attack the dCDN. An implemenation 
+          <t>The redirect Target FCI object potentially exposes information about the internal structure of the dCDN network. 
+             A third party could intercept the FCI transactions and use the information to attack the dCDN. An implementation 
              of the FCI MUST therefore use strong authentication and encryption and strictly follow the directions for securing
              the interface as defined for the Metadata Interface in Section 8.3 of <xref target="RFC8006"/>.
           </t> 
