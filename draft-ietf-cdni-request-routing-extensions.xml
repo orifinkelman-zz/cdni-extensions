@@ -162,24 +162,32 @@
          advertise the hosts within the Redirect Target capability object as "redirecting-hosts". In this case, the 
          uCDN can redirect to that dCDN address, only if the User Agent request was to one of these uCDN hosts.
       </t>
-      <t>
-         A redirect target for DNS redirection is an IPv4 address used as an A record response, an IPv6 address used as 
-         an AAAA record response or a FQDN used as an alias in a CNAME record response (see <xref target="RFC1034"/>) 
-         of the uCDN DNS router. Note that DNS routers make routing decisions based on either the DNS resolver's IP 
-         address or the client IP address when EDNS0 client-subnet is used (see <xref target="RFC7871"/>). 
-         The dCDN may choose to advertise redirect targets and footprints to cover both cases. A uCDN DNS router 
-         implementation SHOULD prefer routing based on client IP address when it is available.
-      </t>
-      <t>
-         A redirect target for HTTP redirection is the URI to be used as the value for the Location header of a HTTP redirect 
-         3xx response, typically a 302 (Found) (see Section 7.1.2 of <xref target="RFC7231"/> and section 6.4 of 
-         <xref target="RFC7231"/>). 
-      </t>
+
       <t>
          If the redirect target capability object does not contain a target or the target is empty, the uCDN MUST interpret it as
          "no target available for these uCDN hosts for the specified footprint". In case such a target was already advertised in a 
          previous FCI object, the uCDN MUST interpret it as an update that deletes the previous redirect target.
        </t> 
+
+      <section title="DNS Redirect Target"> 
+        <t>
+            A redirect target for DNS redirection is an IPv4 address used as an A record response, an IPv6 address used as 
+            an AAAA record response or a FQDN used as an alias in a CNAME record response (see <xref target="RFC1034"/>) 
+            of the uCDN DNS router. Note that DNS routers make routing decisions based on either the DNS resolver's IP 
+            address or the client IP subnet when EDNS0 client-subnet (ECS) is used (see <xref target="RFC7871"/>). 
+            The dCDN may choose to advertise redirect targets and footprints to cover both cases. A uCDN DNS router 
+            implementation SHOULD prefer routing based on client IP subnet when ECS option is present.
+            A dCDN implementation using the ECS option MUST be aware of the privacy drawbacks listed in Section 2 of 
+            <xref target="RFC7871"/> and SHOULD follow the guidelines provided in Section 11.1 of <xref target="RFC7871"/>.   
+        </t>
+      </section>
+      <section title="HTTP Redirect Target"> 
+        <t>
+            A redirect target for HTTP redirection is the URI to be used as the value for the Location header of a HTTP redirect 
+            3xx response, typically a 302 (Found) (see Section 7.1.2 of <xref target="RFC7231"/> and section 6.4 of 
+            <xref target="RFC7231"/>). 
+        </t>
+      </section>
 
 
       <section anchor="redirect-target-capability-properties" title="Properties of Redirect Target Capability Object">
