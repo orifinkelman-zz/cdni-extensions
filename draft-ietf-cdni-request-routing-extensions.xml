@@ -144,7 +144,8 @@
          <t>Footprint: The dCDN may want to have a different target per footprint. 
             Note that a dCDN may spread across multiple geographies. This makes it 
             easier to route client requests to a nearby request router. Though this can be achieved 
-            using a single canonical name and Geo DNS, that approach has limitations; 
+            using a single canonical name and "Geo DNS", such that in different geographies the same 
+            hostname is resolved to different IP address, that approach has limitations; 
             for example a client may be using a third party DNS resolver, making it 
             impossible for the redirector to detect where the client is located, or Geo DNS 
             granularity may be too rough for the requirement of the application.</t>
@@ -171,12 +172,13 @@
 
       <section title="DNS Redirect Target"> 
         <t>
-            A redirect target for DNS redirection is an IPv4 address used as an A record response, an IPv6 address used as 
-            an AAAA record response or a FQDN used as an alias in a CNAME record response (see <xref target="RFC1034"/>) 
+            A redirect target for DNS redirection is a FQDN used as an alias in a CNAME record response (see <xref target="RFC1034"/>) 
             of the uCDN DNS router. Note that DNS routers make routing decisions based on either the DNS resolver's IP 
             address or the client IP subnet when EDNS0 client-subnet (ECS) is used (see <xref target="RFC7871"/>). 
-            The dCDN may choose to advertise redirect targets and footprints to cover both cases. A uCDN DNS router 
-            implementation SHOULD prefer routing based on client IP subnet when ECS option is present.
+            The dCDN may choose to advertise redirect targets and footprints to cover both cases, such that the uCDN resolution
+            would route the DNS query to a different dCDN CNAMEs according client subnet or dCDN resolver IP address.
+            This method further allows the dCDN DNS to optimize the resolution by localizing the target CNAMEs.
+            A uCDN implementation SHOULD prefer routing based on client IP subnet when ECS option is present.
             A dCDN implementation using the ECS option MUST be aware of the privacy drawbacks listed in Section 2 of 
             <xref target="RFC7871"/> and SHOULD follow the guidelines provided in Section 11.1 of <xref target="RFC7871"/>.   
         </t>
@@ -224,8 +226,8 @@
           
          <t>The following is an example of a Redirect Target capability object serialization that advertises a dCDN target address 
             that is attached to a specific list of uCDN "redirecting-hosts". A uCDN host that is included in that list can redirect 
-            to the advertised dCDN redirect target. The capabilities object is serialized as a JSON object as defined in Section 5 of 
-            <xref target="RFC8008"/>
+            to the advertised dCDN redirect target. The capabilities object is serialized as a JSON object as defined in Section 5.1 
+            of <xref target="RFC8008"/>
          </t>
 
          <figure>
@@ -272,27 +274,30 @@
                <t>Mandatory-to-Specify: Yes.</t>
             </list></t>
          </list></t>
-         <t>The following is an example of DnsTarget object:</t>
-         <figure>
-            <artwork><![CDATA[
+
+         <section title="DNS Target Example">
+            <t>The following is an example of DnsTarget object:</t>
+            <figure>
+                <artwork><![CDATA[
  {
     "host": "service123.ucdn.dcdn.example.com"
  }
-         ]]></artwork>
-         </figure>
-         <t>The following is an example of a DNS query for uCDN address "a.service123.ucdn.example.com" and the corresponding 
-            CNAME redirection response:</t>
-         <figure>
-            <artwork><![CDATA[
+            ]]></artwork>
+            </figure>
+            <t>The following is an example of a DNS query for uCDN address "a.service123.ucdn.example.com" and the corresponding 
+                CNAME redirection response:</t>
+            <figure>
+                <artwork><![CDATA[
  Query:
  a.service123.ucdn.example.com: 
  type A, class IN 
  
  Response:
- a.service123.ucdn.example.com: 
- type CNAME, class IN, cname service123.ucdn.dcdn.example.com
-         ]]></artwork>
-         </figure>  
+ NAME: a.service123.ucdn.example.com, TYPE: CNAME, CLASS: IN, 
+ TTL: 120, RDATA: service123.ucdn.dcdn.example.com
+            ]]></artwork>
+            </figure> 
+         </section> 
       </section>
 
       <section anchor="http-target" title="HttpTarget Object">
@@ -310,7 +315,8 @@
             </list></t>
             <t>Property: scheme<list style="empty">
 
-               <t>Description: A URI scheme to be used in the redirect response location construction.</t>
+               <t>Description: A URI scheme to be used in the redirect response location construction. 
+                  When present, the uCDN MUST use the provided scheme in for HTTP redirection to the dCDN.</t>
 
                <t>Type: A URI scheme as defined in Section 3.1 of <xref target="RFC3986"/> represented as a JSON string. The scheme MUST be 
                   either "http" or "https".</t>
@@ -341,22 +347,24 @@
                <t>Mandatory-to-Specify: No. Default value is False.</t>
             </list></t>         
          </list></t>
-         <t>Example of HttpTarget object with a "scheme", a "path-prefix", and "include-redirecting-host" properties:</t>
 
-         <figure>
-            <artwork><![CDATA[
+         <section title="HTTP Target Example">
+            <t>Example of HttpTarget object with a "scheme", a "path-prefix", and "include-redirecting-host" properties:</t>
+
+            <figure>
+                <artwork><![CDATA[
 {
    "host": "us-east1.dcdn.example.com",
    "scheme": "https",
    "path-prefix": "/cache/1/",
    "include-redirecting-host": true
 }
-         ]]></artwork>
-         </figure>
-            <t>Example of a HTTP request for content at uCDN host "a.service123.ucdn.example.com" and the corresponding HTTP response with 
-               a Location header, used for redirecting the client to the dCDN, constructed according to the HttpTarget object from the above example:</t>
-         <figure>
-            <artwork><![CDATA[
+            ]]></artwork>
+            </figure>
+                <t>Example of a HTTP request for content at uCDN host "a.service123.ucdn.example.com" and the corresponding HTTP response with 
+                   a Location header, used for redirecting the client to the dCDN, constructed according to the HttpTarget object from the above example:</t>
+            <figure>
+                <artwork><![CDATA[
  Request:
  GET /vod/1/movie.mp4 HTTP/1.1
  Host: a.service123.ucdn.example.com
@@ -365,15 +373,16 @@
  HTTP/1.1 302 Found
  Location: https://us-east1.dcdn.example.com/cache/1/
  a.service123.ucdn.example.com/vod/1/movie.mp4
-         ]]></artwork>
-         </figure>  
+            ]]></artwork>
+            </figure>
+         </section>  
       </section>     
 
       <section anchor="redirect-target-usage-example" title="Usage Example">
          <t>
            Before requests can be routed from the uCDN to the dCDN the CDNs must exchange service configurations
            between them. Using the MI, the uCDN advertises out-of-band its hosts to the dCDN, each host is designated 
-           by a host name and has its own specific metadata (see Section 4.1.2 of <xref target="RFC8006"/>.
+           by a hostname and has its own specific metadata (see Section 4.1.2 of <xref target="RFC8006"/>.
            The dCDN, using the FCI, advertises, also out-of-band, the redirect target address object defined in 
            <xref target="redirect-target-capability-properties"/> for the relevant uCDN hosts.
            The following is a generalized example of the message flow between an upstream CDN and a downstream dCDN. 
@@ -390,8 +399,8 @@
     <-------------------------------------------------------+
     |                                                       |
 (2) | FCI:  capability-type: FCI.RedirectTarget             |
-    |       redirecting-hosts: us-east1.dcdn.example.com    |
-    |       target host: s123.ucdn.example.com              |
+    |       redirecting-hosts: s123.ucdn.example.com        |
+    |       target host: us-east1.dcdn.example.com          |
     +------------------------------------------------------->
     |                                                       |
     |                                                       |
@@ -476,15 +485,15 @@ End User                  dCDN                   uCDN RR
 
          <t>Error: A cache may receive a request that it cannot properly serve, for 
             example, some of the metadata objects for that service were not properly 
-            acquired. In this case, the cache may resolve to redirect back to uCDN.</t>
+            acquired. In this case, the cache's "default action" may be to "redirect back to uCDN".</t>
       </list></t>
 
-      <t>The Fallback target metadata object is used to indicate the target address the dCDN should use in order
-         to redirect a client back to the uCDN. Fallback target is represented as endpoint objects as defined in 
-         section 4.3.3 of <xref target="RFC8006"/>.</t>
+      <t>The Fallback target metadata object is used to indicate the target address the dCDN should redirect 
+         a client to when falling back to the uCDN. Fallback target address is represented as an endpoint 
+         object as defined in Section 4.3.3 of <xref target="RFC8006"/>.</t>
          
-      <t>The uCDN fallback target address may be used as a DNS A record, AAAA record, or CNAME record in case of DNS redirection 
-         or a hostname for HTTP redirect.</t>
+      <t>In DNS redirection a CNAME record is used as the fallback target address.</t> 
+      <t>In HTTP redirection a hostname is used as the fallback target address.</t>
 
       <t>When using HTTP redirect to route a client request back to the uCDN, it is the dCDN's responsibility
          to use the original URL path as the client would have used for the original uCDN request, stripping, 
@@ -504,6 +513,18 @@ End User                  dCDN                   uCDN RR
 
                <t>Mandatory-to-Specify: Yes.</t>
             </list></t>
+            <t>Property: scheme<list style="empty">
+
+               <t>Description: A URI scheme to be used in the redirect response location construction. 
+                  When present the dCDN MUST use the provided scheme in case of HTTP redirection to the 
+                  uCDN fallback address.</t>
+
+               <t>Type: A URI scheme as defined in Section 3.1 of <xref target="RFC3986"/> represented as a JSON string. The scheme MUST be 
+                  either "http" or "https".</t>
+
+               <t>Mandatory-to-Specify: No. If this property is absent or empty the uCDN request router MUST use the same scheme as was 
+                  used in the original request before redirection.</t>
+            </list></t>            
          </list></t>    
 
          <t>Example of a MI.FallbackTarget Metadata object that designates the host address
@@ -547,8 +568,8 @@ End User                  dCDN                   uCDN RR
     <-------------------------------------------------------+
     |                                                       |
 (2) | FCI:  capability-type: FCI.RedirectTarget             |
-    |       redirecting-hosts: us-east1.dcdn.example.com    |
-    |       target host: s123.ucdn.example.com              |
+    |       redirecting-hosts: s123.ucdn.example.com        |
+    |       target host: us-east1.dcdn.example.com          |
     +------------------------------------------------------->
     |                                                       |
     |                                                       |
@@ -625,6 +646,17 @@ End User              dCDN            uCDN fallback          uCDN RR
          </list></t>
       </section>
 
+      <section title="uCDN addressing consideration">
+        <t>When advertising fallback addresses to the dCDN the uCDN SHOULD consider the failure use cases that may 
+           lead to dCDN routing to fallback. In extreme dCDN network failures or under denial-of-service (DoS) attacks, 
+           requests coming from  a large segment or multiple segments of the dCDN may be routed back to the uCDN. 
+           The uCDN SHOULD therefore design its fallback addressing scheme and its available resources accordingly. 
+           A favorable alternative is for the uCDN to use different fallback target address per uCDN host. 
+           See Sections 4.1.2 and 4.1.3 of <xref target="RFC8006"/> for a description of how to use GenericMetadata 
+           objects within the HostMatch object advertised in the HostIndex of the uCDN.
+        </t> 
+      </section>
+
     </section>
 
       
@@ -674,15 +706,15 @@ End User              dCDN            uCDN fallback          uCDN RR
          defined in Section 8 of <xref target="RFC8006"/> and in Section 7 of <xref target="RFC8008"/> respectively. 
       </t> 
         <section anchor="Privacy" title="Confidentiality and Privacy">
-          <t>The redirect Target FCI object potentially exposes information about the internal structure of the dCDN network. 
-             A third party could intercept the FCI transactions and use the information to attack the dCDN. An implementation 
-             of the FCI MUST therefore use strong authentication and encryption and strictly follow the directions for securing
-             the interface as defined for the Metadata Interface in Section 8.3 of <xref target="RFC8006"/>.
+          <t>The Redirect Target FCI object potentially reveals information about the internal structure of the dCDN network. 
+             A third party could intercept the FCI transactions and use the information to attack the dCDN. The same is also 
+             true for the Fallback Target Metadata object as it may reveal information about the internal structure of the 
+             uCDN, exposing it to external exploits. Implementations of the FCI and MI MUST therefore use strong authentication 
+             and encryption and strictly follow the directions for securing the interface as defined for the Metadata Interface 
+             in Section 8.3 of <xref target="RFC8006"/>.
           </t> 
         </section>
     </section>
-
-
 
 
     <section anchor="Acknowledgements" title="Acknowledgements">
