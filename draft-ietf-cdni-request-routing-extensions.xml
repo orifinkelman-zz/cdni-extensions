@@ -206,7 +206,7 @@
             </list></t>
             <t>Property: dns-target<list style="empty">
 
-               <t>Description: Target address for a DNS A record, AAAA record, or CNAME record.</t>
+               <t>Description: Target CNAME record for DNS redirection.</t>
 
                <t>Type: DnsTarget object (see <xref target="dns-target"/>)</t>
 
@@ -516,14 +516,14 @@ End User                  dCDN                   uCDN RR
             <t>Property: scheme<list style="empty">
 
                <t>Description: A URI scheme to be used in the redirect response location construction. 
-                  When present the dCDN MUST use the provided scheme in case of HTTP redirection to the 
+                  When present, the dCDN MUST use this scheme in case of HTTP redirection to the 
                   uCDN fallback address.</t>
 
                <t>Type: A URI scheme as defined in Section 3.1 of <xref target="RFC3986"/> represented as a JSON string. The scheme MUST be 
                   either "http" or "https".</t>
 
-               <t>Mandatory-to-Specify: No. If this property is absent or empty the uCDN request router MUST use the same scheme as was 
-                  used in the original request before redirection.</t>
+               <t>Mandatory-to-Specify: No. In case of HTTP redirection to fallback, if this property is absent or empty,
+                  the dCDN redirecting entity MUST use the same scheme as in the request received by the dCDN.</t>
             </list></t>            
          </list></t>    
 
@@ -536,7 +536,8 @@ End User                  dCDN                   uCDN RR
     "generic-metadata-type": "MI.FallbackTarget",
     "generic-metadata-value":
     {
-        "host": "fallback-a.service123.ucdn.example"
+        "host": "fallback-a.service123.ucdn.example",
+        "scheme": "https"
     }
 }
          ]]></artwork>
@@ -646,14 +647,15 @@ End User              dCDN            uCDN fallback          uCDN RR
          </list></t>
       </section>
 
-      <section title="uCDN addressing consideration">
+      <section title="uCDN addressing considerations">
         <t>When advertising fallback addresses to the dCDN the uCDN SHOULD consider the failure use cases that may 
-           lead to dCDN routing to fallback. In extreme dCDN network failures or under denial-of-service (DoS) attacks, 
-           requests coming from  a large segment or multiple segments of the dCDN may be routed back to the uCDN. 
+           lead the dCDN to route requests to uCDN fallback. In extreme dCDN network failures or under denial-of-service 
+           (DoS) attacks, requests coming from  a large segment or multiple segments of the dCDN may be routed back to the uCDN. 
            The uCDN SHOULD therefore design its fallback addressing scheme and its available resources accordingly. 
-           A favorable alternative is for the uCDN to use different fallback target address per uCDN host. 
-           See Sections 4.1.2 and 4.1.3 of <xref target="RFC8006"/> for a description of how to use GenericMetadata 
-           objects within the HostMatch object advertised in the HostIndex of the uCDN.
+           A favorable approach would be for the uCDN to use different fallback target address for each uCDN host,
+           enabling it to load balance the requests using the same methods as it would for its original hosts.
+           See Sections 4.1.2 and 4.1.3 of <xref target="RFC8006"/> for a detailed description of how to use 
+           GenericMetadata objects within the HostMatch object advertised in the HostIndex of the uCDN.
         </t> 
       </section>
 
