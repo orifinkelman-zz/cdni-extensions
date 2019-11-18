@@ -60,8 +60,8 @@
     <date/>
 
     <abstract>
-      <t>Open Caching is a use case of Content Delivery Networks Interconnection (CDNI) in which the commercial
-         Content Delivery Network (CDN) is the upstream CDN (uCDN) and the ISP caching layer serves as the
+      <t>Open Caching architecture is a use case of Content Delivery Networks Interconnection (CDNI) in which the 
+         commercial Content Delivery Network (CDN) is the upstream CDN (uCDN) and the ISP caching layer serves as the
          downstream CDN (dCDN). The extensions specified in this document to the CDNI Metadata Interface (MI) and
          the Footprint and Capabilities Interface (FCI) are derived from requirements raised by Open Caching but
          are also applicable to CDNI use cases in general.</t>
@@ -71,14 +71,18 @@
 
   <middle>
     <section title="Introduction">
-      <t>The Open Caching working group of the Streaming Video Alliance (SVA) is focused on the delegation of
-         video delivery requests from commercial CDNs to a caching layer at the Internet Service Provider's (ISP) 
-         network. Open Caching is a specific use case of CDNI where the commercial CDN is the upstream CDN (uCDN) 
-         and the ISP caching layer is the downstream CDN (dCDN). This document defines and registers CDNI generic 
-         metadata object <xref target="RFC8006"/> and CDNI Footprint and Capabilities object <xref target="RFC8008"/> 
-         that are required for Open Caching request routing. For consistency with other CDNI documents this 
-         document follows the CDNI convention of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the 
-         commercial CDN and ISP caching layer respectively.</t>
+      <t>The <xref target="SVA">Streaming Video Alliance</xref> is a global association that works to solve 
+         critical streaming video challenges in an effort to improve end-user experience and adoption.
+         The <xref target="OCWG">Open Caching Working Group</xref> of the <xref target="SVA">Streaming Video Alliance</xref> 
+         is focused on the delegation of video delivery requests from commercial CDNs to a caching layer at the Internet 
+         Service Provider's (ISP) network. Open Caching architecture is a specific use case of CDNI where the commercial CDN 
+         is the upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN). 
+         The <xref target="OC-RR">Open Caching Request Routing Specification</xref> defines the Request Routing process 
+         and the interfaces that are required for its provisioning. This document defines and registers CDNI metadata 
+         object <xref target="RFC8006"/> and CDNI Footprint and Capabilities object <xref target="RFC8008"/> that are 
+         required for Open Caching Request Routing. For consistency with other CDNI documents this document follows the 
+         CDNI convention of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the commercial CDN and ISP caching
+         layer respectively.</t>
       
       <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> for the defined objects:
           <list style="symbols">
@@ -759,6 +763,55 @@ End User              dCDN            uCDN fallback          uCDN RR
       <?rfc include="reference.RFC.7736" ?>
 
       <?rfc include="reference.RFC.7871" ?>
+
+      <reference anchor="SVA" target="https://www.streamingvideoalliance.org">
+        <front>
+          <title>Streaming Video Alliance Home Page</title>
+          <author/>
+          <date/>
+        </front>
+      </reference>
+
+       <reference anchor="OCWG" target="https://www.streamingvideoalliance.org/technical-groups/open-caching/">
+        <front>
+          <title>Open Caching Home Page</title>
+          <author/>
+          <date/>
+        </front>
+      </reference>
+
+      <reference anchor="OC-RR" target="https://www.streamingvideoalliance.org/books/open-cache-request-routing-functional-specification/">
+        <front>
+          <title>
+              Open Caching - Request Routing Functional Specification
+          </title>
+          <author initials="O." surname="Finkelman" fullname="Ori Finkelman" role="editor">
+             <organization>Qwilt</organization>
+          </author>
+          <author initials="J." surname="Hofmann" fullname="Jason Hofmann">
+             <organization>Limelight Networks</organization>
+          </author>
+          <author initials="E." surname="Klein" fullname="Eric Klein">
+             <organization>Disney Streaming Services</organization>
+          </author>
+          <author initials="S." surname="Mishra" fullname="Sanjay Mishra">
+             <organization>Verizon</organization>
+          </author>
+          <author initials="K." surname="Ma" fullname="Kevin J. Ma">
+             <organization>Disney Streaming Services</organization>
+          </author>
+          <author initials="D." surname="Sahar" fullname="Dan Sahar">
+             <organization>Qwilt</organization>
+          </author>
+          <author initials="B." surname="Zurat" fullname="Bill Zurat">
+             <organization>Disney Streaming Services</organization>
+          </author>
+
+          <date day="4" month="October" year="2019"/>
+        </front>
+        <seriesInfo name="Version" value="1.1"/>
+      </reference>
+
                                               
 
     </references>
