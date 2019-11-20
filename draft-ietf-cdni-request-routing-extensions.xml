@@ -72,7 +72,7 @@
   <middle>
     <section title="Introduction">
       <t>The <xref target="SVA">Streaming Video Alliance</xref> is a global association that works to solve 
-         critical streaming video challenges in an effort to improve end-user experience and adoption.
+         streaming video challenges in an effort to improve end-user experience and adoption.
          The <xref target="OCWG">Open Caching Working Group</xref> of the <xref target="SVA">Streaming Video Alliance</xref> 
          is focused on the delegation of video delivery requests from commercial CDNs to a caching layer at the Internet 
          Service Provider's (ISP) network. Open Caching architecture is a specific use case of CDNI where the commercial CDN 
