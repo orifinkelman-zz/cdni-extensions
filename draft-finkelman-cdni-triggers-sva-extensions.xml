@@ -705,10 +705,10 @@ https://video.example.com/k/movie1/4/013.ts
                <c>False</c>
                <c>MUST NOT serve.  MUST set "incomprehensible" to true when redistributing.</c>
 
-           </texttable>
-
-           <t>
-             <xref target="dcdn-actions"/> describes the action to be taken by a tCDN for the different
+           </texttable> 
+          
+           <t>         
+             <xref target="dcdn-actions"/> describes the action to be taken by a dCDN for the different
              combinations of mandatory-to-enforce and "incomprehensible" ("Incomp")
              properties, when the dCDN either does or does not understand
              the trigger extension object in question:
