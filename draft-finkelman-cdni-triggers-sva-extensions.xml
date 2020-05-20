@@ -640,7 +640,7 @@ https://video.example.com/k/movie1/4/013.ts
              MUST set the "incomprehensible" flag to true for that GenericTriggerExtension
              object before redistributing it.  The "incomprehensible"
              flag signals to a dCDN that trigger metadata was not properly transformed
-             by the tCDN.  A CDN MUST NOT attempt to execute a trigger that has been
+             by the tCDN.  A CDN MUST NOT attempt to execute a trigger with an extension that has been
              marked as "incomprehensible" by a uCDN.
            </t>
            <t>
