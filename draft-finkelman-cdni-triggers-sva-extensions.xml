@@ -691,7 +691,7 @@ RESPONSE:
            </texttable> 
           
            <t>         
-             <xref target="dcdn-actions"/> describes the action to be taken by a tCDN for the different
+             <xref target="dcdn-actions"/> describes the action to be taken by a dCDN for the different
              combinations of mandatory-to-enforce and "incomprehensible" ("Incomp")
              properties, when the dCDN either does or does not understand
              the trigger extension object in question:
