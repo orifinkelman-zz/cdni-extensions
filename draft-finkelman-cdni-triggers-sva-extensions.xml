@@ -860,7 +860,6 @@ RESPONSE:
                 Description: Array of trigger extension objects copied from the corresponding "extensions" array
                 from the Trigger Specification. Only those extensions to which the error applies are included, but 
                 those extensions MUST be exactly as they appear in the request.                 
-                where each object is copied from data copied from the 
               </t>
               
               <t>
