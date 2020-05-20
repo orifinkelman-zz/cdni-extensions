@@ -885,7 +885,7 @@ https://video.example.com/k/movie1/4/013.ts
               </t>
 
               <t>
-                Mandatory: No. The "extensions" array SHOULD be used only if there were errors related to
+                Mandatory: No. The "extensions" array SHOULD be used only if the error relates to
                 extension objects.
               </t>
             </list></t>
