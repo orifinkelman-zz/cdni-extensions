@@ -787,8 +787,9 @@ https://video.example.com/k/movie1/4/013.ts
 
               <t>Property: safe-to-redistribute<list style="empty">
 
-                 <t>Description: Flag identifying whether or not this trigger extension
-                    can be safely redistributed without modification.</t>
+                 <t>Description: Flag identifying whether or not this trigger extension 
+                    can be safely redistributed without modification, even if 
+                    the CDN fails to understand the extension.</t>
 
                  <t>Type: Boolean</t>
 
