@@ -414,7 +414,7 @@ RESPONSE:
               
               <t>Type: A JSON array of RegexMatch objects (see <xref target="regex-match"/>).</t>
               
-              <t>Mandatory-to-Specify: No, but at least one of "metadata.*" or "content.*" MUST be present 
+              <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present 
                  and non-empty.</t>
             </list></t>
             
@@ -424,7 +424,7 @@ RESPONSE:
 
               <t>Type: A JSON array of Playlist objects (see <xref target="playlist"/>).</t>
 
-              <t>Mandatory-to-Specify: No, but at least one of "metadata.*" or "content.*" MUST be present 
+              <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present 
                  and non-empty.</t>
             </list></t>
             
@@ -434,7 +434,7 @@ RESPONSE:
 
                 <t>Type: Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).</t>
 
-                <t>Mandatory-to-Specify: No. The default is no extensions.</t>
+                <t>Mandatory: No. The default is no extensions.</t>
              </list></t> 
 
           </list></t>
@@ -758,7 +758,7 @@ RESPONSE:
                  <t>Type: String containing the CDNI Payload Type <xref target="RFC7736"/> of the object contained 
                     in the generic-trigger-extension-value property (see table in <xref target="IANA.CDNI.payload"/>).</t>
 
-                 <t>Mandatory-to-Specify: Yes.</t>
+                 <t>Mandatory: Yes.</t>
               </list></t>
               
               <t>Property: generic-trigger-extension-value<list style="empty">
@@ -768,7 +768,7 @@ RESPONSE:
                  <t>Type: Format/Type is defined by the value of the
                     generic-trigger-extension-type property above.</t>
 
-                 <t>Mandatory-to-Specify: Yes.</t>
+                 <t>Mandatory: Yes.</t>
               </list></t>
 
               <t>Property: mandatory-to-enforce<list style="empty">
@@ -778,7 +778,7 @@ RESPONSE:
 
                  <t>Type: Boolean</t>
 
-                 <t>Mandatory-to-Specify: No.  Default is to treat the trigger extension as
+                 <t>Mandatory: No.  Default is to treat the trigger extension as
                     mandatory-to-enforce (i.e., a value of True).</t>
               </list></t>
 
@@ -789,7 +789,7 @@ RESPONSE:
 
                  <t>Type: Boolean</t>
 
-                 <t>Mandatory-to-Specify: No.  Default is to allow transparent
+                 <t>Mandatory: No.  Default is to allow transparent
                     redistribution (i.e., a value of True).</t>
               </list></t>
 
@@ -803,7 +803,7 @@ RESPONSE:
 
                  <t>Type: Boolean</t>
 
-                 <t>Mandatory-to-Specify: No.  Default is comprehensible (i.e., a
+                 <t>Mandatory: No.  Default is comprehensible (i.e., a
                     value of False).</t>
               </list></t>
                         
@@ -1235,7 +1235,7 @@ RESPONSE:
 
                  <t>Type: Array of LocationRule objects (see Section 4.2.2.1 of <xref target="RFC8006"/>)</t>
 
-                 <t>Mandatory-to-Specify: Yes.</t>
+                 <t>Mandatory: Yes.</t>
               </list></t>
         </list></t>
           
@@ -1329,7 +1329,7 @@ RESPONSE:
                     <xref target="RFC8006"/>)
                  </t>
 
-                 <t>Mandatory-to-Specify: No, but exactly one of "unixEpochWindow", "utcWindow"
+                 <t>Mandatory: No, but exactly one of "unixEpochWindow", "utcWindow"
                     or "localTimeWindow" MUST be present.</t>
               </list></t>
               <t>Property: utcWindow<list style="empty">
@@ -1338,7 +1338,7 @@ RESPONSE:
 
                  <t>Type: UTCWindow object as defined in <xref target="utc-window"/>.</t>
 
-                 <t>Mandatory-to-Specify: No, but exactly one of "unixEpochWindow", "utcWindow"
+                 <t>Mandatory: No, but exactly one of "unixEpochWindow", "utcWindow"
                     or "localTimeWindow" MUST be present.</t>
               </list></t>
               <t>Property: localTimeWindow<list style="empty">
@@ -1349,7 +1349,7 @@ RESPONSE:
 
                  <t>Type: LocalTimeWindow object as defined in <xref target="local-time-window"/>.</t>
 
-                 <t>Mandatory-to-Specify: No, but exactly one of "unixEpochWindow", "utcWindow"
+                 <t>Mandatory: No, but exactly one of "unixEpochWindow", "utcWindow"
                     or "localTimeWindow" MUST be present.</t>
               </list></t>             
           </list></t>
@@ -1395,7 +1395,7 @@ RESPONSE:
 
               <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
 
-              <t>Mandatory-to-Specify: No, but at least one of "start" or "end"
+              <t>Mandatory: No, but at least one of "start" or "end"
                  MUST be present and non-empty.</t>
 
             </list></t>
@@ -1405,7 +1405,7 @@ RESPONSE:
 
               <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
 
-              <t>Mandatory-to-Specify: No, but at least one of "start" or "end"
+              <t>Mandatory: No, but at least one of "start" or "end"
                  MUST be present and non-empty.</t>
             </list></t>   
          </list></t>      
@@ -1456,7 +1456,7 @@ RESPONSE:
                  <xref target="date-local-time"/>.
               </t>
 
-              <t>Mandatory-to-Specify: No, but at least one of "start" or "end"
+              <t>Mandatory: No, but at least one of "start" or "end"
                  MUST be present and non-empty.</t>
             </list></t>
             <t>Property: end<list style="empty"> 
@@ -1467,7 +1467,7 @@ RESPONSE:
                  <xref target="date-local-time"/>.
               </t>
 
-              <t>Mandatory-to-Specify: No, but at least one of "start" or "end"
+              <t>Mandatory: No, but at least one of "start" or "end"
                  MUST be present and non-empty.</t>
             </list></t>   
          </list></t>      
@@ -1591,7 +1591,7 @@ Month Number  Month/Year           Maximum value of date-mday
 
                  <t>Type: An array of JSON strings</t>
 
-                 <t>Mandatory-to-Specify: No. The default is version 1. A missing or an empty versions list
+                 <t>Mandatory: No. The default is version 1. A missing or an empty versions list
                     means that  only version 1 of the interface and objects is supported.</t>
            </list></t>
         </list></t>
@@ -1637,7 +1637,7 @@ Month Number  Month/Year           Maximum value of date-mday
                  <t>Type: A list of MediaProtocol (from the CDNI Triggers media protocol types 
                     <xref target="IANA.CDNI.MediaProtocolReg"/>)</t>
 
-                 <t>Mandatory-to-Specify: No. The default, in case of a missing or an empty list, 
+                 <t>Mandatory: No. The default, in case of a missing or an empty list, 
                     is none supported.</t>
            </list></t>
         </list></t>
@@ -1684,7 +1684,7 @@ Month Number  Month/Year           Maximum value of date-mday
                     CI/T GenericExtensionObject objects.
                  </t>
 
-                 <t>Mandatory-to-Specify: No. The default, in case of a missing or an empty list, MUST be 
+                 <t>Mandatory: No. The default, in case of a missing or an empty list, MUST be 
                     interpreted as "no GenericExtensionObject types are supported". A non-empty list MUST be 
                     interpreted as containing "the only GenericExtensionObject types that are supported".
                  </t>
