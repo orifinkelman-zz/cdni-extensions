@@ -414,7 +414,7 @@ RESPONSE:
               
               <t>Type: A JSON array of RegexMatch objects (see <xref target="regex-match"/>).</t>
               
-              <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present 
+              <t>Mandatory-to-Specify: No, but at least one of "metadata.*" or "content.*" MUST be present 
                  and non-empty.</t>
             </list></t>
             
@@ -424,7 +424,7 @@ RESPONSE:
 
               <t>Type: A JSON array of Playlist objects (see <xref target="playlist"/>).</t>
 
-              <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present 
+              <t>Mandatory-to-Specify: No, but at least one of "metadata.*" or "content.*" MUST be present 
                  and non-empty.</t>
             </list></t>
             
@@ -1395,7 +1395,9 @@ RESPONSE:
 
               <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
 
-              <t>Mandatory-to-Specify: Yes.</t>
+              <t>Mandatory-to-Specify: No, but at least one of "start" or "end"
+                 MUST be present and non-empty.</t>
+
             </list></t>
             <t>Property: end<list style="empty"> 
 
@@ -1403,7 +1405,8 @@ RESPONSE:
 
               <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
 
-              <t>Mandatory-to-Specify: Yes.</t>
+              <t>Mandatory-to-Specify: No, but at least one of "start" or "end"
+                 MUST be present and non-empty.</t>
             </list></t>   
          </list></t>      
          
@@ -1453,7 +1456,8 @@ RESPONSE:
                  <xref target="date-local-time"/>.
               </t>
 
-              <t>Mandatory-to-Specify: Yes.</t>
+              <t>Mandatory-to-Specify: No, but at least one of "start" or "end"
+                 MUST be present and non-empty.</t>
             </list></t>
             <t>Property: end<list style="empty"> 
 
@@ -1463,7 +1467,8 @@ RESPONSE:
                  <xref target="date-local-time"/>.
               </t>
 
-              <t>Mandatory-to-Specify: Yes.</t>
+              <t>Mandatory-to-Specify: No, but at least one of "start" or "end"
+                 MUST be present and non-empty.</t>
             </list></t>   
          </list></t>      
          
