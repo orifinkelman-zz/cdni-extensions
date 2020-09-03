@@ -66,11 +66,11 @@
          granular content matching options, required by the Open Caching architecture.
          The Open Caching architeccture is a use case of Content Delivery Network 
          Interconnection (CDNI) in which the commercial Content Delivery Network (CDN) is  
-         is the upstream CDN (uCDN) and the ISP caching layer serves as the downstream
-         CDN (dCDN). This document defines extensions to the CDNI CI/T interface. These
-         extensions are derived from requirements raised by Open Caching but are applicable 
-         to CDNI use cases in general.
-      </t>
+         the upstream CDN (uCDN) and the ISP caching layer serves as the downstream
+         CDN (dCDN). This document defines extensions to the Content Delivery Network 
+         Interconnection (CDNI) Control Interface/Triggers. These extensions are derived 
+         from requirements raised by Open Caching architecture but are also applicable 
+         to CDNI use cases in general.</t>
     </abstract>
 
     <note title="Requirements Language">
@@ -83,7 +83,17 @@
 
   <middle>
     <section title="Introduction">
-      <t>This document defines the objects and extensions required for granular content management
+      <t>The Streaming Video Alliance <xref target="SVA" format="default"/> is a global association
+         that works to solve streaming video challenges in an effort to improve end-user experience 
+         and adoption. The Open Caching Working Group <xref target="OCWG" format="default"/> of the 
+         Streaming Video Alliance <xref target="SVA" format="default"/> is focused on the delegation
+         of video delivery requests from commerical CDNs to a caching layer at the ISP's network. 
+         Open Caching architecture is a specific use case of CDNI where the commercial CDN is the 
+         upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN). The Open
+         Caching Content Management Operations Specification <xref target="OC-CM" format="default"/>
+         defines objects and extensions required by Open Caching architecture for granular content
+         management operations such as new content selection options. 
+         This document defines the objects and extensions required for granular content management
          operations. For that purpose it extends CDNI Control Interface / Triggers <xref target="RFC8007"/>
          by adding new content selection options to the trigger specification and specifying a generic
          extension mechanism that enables adding future functions for controlling the trigger execution.
@@ -96,6 +106,10 @@
       <t>The CDNI Footprint and Capability Interface is described in <xref target="RFC8008"/>.</t>
       <t>The CDNI Control Interface / Triggers is described in <xref target="RFC8007"/>.</t>
 
+       <t>For consistency with other CDNI documents, this document follows the CDNI convention 
+        of uCDN (upstream CDN) and dCDN downstream CDN) to represent the commercial CDN and 
+        ISP caching layer, respectively.</t>    
+           
       <section anchor="terminology" title="Terminology">
         <t>This document reuses the terminology defined in <xref target="RFC6707"/>,
            <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
@@ -1971,7 +1985,40 @@ Month Number  Month/Year           Maximum value of date-mday
         <seriesInfo name="Edition" value="3"/>
       </reference>
 
+      <reference anchor="SVA" target="https://www.streamingvideoalliance.org">
+          <front>
+            <title>Streaming Video Alliance</title>
+            <author/>
+          </front>
+        </reference>
 
+        <reference anchor="OCWG" target="https://www.streamingvideoalliance.org/technical-groups/open-caching/">
+          <front>
+            <title>Open Caching</title>
+            <author><organization>Streaming Video Alliance</organization>
+            </author>
+          </front>
+        </reference>
+
+      <reference anchor="OC-CM" target="https://www.streamingvideoalliance.org/document/open-caching-content-management-operations-specification/">
+          <front>
+            <title>
+              Open Caching Content Management Operations Specification
+            </title>
+            <seriesInfo name="Version" value="1.0"/>
+            <author initials="O." surname="Finkelman" fullname="Ori Finkelman" role="editor">
+              <organization>Qwilt</organization>
+            </author>
+            <author initials="J." surname="Devabhaktuni" fullname="Jaya Devabhaktuni">
+              <organization>Concurrent</organization>
+            </author>
+            <author initials="M." surname="Stock" fullname="Matt Sanjay Stock">
+              <organization>Limelight Networks</organization>
+            </author>
+            <date month="November" year="2017"/>
+          </front>
+        </reference>
+            
     </references>
   </back>
 </rfc>
