@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="4"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<rfc category="std" docName="draft-ietf-cdni-request-routing-extensions-03" ipr="trust200902">
+  <front>
+    <title abbrev="CDNI Request Routing Extensions">CDNI Request Routing Extensions</title>
+
+    <author fullname="Ori Finkelman" initials="O." surname="Finkelman">
+      <organization>Qwilt</organization>
+
+      <address>
+        <postal>
+          <street>6, Ha'harash</street>
+
+          <city>Hod HaSharon</city>
+
+          <region></region>
+
+          <code>4524079</code>
+
+          <country>Israel</country>
+        </postal>
+
+        <phone>+972-72-2221647</phone>
+
+        <email>ori.finkelman.ietf@gmail.com</email>
+      </address>
+    </author>
+
+    <author fullname="Sanjay Mishra" initials="S." surname="Mishra">
+      <organization>Verizon</organization>
+
+      <address>
+        <postal>
+          <street>13100 Columbia Pike</street>
+
+          <city>Silver Spring</city>
+
+          <region>MD</region>
+
+          <code>20904</code>
+
+          <country>USA</country>
+        </postal>
+
+        <phone></phone>
+
+        <email>sanjay.mishra@verizon.com</email>
+      </address>
+    </author>
+    
+    <date/>
+
+    <abstract>
+      <t>The Open Caching working group of the Streaming Video Alliance is focused 
+         on the delegation of video delivery requests from commercial CDNs to a 
+         caching layer at the ISP. In that aspect, Open Caching is a specific use
+         case of CDNI, where the commercial CDN is the upstream CDN (uCDN) and the
+         ISP caching layer is the downstream CDN (dCDN). The extensions specified in this
+         document to the CDNI Metadata and FCI interfaces are derived from requirements raised by 
+         Open Caching but are applicable to CDNI use cases in general.</t>
+    </abstract>
+
+    <note title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+    </note>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>This document defines objects needed for Open Caching request routing. For that purpose it 
+         extends CDNI metadata <xref target="RFC8006"/> and CDNI Footprint and Capabilities <xref target="RFC8008"/>.
+         For consistency, this document follows the CDNI notation of uCDN 
+         (the commercial CDN) and dCDN (the ISP caching layer).</t>
+      
+      <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> for the defined objects:
+          <list style="symbols">
+            <t>Redirect Target Capability (for dCDN advertising redirect target address)</t>
+            <t>Fallback Target Metadata (for uCDN configuring fallback target address)</t>            
+          </list>
+      </t>
+        
+      <section anchor="terminology" title="Terminology">
+        <t>This document reuses the terminology defined in <xref
+        target="RFC6707"/>, <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
+
+        <t>Additionally, the following terms are used throughout this document
+        and are defined as follows:
+
+          <list style="symbols">
+            <t>RR - Request Router</t>            
+            <t>CP - Content Provider</t>           
+          </list>
+        </t>
+      </section>
+
+    </section>
+
+
+    <section anchor="redirect-target-capability" title="Redirect Target Capability Object">
+      <t>Iterative request redirect as defined in section 1.1 of <xref target="RFC7336"/> requries the 
+         provisioning of a redirect target address to be used by the uCDN in order to redirect to the dCDN.
+         Redirect target addresses can vary between different footprints, for example, between different regions,
+         and they may also change over time, for example as a result of network problems. Given this variable 
+         and dynamic nature of the redirect target, it may not be suitable to advertise it during bootstrap. 
+         A more dynamic and footprint oriented interface is required. Therefore, we have chosen to use 
+         the CDNI Footprint and Capabilities interface for redirect target advertisement.</t>
+         
+      <t>Use cases<list style="symbols">
+         <t>Footprint: The dCDN may want to have a different target per footprint. 
+            Note that a dCDN may spread across multiple geographies. This makes it 
+            easier to route client requests to a nearby request router. Though this can be achieved 
+            using a single canonical name and Geo DNS, that approach has limitations; 
+            for example a client may be using a third party DNS resolver, making it 
+            impossible for the redirector to detect where the client is located, or Geo DNS 
+            granularity may be too rough for the requirement of the application.</t>
+
+         <t>Scaling: The dCDN may choose to scale its request routing service by deploying more request routers 
+            in new locations and advertise them via an updatable interface like the FCI.</t>
+
+      </list></t>
+      <t>The Redirect Target capability object is used to indicate the target address the uCDN should use in order
+         to redirect a client to the dCDN. A target may be attached to a specific uCDN host, a list of uCDN hosts, 
+         or used globally for all the hosts of the uCDN. 
+      </t>
+      <t>
+         When a dCDN is attaching the redirect target to a specific uCDN host or a list of uCDN hosts, the dCDN MUST 
+         advertise the hosts within the Redirect Target capability object as "redirecting-hosts". In that case, the 
+         uCDN can redirect to that dCDN address, only if the request was directed to one of those uCDN hosts.
+      </t>
+      <t>
+         A redirect target for DNS redirection is an IP address used as an A record response or a FQDN used as an alias 
+         in a CNAME record response (see <xref target="RFC1034"/>) of the uCDN DNS router. Note that DNS routers make 
+         routing decisions based on either the DNS resolver's IP address or the client IP address when EDNS0 client-subnet 
+         is used (see <xref target="RFC7871"/>). The dCDN may choose to advertise redirect targets and footprints to 
+         cover both cases. A uCDN DNS router implemenation SHOULD prefer routing based on client IP address when it is available.
+      </t>
+      <t>
+         A redirect target for HTTP redirection is the URI to be used as the value for the Location header of a HTTP redirect 
+         3xx response, typically a 302 (Found) (see section 7.1.2 of <xref target="RFC7231"/> and section 6.4 of 
+         <xref target="RFC7231"/>). 
+      </t>
+      <section anchor="redirect-target-capability-properties" title="Properties of Redirect Target Capability Object">
+         <t>The Redirect Target capability object consists of the following properties:</t> 
+         <t><list style="empty">
+            <t>Property: redirecting-hosts<list style="empty"> 
+
+               <t>Description: One or more uCDN hosts to which this redirect target is attached. A redirecting host SHOULD be a 
+                  host that was published in a HostMatch object by the uCDN as defined in section 4.1.2 of <xref target="RFC8006"/>.</t>
+
+               <t>Type: A list of Endpoint objects (see section 4.3.3 of <xref target="RFC8006"/>)</t>
+
+               <t>Mandatory-to-Specify: No. If not present, or empty, the redirect target applies to all hosts of the redirecting uCDN.</t>
+            </list></t>
+            <t>Property: dns-target<list style="empty">
+
+               <t>Description: Target address for a DNS A record or CNAME record.</t>
+
+               <t>Type: DnsTarget object (see <xref target="dns-target"/>)</t>
+
+               <t>Mandatory-to-Specify: No. but at least one of "dns-target" or "http-target" MUST be present and non empty.</t>
+            </list></t>
+            <t>Property: http-target<list style="empty">
+
+               <t>Description: Target URI for a HTTP redirect.</t>
+
+               <t>Type: HttpTarget object (see <xref target="http-target"/>)</t>
+
+               <t>Mandatory-to-Specify: No, but at least one of "dns-target" or "http-target" MUST be present and non empty.</t>
+            </list></t>
+
+         </list></t>
+         <t>The following is an example of a Redirect Target capability object serialization that advertises a dCDN target address 
+            that is attached to a specific list of uCDN "redirecting-hosts". A uCDN host that is included in that list can redirect 
+            to the advertised dCDN redirect target.
+         </t>
+
+         <figure>
+           <artwork><![CDATA[
+{
+  "capabilities": [
+    {
+      "capability-type": "FCI.RedirectTarget",
+      "capability-value": {
+          "redirecting-hosts": [
+             "a.service123.ucdn.example.com", 
+             "b.service123.ucdn.example.com"
+          ],
+          "dns-target": {
+             "host": "service123.ucdn.example.dcdn.com"
+          },
+          "http-target": {
+              "host": "us-east1.dcdn.com",
+              "path-prefix": "/cache/1/",
+              "include-redirecting-host": true          
+          }
+      },
+      "footprints": [
+          <Footprint objects>
+      ]
+    }
+  ]
+}
+         ]]></artwork>
+         </figure>
+      </section> 
+      <section anchor="dns-target" title="DnsTarget">
+         <t>The DnsTarget object gives the target address for the DNS response to delegate from the uCDN to the dCDN.</t>
+                           
+         <t><list style="empty">
+            <t>Property: host<list style="empty">
+
+               <t>Description: The host property is a hostname or an IP address, without a port number.</t>
+
+               <t>Type: Endpoint object as defined in section 4.3.3 of <xref target="RFC8006"/> 
+                   with the limitation that it SHOULD NOT include a port number and, in case a port number is present,
+                   the uCDN MUST ignore it.</t>
+
+               <t>Mandatory-to-Specify: Yes.</t>
+            </list></t>
+         </list></t>
+         <t>The following is an example of DnsTarget object:</t>
+         <figure>
+            <artwork><![CDATA[
+ {
+    "host": "service123.ucdn.example.dcdn.com"
+ }
+         ]]></artwork>
+         </figure>
+         <t>The following is an example of a DNS query for uCDN address "a.service123.ucdn.example.com" and the corresponding 
+            CNAME redirection response:</t>
+         <figure>
+            <artwork><![CDATA[
+ Query:
+ a.service123.ucdn.example.com: 
+ type A, class IN 
+ 
+ Response:
+ a.service123.ucdn.example.com: 
+ type CNAME, class IN, cname service123.ucdn.example.dcdn.com
+         ]]></artwork>
+         </figure>  
+      </section>
+
+      <section anchor="http-target" title="HttpTarget">
+         <t>The HttpTarget object gives the necessary information to construct the target Location URI for HTTP redirection.</t>
+                        
+         <t><list style="empty">
+            <t>Property: host<list style="empty">
+
+               <t>Description: Hostname or IP address and an optional port, i.e., the host and port of the authority component 
+                  of the URI as described in section 3.2 of <xref target="RFC3986"/>.</t>
+
+               <t>Type: Endpoint object as defined in section 4.3.3 of <xref target="RFC8006"/>.</t>
+
+               <t>Mandatory-to-Specify: Yes.</t>
+            </list></t>
+            <t>Property: path-prefix<list style="empty">
+
+               <t>Description: A path prefix for the HTTP redirect Location header. The original path is appended after this prefix.</t>
+
+               <t>Type: A prefix of a path-absolute as defined in section 3.3 of <xref target="RFC3986"/>. 
+                  The prefix MUST end with a trailing slash, to indicate the end of the last path segment in the prefix.</t>
+
+               <t>Mandatory-to-Specify: No. If this property is absent or empty, the uCDN MUST NOT prepend a path prefix to 
+                  the original content path, i.e., the original path MUST appear in the location URI right after the authority component.</t>
+            </list></t>
+            <t>Property: include-redirecting-host<list style="empty">
+
+               <t>Description: A flag indicating whether or not to include the redirecting host as the first path segment after the path-prefix.
+                  If set to true and a "path-prefix" is used, the uCDN redirecting host MUST be added as a separate path segment after 
+                  the path-prefix and before the original URL path. If set to true and there is no path-prefix, the uCDN redirecting 
+                  host MUST be prepended as the first path segment in the redirect URL.</t>
+
+               <t>Type: Boolean.</t>
+
+               <t>Mandatory-to-Specify: No. Default value is False.</t>
+            </list></t>         
+         </list></t>
+         <t>Example of HttpTarget object with a path-prefix and include-redirecting-host:</t>
+
+         <figure>
+            <artwork><![CDATA[
+{
+   "host": "us-east1.dcdn.com",
+   "path-prefix": "/cache/1/",
+   "include-redirecting-host": true
+}
+         ]]></artwork>
+         </figure>
+            <t>Example of a HTTP request for content at uCDN host "a.service123.ucdn.example.com" and the corresponding HTTP response with 
+               Location header used for redirecting the client to the dCDN using the the http-target in the above example:</t>
+         <figure>
+            <artwork><![CDATA[
+ Request:
+ GET /vod/1/movie.mp4 HTTP/1.1
+ Host: a.service123.ucdn.example.com
+ 
+ Response:
+ HTTP/1.1 302 Found
+ Location: http://us-east1.dcdn.com/cache/1/
+ a.service123.ucdn.example.com/vod/1/movie.mp4
+         ]]></artwork>
+         </figure>  
+      </section>                   
+    </section>
+
+    <section anchor="fallback-target-metadata" title="Fallback Target Address Metadata">
+      <t>Open Caching requires that the uCDN provide a fallback target server to the 
+         dCDN, to be used in cases where the dCDN cannot properly handle the request. 
+         To avoid redirect loops, the fallback target server's address at the uCDN MUST be 
+         differnet from the original uCDN address from which the client was redirected 
+         to the dCDN. The uCDN MUST avoid further redirection when receiving the client request at 
+         the fallback target. The fallback target is defined as a generic metadata object 
+         (see section 3.2 of <xref target="RFC8006"/>)</t>
+         
+      <t>Use cases<list style="symbols">
+         <t>Failover: A dCDN request router receives a request but has no caches 
+            to which it can route the request. This can happen in the case of 
+            failures or temporary network overload.</t>
+         
+         <t>No coverage: A dCDN request router receives a request from a client located
+            in an area inside the footprint but not covered by the dCDN caches or outside the dCDN 
+            footprint coverage. In such cases, the router may choose to redirect the request back 
+            to the uCDN fallback address.</t>
+
+         <t>Error: A cache may receive a request that it cannot properly serve, for 
+            example, some of the metadata objects for that service were not properly 
+            acquired. In this case, the cache may resolve to redirect back to uCDN.</t>
+      </list></t>
+
+      <t>The Fallback target metadata object is used to indicate the target address the dCDN should use in order
+         to redirect a client back to the uCDN. Fallback target is represented as endpoint objects as defined in 
+         section 4.3.3 of <xref target="RFC8006"/>.</t>
+         
+      <t>The uCDN fallback target address may be used as a DNS A record or CNAME record in case of DNS redirection 
+         or a hostname for HTTP redirect.</t>
+
+      <t>When using HTTP redirect to route a client request back to the uCDN, it is the dCDN's responsibility
+         to use the original URL path as the client would have used for the original uCDN request, stripping, 
+         if needed, the dCDN path-prefix and/or the uCDN hostname from the redirect URL that may have been used to 
+         request the content from the dCDN.</t>
+
+      <section anchor="fallback-target-metadata-properties" title="Properties Fallback Target Address Metadata Object">
+         <t>The MI.FallbackTarget Metadata object consists of the following single property:</t>
+         <t><list style="empty">
+            <t>Property: host<list style="empty">
+         
+               <t>Description: Target address to which the dCDN can redirect the client.</t>
+
+               <t>Type: Endpoint object as defined in section 4.3.3 of <xref target="RFC8006"/> 
+                  with the limitation that in case of DNS delegation it SHOULD NOT include a port number and,
+                  in case a port number is present, the dCDN MUST ignore it.</t>
+
+               <t>Mandatory-to-Specify: Yes.</t>
+            </list></t>
+         </list></t>    
+
+         <t>Example of a MI.FallbackTarget Metadata object that designates the host address
+            the dCDN should use as fallback address to redirect back to the uCDN.</t>
+
+         <figure>
+            <artwork><![CDATA[
+{
+    "generic-metadata-type": "MI.FallbackTarget",
+    "generic-metadata-value":
+    {
+        "host": "fallback-a.service123.ucdn.example"
+    }
+}
+         ]]></artwork>
+         </figure>
+      </section> 
+    </section>
+
+      
+    <section anchor="IANA" title="IANA Considerations">
+
+      <section anchor="IANA.payload" title="CDNI Payload Types">
+
+        <t>This document requests the registration of the following CDNI Payload Types 
+           under the IANA "CDNI Payload Types" registry defined in <xref target="RFC7736"/>:</t>
+
+        <texttable>
+          <ttcol align="left">Payload Type</ttcol>
+          <ttcol align="left">Specification</ttcol>
+
+          <c>FCI.RedirectTarget</c>
+          <c>RFCthis</c>
+          
+          <c>MI.FallbackTarget</c>
+          <c>RFCthis</c>
+          
+        </texttable>
+
+        <t>[RFC Editor: Please replace RFCthis with the published RFC
+        number for this document.]</t>
+
+        
+        
+        <section anchor="IANA.payload.RedirectTarget" title="CDNI FCI RedirectTarget Payload Type">
+          <t>Purpose: The purpose of this payload type is to
+             distinguish RedirectTarget FCI objects</t>
+          <t>Interface: FCI</t>
+          <t>Encoding: see <xref target="redirect-target-capability-properties"/></t>
+        </section>
+        <section anchor="IANA.payload.FallbackTarget" title="CDNI MI FallbackTarget Payload Type">
+          <t>Purpose: The purpose of this payload type is to
+             distinguish FallbackTarget MI objects (and any associated capability advertisement)</t>
+          <t>Interface: MI/FCI</t>
+          <t>Encoding: see <xref target="fallback-target-metadata-properties"/></t>
+        </section>
+
+       </section>
+    </section>
+
+    <section anchor="Security" title="Security and Privacy Considerations">
+      <t>This specification is in accordance with the CDNI Metadata Interface and the CDNI Request Routing: 
+         Footprint and Capabilities Semantics. As such, it is subject to the security and privacy considerations 
+         as defined in <xref target="RFC8006"/> and <xref target="RFC8008"/> respectively. Note specifically that
+         the Redirect Target FCI object exposes internal information of the dCDN network. A third party could
+         intercept the FCI transactions and use the information to attack the dCDN. An implemenation of the FCI 
+         MUST therefore use strong authentication and encryption and strcitly follow the directions as defined for 
+         the Metadata Interface in Section 8.3 of <xref target="RFC8006"/>.</t> 
+    </section>
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>TBD.</t>
+    </section>
+    
+    <section anchor="Contributors" title="Contributors">
+      <t>TBD.</t>
+    </section>
+
+
+  </middle>
+
+  <back>
+    <references title="Normative References">
+
+      <?rfc include="reference.RFC.1034" ?>
+      
+      <?rfc include="reference.RFC.2119" ?>
+                       
+      <?rfc include="reference.RFC.3986" ?>
+
+      <?rfc include="reference.RFC.7231" ?>
+                       
+      <?rfc include="reference.RFC.8006" ?>
+
+      <?rfc include="reference.RFC.8007" ?>
+
+      <?rfc include="reference.RFC.8008" ?>
+          
+    </references>
+
+    <references title="Informative References">
+      <?rfc include="reference.RFC.6707" ?>
+      
+      <?rfc include="reference.RFC.7336" ?>   
+           
+      <?rfc include="reference.RFC.7736" ?>
+
+      <?rfc include="reference.RFC.7871" ?>
+                                              
+
+    </references>
+  </back>
+</rfc>
