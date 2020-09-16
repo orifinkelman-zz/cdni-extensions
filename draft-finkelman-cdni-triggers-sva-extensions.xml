@@ -393,14 +393,16 @@ RESPONSE:
              CDNI triggers may be propagated over a chain of downstream CDNs. Let us take for example an 
              upstream (uCDN-A) CDN A that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
              to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed 
-             from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it is essential for 
+             from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it might be essential for 
              uCDN-A that sets the trigger, to be able to trace back an error to the downstream CDN where it occurred. 
              This document adds a mechanism to propagate the ID of the faulty dCDN back to the uCDN by adding the CDN ID 
              to the error description. When a downstream dCDN-B propagates a trigger to another downstream 
              dCDN-C, it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
              them to the errors array in its own status resource to be sent back to the originating uCDN-A.
-             This makes sure that the trigger originating upstream CDN will receive an array of errors that occurred 
-             in all the CDNs along the execution path, each error carrying its own CDN identifier.                 
+             While propagating back the errors, and depending on the relations with uCDN-A, downstream dCDN-B MAY also 
+             specify the dCDN-C CDN identifier, indicating that the error relates spefically to this CDN.
+             The trigger originating upstream CDN will receive an array of errors that occurred 
+             in all the CDNs along the execution path, where each error MAY carrying its own CDN identifier.
           </t>            
         </list></t>       
       </section>
@@ -893,7 +895,8 @@ RESPONSE:
               <t>Type: A non-empty JSON string, where the string is a CDN PID as defined in Section 
                  4.6 of <xref target="RFC8007"/>.</t>
               
-              <t>Mandatory: Yes.</t>
+              <t>Mandatory: Yes. In the case the dCDN would not like to expose this information, its own 
+                CDN PID is provided.</t>
             </list></t>
           </list></t>
 
