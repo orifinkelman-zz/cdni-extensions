@@ -2025,6 +2025,7 @@ Month Number  Month/Year           Maximum value of date-mday
           <front>
             <title>Streaming Video Alliance</title>
             <author/>
+            <date/>
           </front>
         </reference>
 
@@ -2033,6 +2034,7 @@ Month Number  Month/Year           Maximum value of date-mday
             <title>Open Caching</title>
             <author><organization>Streaming Video Alliance</organization>
             </author>
+            <date/>
           </front>
         </reference>
 
@@ -2041,7 +2043,6 @@ Month Number  Month/Year           Maximum value of date-mday
             <title>
               Open Caching Content Management Operations Specification
             </title>
-            <seriesInfo name="Version" value="1.0"/>
             <author initials="O." surname="Finkelman" fullname="Ori Finkelman" role="editor">
               <organization>Qwilt</organization>
             </author>
