@@ -939,13 +939,14 @@ https://video.example.com/k/movie1/4/013.ts
 
         <section anchor="error-code" title="Error codes">
           <t>
-             This document adds the error code "eextension" to the error codes table defined in Section
-             5.2.6 of <xref target="RFC8007"/>. This error code designates that an error occurred while
-             parsing a generic trigger extension, or that the specific extension is not supported by the CDN.
-             A CDN that fails to parse or execute a generic extension object MUST report it using the "errors.v2"
-             array within the trigger status resource, while setting the error code to "eextension" and providing
-             an appropriate description. The "eextension" error code is a registered type of
-             "CDNI CI/T Trigger Error Codes" (see <xref target="IANA.CDNI.CIT.ErrorCodes"/>).
+             This document adds the error code "eextension" to the error codes table defined in Section 
+             5.2.6 of <xref target="RFC8007"/>. This error code designates that an error occurred while 
+             parsing a generic trigger extension, or that the specific extension is not supported by the CDN. 
+             A CDN that fails to execute a trigger due a generic extension object which is "mandatory-to-enforce" 
+             MUST report it using the "errors.v2" 
+             array within the trigger status resource, while setting the error code to "eextension" and providing 
+             an appropriate description. The "eextension" error code is a registered type of 
+             "CDNI CI/T Trigger Error Codes" (see <xref target="IANA.CDNI.CIT.ErrorCodes"/>). 
           </t>
         </section>
 
@@ -1120,7 +1121,7 @@ REQUEST:
                   {
                     <properties of trigger extension object #1>
                   },
-              "mandatory-to-enforce": false,
+              "mandatory-to-enforce": true,
               "safe-to-redistribute": true,
             },
             {
@@ -1130,7 +1131,7 @@ REQUEST:
                   {
                     <properties of trigger extension object #2>
                   },
-              "mandatory-to-enforce": false,
+              "mandatory-to-enforce": true,
               "safe-to-redistribute": true,
             },
         ],
@@ -1158,7 +1159,7 @@ RESPONSE:
                     {
                       <properties of trigger extension object #1>
                     },
-                "mandatory-to-enforce": false,
+                "mandatory-to-enforce": true,
                 "safe-to-redistribute": true,
               },
             ],
@@ -1174,7 +1175,7 @@ RESPONSE:
                     {
                       <properties of trigger extension object #2>
                     },
-                "mandatory-to-enforce": false,
+                "mandatory-to-enforce": true,
                 "safe-to-redistribute": true,
               },
             ],
@@ -1814,7 +1815,7 @@ Month Number  Month/Year           Maximum value of date-mday
           <ttcol align="left">Description</ttcol>
           <ttcol align="left">Specification</ttcol>
             <c>eextension</c>
-            <c>The dCDN failed to parse a generic extension object, or does not support this extension.</c>
+            <c>The dCDN failed to parse a generic "mandatory-to-enforce" extension object, or does not support this extension.</c>
             <c>Section <xref target="error-code"/> of this document.</c>
         </texttable>
       </section>
