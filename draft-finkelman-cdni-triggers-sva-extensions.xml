@@ -58,6 +58,28 @@
       </address>
     </author>
 
+    <author fullname="Nir B. Sopher" initials="N.B." surname="Sopher">
+      <organization>Qwilt</organization>
+
+      <address>
+        <postal>
+          <street>6, Ha'harash</street>
+
+          <city>Hod HaSharon</city>
+
+          <region></region>
+
+          <code>4524079</code>
+
+          <country>Israel</country>
+        </postal>
+
+        <phone>+972-72-2221647</phone>
+
+        <email>nir@apache.org</email>
+      </address>
+    </author>
+
     <date/>
 
     <abstract>
