@@ -87,7 +87,7 @@
          of video delivery requests from commerical CDNs to a caching layer at the ISP's network. 
          Open Caching architecture is a specific use case of CDNI where the commercial CDN is the 
          upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN). The Open
-         Caching Content Management Operations Specification <xref target="OC-CM" format=default"/>
+         Caching Content Management Operations Specification <xref target="OC-CM" format="default"/>
          defines objects and extensions required by Open Caching architecture for granular content
          management operations such as new content selection options. This document add those extensions
          to Content Delivery Network Interconnection (CDNI) Control Interface / Triggers <xref target="RFC8007"/>
