@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-02" updates='8007' ipr="trust200902">
+<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-05" updates='8007' ipr="trust200902">
   <front>
     <title abbrev="CDNI Control Interface / Triggers Extensions">CDNI Control Triggers Interface Extensions</title>
 
@@ -640,7 +640,7 @@ https://video.example.com/k/movie1/4/013.ts
              MUST set the "incomprehensible" flag to true for that GenericTriggerExtension
              object before redistributing it.  The "incomprehensible"
              flag signals to a dCDN that trigger metadata was not properly transformed
-             by the tCDN.  A CDN MUST NOT attempt to execute a trigger that has been
+             by the tCDN.  A CDN MUST NOT attempt to execute a trigger with an extension that has been
              marked as "incomprehensible" by a uCDN.
            </t>
            <t>
@@ -705,10 +705,10 @@ https://video.example.com/k/movie1/4/013.ts
                <c>False</c>
                <c>MUST NOT serve.  MUST set "incomprehensible" to true when redistributing.</c>
 
-           </texttable>
-
-           <t>
-             <xref target="dcdn-actions"/> describes the action to be taken by a tCDN for the different
+           </texttable> 
+          
+           <t>         
+             <xref target="dcdn-actions"/> describes the action to be taken by a dCDN for the different
              combinations of mandatory-to-enforce and "incomprehensible" ("Incomp")
              properties, when the dCDN either does or does not understand
              the trigger extension object in question:
@@ -875,9 +875,8 @@ https://video.example.com/k/movie1/4/013.ts
             <t>Property: extensions<list style="empty">
               <t>
                 Description: Array of trigger extension objects copied from the corresponding "extensions" array
-                from the Trigger Specification. Only those extensions to which the error applies are included, but
-                those extensions MUST be exactly as they appear in the request.
-                where each object is copied from data copied from the
+                from the Trigger Specification. Only those extensions to which the error applies are included, but 
+                those extensions MUST be exactly as they appear in the request.                 
               </t>
 
               <t>
@@ -886,7 +885,7 @@ https://video.example.com/k/movie1/4/013.ts
               </t>
 
               <t>
-                Mandatory: No. The "extensions" array SHOULD be used only if there were errors related to
+                Mandatory: No. The "extensions" array SHOULD be used only if the error relates to
                 extension objects.
               </t>
             </list></t>
