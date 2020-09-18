@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-finkelman-cdni-triggers-sva-extension-05" updates='8007' ipr="trust200902">
+<rfc category="std" docName="draft-finkelman-cdni-triggers-sva-extensions-05" updates='8007' ipr="trust200902">
   <front>
     <title abbrev="CDNI Control Interface / Triggers Extensions">CDNI Control Triggers Interface Extensions</title>
 
