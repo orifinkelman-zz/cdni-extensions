@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-02" updates='8007' ipr="trust200902">
+<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-06" updates='8007' ipr="trust200902">
   <front>
     <title abbrev="CDNI Control Interface / Triggers Extensions">CDNI Control Triggers Interface Extensions</title>
 
@@ -30,7 +30,7 @@
           <country>Israel</country>
         </postal>
 
-        <phone>+972-72-2221647</phone>
+        <phone></phone>
 
         <email>ori.finkelman.ietf@gmail.com</email>
       </address>
@@ -58,20 +58,41 @@
       </address>
     </author>
 
+    <author fullname="Nir B. Sopher" initials="N.B." surname="Sopher">
+      <organization>Qwilt</organization>
+
+      <address>
+        <postal>
+          <street>6, Ha'harash</street>
+
+          <city>Hod HaSharon</city>
+
+          <region></region>
+
+          <code>4524079</code>
+
+          <country>Israel</country>
+        </postal>
+
+        <phone></phone>
+
+        <email>nir@apache.org</email>
+      </address>
+    </author>
+
     <date/>
 
     <abstract>
       <t>
          This document updates RFC 8007 to include generic extensions and more
          granular content matching options, required by the Open Caching architecture.
-         The Open Caching working group of the Streaming Video Alliance is focused on
-         the delegation of video delivery request from commercial CDNs to a caching
-         layer at the ISP. In that aspect, Open Caching is a specific use case of CDNI,
-         where the commercial CDN is the upstream CDN (uCDN) and the ISP caching layer
-         is the downstream CDN (dCDN). The extensions specified in this document to the
-         CDNI Control Interface / Triggers are derived from requirements of Open Caching
-         but are applicable to CDNI use cases in general.
-      </t>
+         The Open Caching architeccture is a use case of Content Delivery Network 
+         Interconnection (CDNI) in which the commercial Content Delivery Network (CDN) is  
+         the upstream CDN (uCDN) and the ISP caching layer serves as the downstream
+         CDN (dCDN). This document defines extensions to the Content Delivery Network 
+         Interconnection (CDNI) Control Interface/Triggers. These extensions are derived 
+         from requirements raised by Open Caching architecture but are also applicable 
+         to CDNI use cases in general.</t>
     </abstract>
 
     <note title="Requirements Language">
@@ -84,7 +105,17 @@
 
   <middle>
     <section title="Introduction">
-      <t>This document defines the objects and extensions required for granular content management
+      <t>The Streaming Video Alliance <xref target="SVA" format="default"/> is a global association
+         that works to solve streaming video challenges in an effort to improve end-user experience 
+         and adoption. The Open Caching Working Group <xref target="OCWG" format="default"/> of the 
+         Streaming Video Alliance <xref target="SVA" format="default"/> is focused on the delegation
+         of video delivery requests from commerical CDNs to a caching layer at the ISP's network. 
+         Open Caching architecture is a specific use case of CDNI where the commercial CDN is the 
+         upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN). The Open
+         Caching Content Management Operations Specification <xref target="OC-CM" format="default"/>
+         defines objects and extensions required by Open Caching architecture for granular content
+         management operations such as new content selection options. 
+         This document defines the objects and extensions required for granular content management
          operations. For that purpose it extends CDNI Control Interface / Triggers <xref target="RFC8007"/>
          by adding new content selection options to the trigger specification and specifying a generic
          extension mechanism that enables adding future functions for controlling the trigger execution.
@@ -97,6 +128,10 @@
       <t>The CDNI Footprint and Capability Interface is described in <xref target="RFC8008"/>.</t>
       <t>The CDNI Control Interface / Triggers is described in <xref target="RFC8007"/>.</t>
 
+       <t>For consistency with other CDNI documents, this document follows the CDNI convention 
+        of uCDN (upstream CDN) and dCDN downstream CDN) to represent the commercial CDN and 
+        ISP caching layer, respectively.</t>    
+           
       <section anchor="terminology" title="Terminology">
         <t>This document reuses the terminology defined in <xref target="RFC6707"/>,
            <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
@@ -384,19 +419,21 @@ RESPONSE:
           </t>
           <t>
              Error propagation - enable the uCDN to traceback an error to the dCDN in which it occurred.
-             CDNI triggers may be propagated over a chain of downstream CDNs. Let us take for example an
-             upstream (uCDN-A) CDN A that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating
-             to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed
-             from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it is essential for
-             uCDN-A that sets the trigger, to be able to trace back an error to the downstream CDN where it occurred.
-             This document adds a mechanism to propagate the ID of the faulty dCDN back to the uCDN by adding the CDN ID
-             to the error description. When a downstream dCDN-B propagates a trigger to another downstream
+             CDNI triggers may be propagated over a chain of downstream CDNs. Let us take for example an 
+             upstream (uCDN-A) CDN A that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
+             to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed 
+             from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it might be essential for 
+             uCDN-A that sets the trigger, to be able to trace back an error to the downstream CDN where it occurred. 
+             This document adds a mechanism to propagate the ID of the faulty dCDN back to the uCDN by adding the CDN ID 
+             to the error description. When a downstream dCDN-B propagates a trigger to another downstream 
              dCDN-C, it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
              them to the errors array in its own status resource to be sent back to the originating uCDN-A.
-             This makes sure that the trigger originating upstream CDN will receive an array of errors that occurred
-             in all the CDNs along the execution path, each error carrying its own CDN identifier.
-          </t>
-        </list></t>
+             While propagating back the errors, and depending on the implementation, downstream dCDN-B MAY also 
+             specify the dCDN-C CDN identifier, indicating that the error relates spefically to this CDN.
+             The trigger originating upstream CDN will receive an array of errors that occurred 
+             in all the CDNs along the execution path, where each error MAY carrying its own CDN identifier.
+          </t>            
+        </list></t>       
       </section>
 
       <section anchor="cit-objects-properties-v2" title="Properties of CI/T Version 2 objects">
@@ -417,8 +454,8 @@ RESPONSE:
               <t>Description: Regexs of content URLs to which the CI/T trigger command applies.</t>
 
               <t>Type: A JSON array of RegexMatch objects (see <xref target="regex-match"/>).</t>
-
-              <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present
+              
+              <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present 
                  and non-empty.</t>
             </list></t>
 
@@ -428,7 +465,7 @@ RESPONSE:
 
               <t>Type: A JSON array of Playlist objects (see <xref target="playlist"/>).</t>
 
-              <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present
+              <t>Mandatory: No, but at least one of "metadata.*" or "content.*" MUST be present 
                  and non-empty.</t>
             </list></t>
 
@@ -438,8 +475,8 @@ RESPONSE:
 
                 <t>Type: Array of GenericTriggerExtension objects (see <xref target="generic-extension-object"/>).</t>
 
-                <t>Mandatory-to-Specify: No. The default is no extensions.</t>
-             </list></t>
+                <t>Mandatory: No. The default is no extensions.</t>
+             </list></t> 
 
           </list></t>
 
@@ -640,7 +677,7 @@ https://video.example.com/k/movie1/4/013.ts
              MUST set the "incomprehensible" flag to true for that GenericTriggerExtension
              object before redistributing it.  The "incomprehensible"
              flag signals to a dCDN that trigger metadata was not properly transformed
-             by the tCDN.  A CDN MUST NOT attempt to execute a trigger that has been
+             by the tCDN.  A CDN MUST NOT attempt to execute a trigger with an extension that has been
              marked as "incomprehensible" by a uCDN.
            </t>
            <t>
@@ -705,10 +742,10 @@ https://video.example.com/k/movie1/4/013.ts
                <c>False</c>
                <c>MUST NOT serve.  MUST set "incomprehensible" to true when redistributing.</c>
 
-           </texttable>
-
-           <t>
-             <xref target="dcdn-actions"/> describes the action to be taken by a tCDN for the different
+           </texttable> 
+          
+           <t>         
+             <xref target="dcdn-actions"/> describes the action to be taken by a dCDN for the different
              combinations of mandatory-to-enforce and "incomprehensible" ("Incomp")
              properties, when the dCDN either does or does not understand
              the trigger extension object in question:
@@ -775,7 +812,7 @@ https://video.example.com/k/movie1/4/013.ts
                  <t>Type: String containing the CDNI Payload Type <xref target="RFC7736"/> of the object contained
                     in the generic-trigger-extension-value property (see table in <xref target="IANA.CDNI.payload"/>).</t>
 
-                 <t>Mandatory-to-Specify: Yes.</t>
+                 <t>Mandatory: Yes.</t>
               </list></t>
 
               <t>Property: generic-trigger-extension-value<list style="empty">
@@ -785,7 +822,7 @@ https://video.example.com/k/movie1/4/013.ts
                  <t>Type: Format/Type is defined by the value of the
                     generic-trigger-extension-type property above.</t>
 
-                 <t>Mandatory-to-Specify: Yes.</t>
+                 <t>Mandatory: Yes.</t>
               </list></t>
 
               <t>Property: mandatory-to-enforce<list style="empty">
@@ -795,18 +832,19 @@ https://video.example.com/k/movie1/4/013.ts
 
                  <t>Type: Boolean</t>
 
-                 <t>Mandatory-to-Specify: No.  Default is to treat the trigger extension as
+                 <t>Mandatory: No.  Default is to treat the trigger extension as
                     mandatory-to-enforce (i.e., a value of True).</t>
               </list></t>
 
               <t>Property: safe-to-redistribute<list style="empty">
 
-                 <t>Description: Flag identifying whether or not this trigger extension
-                    can be safely redistributed without modification.</t>
+                 <t>Description: Flag identifying whether or not this trigger extension 
+                    can be safely redistributed without modification, even if 
+                    the CDN fails to understand the extension.</t>
 
                  <t>Type: Boolean</t>
 
-                 <t>Mandatory-to-Specify: No.  Default is to allow transparent
+                 <t>Mandatory: No.  Default is to allow transparent
                     redistribution (i.e., a value of True).</t>
               </list></t>
 
@@ -820,7 +858,7 @@ https://video.example.com/k/movie1/4/013.ts
 
                  <t>Type: Boolean</t>
 
-                 <t>Mandatory-to-Specify: No.  Default is comprehensible (i.e., a
+                 <t>Mandatory: No.  Default is comprehensible (i.e., a
                     value of False).</t>
               </list></t>
 
@@ -849,9 +887,9 @@ https://video.example.com/k/movie1/4/013.ts
 
         <section anchor="error-description-v2" title="Error Description Version 2">
           <t>
-             Version 2 of the Error Description adds the "content.playlists", "content.regexs", "extensions" and "cdn"
-             properties on top of the existing properties of version 1 of the trigger Error Description as defined in
-             Section 5.2.6 of <xref target="RFC8007"/>.
+             Version 2 of the Error Description adds the "content.playlists", "content.regexs", "extensions" and "cdn" 
+             properties on top of the existing properties of version 1 of the trigger Error Description as defined in 
+             Section 5.2.6 of <xref target="RFC8007"/>. 
           </t>
 
           <t><list style="empty">
@@ -875,9 +913,8 @@ https://video.example.com/k/movie1/4/013.ts
             <t>Property: extensions<list style="empty">
               <t>
                 Description: Array of trigger extension objects copied from the corresponding "extensions" array
-                from the Trigger Specification. Only those extensions to which the error applies are included, but
-                those extensions MUST be exactly as they appear in the request.
-                where each object is copied from data copied from the
+                from the Trigger Specification. Only those extensions to which the error applies are included, but 
+                those extensions MUST be exactly as they appear in the request.                 
               </t>
 
               <t>
@@ -886,21 +923,23 @@ https://video.example.com/k/movie1/4/013.ts
               </t>
 
               <t>
-                Mandatory: No. The "extensions" array SHOULD be used only if there were errors related to
+                Mandatory: No. The "extensions" array SHOULD be used only if the error relates to
                 extension objects.
               </t>
-            </list></t>
-            <t>Property: cdn<list style="empty">
+            </list></t>           
+            <t>Property: cdn<list style="empty"> 
               <t>
                 Description: The CDN PID of the CDN where the error occurred. The "cdn" property is used
-                by the originating uCDN or by propagating dCDN in order to distinguish in which CDN the
+                by the originating uCDN or by propagating dCDN in order to distinguish in which CDN the 
                 error occured.
               </t>
-
-              <t>Type: A non-empty JSON string, where the string is a CDN PID as defined in Section
+              
+              <t>Type: A non-empty JSON string, where the string is a CDN PID as defined in Section 
                  4.6 of <xref target="RFC8007"/>.</t>
-
-              <t>Mandatory: Yes.</t>
+              
+              <t>Mandatory: Yes. In the case the dCDN does not like to expose this information, 
+                 it should provide its own CDN PID.
+              </t>
             </list></t>
           </list></t>
 
@@ -954,13 +993,14 @@ https://video.example.com/k/movie1/4/013.ts
 
         <section anchor="error-code" title="Error codes">
           <t>
-             This document adds the error code "eextension" to the error codes table defined in Section
-             5.2.6 of <xref target="RFC8007"/>. This error code designates that an error occurred while
-             parsing a generic trigger extension, or that the specific extension is not supported by the CDN.
-             A CDN that fails to parse or execute a generic extension object MUST report it using the "errors.v2"
-             array within the trigger status resource, while setting the error code to "eextension" and providing
-             an appropriate description. The "eextension" error code is a registered type of
-             "CDNI CI/T Trigger Error Codes" (see <xref target="IANA.CDNI.CIT.ErrorCodes"/>).
+             This document adds the error code "eextension" to the error codes table defined in Section 
+             5.2.6 of <xref target="RFC8007"/>. This error code designates that an error occurred while 
+             parsing a generic trigger extension, or that the specific extension is not supported by the CDN. 
+             A CDN that fails to execute a trigger due a generic extension object which is "mandatory-to-enforce" 
+             MUST report it using the "errors.v2" 
+             array within the trigger status resource, while setting the error code to "eextension" and providing 
+             an appropriate description. The "eextension" error code is a registered type of 
+             "CDNI CI/T Trigger Error Codes" (see <xref target="IANA.CDNI.CIT.ErrorCodes"/>). 
           </t>
         </section>
 
@@ -1079,24 +1119,24 @@ RESPONSE:
     Server: example-server/0.1
 
     {
-      "errors.v2": [
-       {
-         "content.playlists": [
-          {
-            "playlist": "https://www.example.com/hls/title/index.m3u8",
-            "media-protocol": "hls"
-          },
-         ],
-         "description": "The dCDN was not able to parse the playlist",
-         "error": "econtent",
-         "cdn": "AS64500:0"
-       },
-      ],
-      "ctime": 1462351690,
-      "etime": 1462351698,
-      "mtime": 1462351690,
-      "status": "failed",
-      "trigger.v2": { <content of trigger object from the command> }
+       "errors.v2": [ 
+         {
+           "content.playlists": [
+              { 
+                "playlist": "https://www.example.com/hls/title/index.m3u8",    
+                "media-protocol": "hls"
+              },                
+            ],
+           "description": "The dCDN was not able to parse the playlist",
+           "error": "econtent",
+           "cdn": "AS64500:0"
+         },
+       ],
+       "ctime": 1462351690,
+       "etime": 1462351698,
+       "mtime": 1462351690,
+       "status": "failed",       
+       "trigger.v2": { <content of trigger object from the command> }
     }
          ]]></artwork>
           </figure>
@@ -1137,7 +1177,7 @@ REQUEST:
                   {
                     <properties of trigger extension object #1>
                   },
-              "mandatory-to-enforce": false,
+              "mandatory-to-enforce": true,
               "safe-to-redistribute": true,
             },
             {
@@ -1147,7 +1187,7 @@ REQUEST:
                   {
                     <properties of trigger extension object #2>
                   },
-              "mandatory-to-enforce": false,
+              "mandatory-to-enforce": true,
               "safe-to-redistribute": true,
             },
         ],
@@ -1175,7 +1215,7 @@ RESPONSE:
                     {
                       <properties of trigger extension object #1>
                     },
-                "mandatory-to-enforce": false,
+                "mandatory-to-enforce": true,
                 "safe-to-redistribute": true,
               },
             ],
@@ -1192,14 +1232,14 @@ RESPONSE:
                     {
                       <properties of trigger extension object #2>
                     },
-                "mandatory-to-enforce": false,
+                "mandatory-to-enforce": true,
                 "safe-to-redistribute": true,
               },
             ],
            "description": "unrecognized extension <type>",
            "error": "eextension",
            "cdn": "AS64501:0"
-         },
+         },        
        ],
        "ctime": 1462351690,
        "etime": 1462351698,
@@ -1253,7 +1293,7 @@ RESPONSE:
 
                  <t>Type: Array of LocationRule objects (see Section 4.2.2.1 of <xref target="RFC8006"/>)</t>
 
-                 <t>Mandatory-to-Specify: Yes.</t>
+                 <t>Mandatory: Yes.</t>
               </list></t>
         </list></t>
 
@@ -1347,8 +1387,8 @@ RESPONSE:
                     <xref target="RFC8006"/>)
                  </t>
 
-                 <t>Mandatory-to-Specify: No, but exactly one of "unix-time-window", "utc-window"
-                    or "local-time-window" MUST be present.</t>
+                 <t>Mandatory: No, but exactly one of "unixEpochWindow", "utcWindow"
+                    or "localTimeWindow" MUST be present.</t>
               </list></t>
               <t>Property: utc-window<list style="empty">
 
@@ -1356,8 +1396,8 @@ RESPONSE:
 
                  <t>Type: UTCWindow object as defined in <xref target="utc-window"/>.</t>
 
-                 <t>Mandatory-to-Specify: No, but exactly one of "unix-time-window", "utc-window"
-                    or "local-time-window" MUST be present.</t>
+                 <t>Mandatory: No, but exactly one of "unixEpochWindow", "utcWindow"
+                    or "localTimeWindow" MUST be present.</t>
               </list></t>
               <t>Property: local-time-window<list style="empty">
 
@@ -1367,9 +1407,9 @@ RESPONSE:
 
                  <t>Type: LocalTimeWindow object as defined in <xref target="local-time-window"/>.</t>
 
-                 <t>Mandatory-to-Specify: No, but exactly one of "unix-time-window", "utc-window"
-                    or "local-time-window" MUST be present.</t>
-              </list></t>
+                 <t>Mandatory: No, but exactly one of "unixEpochWindow", "utcWindow"
+                    or "localTimeWindow" MUST be present.</t>
+              </list></t>             
           </list></t>
 
           <t>
@@ -1413,7 +1453,9 @@ RESPONSE:
 
               <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
 
-              <t>Mandatory-to-Specify: Yes.</t>
+              <t>Mandatory: No, but at least one of "start" or "end"
+                 MUST be present and non-empty.</t>
+
             </list></t>
             <t>Property: end<list style="empty">
 
@@ -1421,10 +1463,11 @@ RESPONSE:
 
               <t>Type: Internet date and time as defined in <xref target="RFC3339"/>.</t>
 
-              <t>Mandatory-to-Specify: Yes.</t>
-            </list></t>
-         </list></t>
-
+              <t>Mandatory: No, but at least one of "start" or "end"
+                 MUST be present and non-empty.</t>
+            </list></t>   
+         </list></t>      
+         
          <t>
            Example UTCWindow object that describes a time window from 02:30
            01/01/2000 UTC to 04:30 01/01/2000 UTC:
@@ -1471,7 +1514,8 @@ RESPONSE:
                  <xref target="date-local-time"/>.
               </t>
 
-              <t>Mandatory-to-Specify: Yes.</t>
+              <t>Mandatory: No, but at least one of "start" or "end"
+                 MUST be present and non-empty.</t>
             </list></t>
             <t>Property: end<list style="empty">
 
@@ -1481,10 +1525,11 @@ RESPONSE:
                  <xref target="date-local-time"/>.
               </t>
 
-              <t>Mandatory-to-Specify: Yes.</t>
-            </list></t>
-         </list></t>
-
+              <t>Mandatory: No, but at least one of "start" or "end"
+                 MUST be present and non-empty.</t>
+            </list></t>   
+         </list></t>      
+         
          <t>
            Example LocalTimeWindow object that describes a local time window from 02:30
            01/01/2000 to 04:30 01/01/2000.
@@ -1605,7 +1650,7 @@ Month Number  Month/Year           Maximum value of date-mday
 
                  <t>Type: An array of JSON strings</t>
 
-                 <t>Mandatory-to-Specify: No. The default is version 1. A missing or an empty versions list
+                 <t>Mandatory: No. The default is version 1. A missing or an empty versions list
                     means that  only version 1 of the interface and objects is supported.</t>
            </list></t>
         </list></t>
@@ -1651,7 +1696,7 @@ Month Number  Month/Year           Maximum value of date-mday
                  <t>Type: A list of MediaProtocol (from the CDNI Triggers media protocol types
                     <xref target="IANA.CDNI.MediaProtocolReg"/>)</t>
 
-                 <t>Mandatory-to-Specify: No. The default, in case of a missing or an empty list,
+                 <t>Mandatory: No. The default, in case of a missing or an empty list, 
                     is none supported.</t>
            </list></t>
         </list></t>
@@ -1698,8 +1743,8 @@ Month Number  Month/Year           Maximum value of date-mday
                     CI/T GenericExtensionObject objects.
                  </t>
 
-                 <t>Mandatory-to-Specify: No. The default, in case of a missing or an empty list, MUST be
-                    interpreted as "no GenericExtensionObject types are supported". A non-empty list MUST be
+                 <t>Mandatory: No. The default, in case of a missing or an empty list, MUST be 
+                    interpreted as "no GenericExtensionObject types are supported". A non-empty list MUST be 
                     interpreted as containing "the only GenericExtensionObject types that are supported".
                  </t>
            </list></t>
@@ -1828,7 +1873,7 @@ Month Number  Month/Year           Maximum value of date-mday
           <ttcol align="left">Description</ttcol>
           <ttcol align="left">Specification</ttcol>
             <c>eextension</c>
-            <c>The dCDN failed to parse a generic extension object, or does not support this extension.</c>
+            <c>The dCDN failed to parse a generic "mandatory-to-enforce" extension object, or does not support this extension.</c>
             <c>Section <xref target="error-code"/> of this document.</c>
         </texttable>
       </section>
@@ -1999,7 +2044,41 @@ Month Number  Month/Year           Maximum value of date-mday
         <seriesInfo name="Edition" value="3"/>
       </reference>
 
+      <reference anchor="SVA" target="https://www.streamingvideoalliance.org">
+          <front>
+            <title>Streaming Video Alliance</title>
+            <author/>
+            <date/>
+          </front>
+        </reference>
 
+        <reference anchor="OCWG" target="https://www.streamingvideoalliance.org/technical-groups/open-caching/">
+          <front>
+            <title>Open Caching</title>
+            <author><organization>Streaming Video Alliance</organization>
+            </author>
+            <date/>
+          </front>
+        </reference>
+
+      <reference anchor="OC-CM" target="https://www.streamingvideoalliance.org/document/open-caching-content-management-operations-specification/">
+          <front>
+            <title>
+              Open Caching Content Management Operations Specification
+            </title>
+            <author initials="O." surname="Finkelman" fullname="Ori Finkelman" role="editor">
+              <organization>Qwilt</organization>
+            </author>
+            <author initials="J." surname="Devabhaktuni" fullname="Jaya Devabhaktuni">
+              <organization>Concurrent</organization>
+            </author>
+            <author initials="M." surname="Stock" fullname="Matt Sanjay Stock">
+              <organization>Limelight Networks</organization>
+            </author>
+            <date month="November" year="2017"/>
+          </front>
+        </reference>
+            
     </references>
   </back>
 </rfc>
