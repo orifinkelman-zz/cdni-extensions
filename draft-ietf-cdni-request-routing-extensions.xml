@@ -56,7 +56,27 @@
         <email>sanjay.mishra@verizon.com</email>
       </address>
     </author>
-    
+
+    <author fullname="Nir B. Sopher" initials="N." surname="Sopher">
+        <organization>Qwilt</organization>
+
+        <address>
+            <postal>
+                <street>6, Ha'harash</street>
+
+                <city>Hod HaSharon</city>
+
+                <region></region>
+
+                <code>4524079</code>
+
+                <country>Israel</country>
+            </postal>
+
+            <email>nir@apache.org</email>
+        </address>
+    </author>
+
     <date/>
 
     <abstract>
@@ -84,10 +104,13 @@
          CDNI convention of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the commercial CDN and ISP caching
          layer respectively.</t>
       
-      <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> for the defined objects:
+      <t>This document also registers CDNI Payload Types <xref target="RFC7736"/> and a CDNI Metadata Footprint Type
+          (section 7.2 of <xref target="RFC8006"/>) for the defined objects:
           <list style="symbols">
             <t>Redirect Target Capability (for dCDN advertising redirect target address)</t>
-            <t>Fallback Target Metadata (for uCDN configuring fallback target address)</t>            
+            <t>Fallback Target Metadata (for uCDN configuring fallback target address)</t>
+            <t>IPv4v6CIDR Footprint Type (for dCDN advertising a footprint that consists of both
+                IPv4 and IPv6 client addresses)</t>
           </list>
       </t>
         
@@ -665,12 +688,115 @@ End User              dCDN            uCDN fallback          uCDN RR
 
     </section>
 
-      
+
+    <section anchor="cdni-metadata-ipv4v6cidr-footprint-type" title="CDNI Metadata IPv4v6CIDR Footprint Type">
+      <t> As described in section 5 of <xref target="RFC8008"/>, the FCI Capability Advertisement Object
+          includes an array of CDNI Footprint Objects. Appendix B of <xref target="RFC8008"/> specifies that the
+          semantics of Footprint Objects array is of a multiple, additive, footprint constraints. 
+          Meaning, the advertisement of different footprint types narrows
+          the dCDN's candidacy cumulatively. 
+      </t>
+
+      <t>Sections 4.3.5 and 4.3.6 of <xref target="RFC8006"/> specify the "IPv4CIDR" and "IPv6CIDR"
+          footprint types (respectively), for listing IP addresses blocks. Using Footprint Objects of these
+          types, one can define a FCI Capability Advertisement Object footprint constraints that match IPv4 
+          or IPv6 clients. However, the described "narrowing" semantic of the Footprint Objects array prevents
+          the usage of these objects together in order to create a footprint constraint that matches IPv4 
+          clients together with IPv6 clients. 
+       </t>
+       <t>Below is an example for an attempt creating an object matching 
+          IPv4 clients of subnet "192.0.2.0/24", as well as IPv6 clients of subnet "2001:db8::/32". 
+          Such definition results with an empty list of clients, as the constraints are additives and 
+          a client address cannot be both IPv4 and IPv6.
+      </t>
+
+        <figure>
+            <artwork><![CDATA[
+{
+  "capabilities": [
+    {
+      "capability-type": <CDNI capability object type>,
+      "capability-value": <CDNI capability object>,
+      },
+      "footprints": [
+          {
+              "footprint-type": "ipv4cidr",
+              "footprint-value": ["192.0.2.0/24"]
+          },
+          {
+              "footprint-type": "ipv6cidr",
+              "footprint-value": ["2001:db8::/32"]
+          }
+      ]
+    }
+  ]
+}
+]]>
+            </artwork>
+        </figure>
+
+
+      <t>To overcome the described limitation and allow a list of footprint constraints that
+          matches both IPv4 and IPv6 client addresses, we introduce below the "IPv4v6CIDR" simple data type as well as
+          a derived footprint type.
+      </t>
+
+      <section anchor="cdni-metadata-ipv4v6cidr-data-type" title="CDNI Metadata IPv4v6CIDR Data Type">
+        <t>The "IPv4v6CIDR" data type specified in <xref target="cdni-metadata-ipv4v6cidr-data-type-description"/>, 
+            can be either IPv4 or IPv6 address blocks. The data type is added to the list of data types
+            described in section 4.3 of <xref target="RFC8006"/> that are used as properties of CDNI Metadata objects.
+        </t>
+
+        <section anchor="cdni-metadata-ipv4v6cidr-data-type-description" title="CDNI Metadata IPv4v6CIDR Data Type Description">
+          <t>Either a IPv4CIDR property or IPv6CIDR property, as described in sections 4.3.5 and 4.3.6 of
+             <xref target="RFC8006"/> respectively.
+          </t>
+          <t><list style="empty">
+            <t>Type: String</t>
+            <t>Example IPv4v6CIDRs:</t>
+            <t>"192.0.2.0/24"</t>
+            <t>"2001:db8::/32"</t>
+          </list></t>
+        </section>
+      </section>
+
+      <section anchor="cdni-metadata-ipv4v6cidr-footprint-type-description" title="CDNI Metadata IPv4v6CIDR Footprint Type Description">
+        <t>The "IPv4v6CIDR" simple data type specified in <xref target="cdni-metadata-ipv4v6cidr-data-type"/>, is added
+           to the data types listed as footprint types in section 4.2.2.2 of <xref target="RFC8006"/>.
+         </t>
+         <t>Below is an adjustment for the example in <xref target="cdni-metadata-ipv4v6cidr-data-type"/>, 
+            now embedding a footprint object of type "IPv4v6CIDR".
+        </t>
+
+        <figure>
+          <artwork><![CDATA[
+{
+  "capabilities": [
+    {
+      "capability-type": <CDNI capability object type>,
+      "capability-value": <CDNI capability object>,
+      },
+      "footprints": [
+          {
+              "footprint-type": "ipv4v6cidr",
+              "footprint-value": ["192.0.2.0/24", "2001:db8::/32"]
+          }
+      ]
+    }
+  ]
+}
+         ]]>
+          </artwork>
+        </figure>
+      </section>
+    </section>
+
+
     <section anchor="IANA" title="IANA Considerations">
 
       <section anchor="IANA.payload" title="CDNI Payload Types">
 
-        <t>This document requests the registration of the following CDNI Payload Types 
+        <t>This document requests the registration of the following CDNI Payload Type 
            under the IANA "CDNI Payload Types" registry defined in <xref target="RFC7736"/>:</t>
 
         <texttable>
@@ -703,6 +829,31 @@ End User              dCDN            uCDN fallback          uCDN RR
           <t>Encoding: see <xref target="fallback-target-metadata-properties"/></t>
         </section>
 
+       </section>
+
+       <section anchor="IANA.cdni.metadata.footprint.types" title="CDNI Metadata Footprint Types">
+          <t>As described in section 7.2 of <xref target="RFC8006"/>, the "CDNI Metadata Footprint Types" subregistry
+              was created within the "Content Delivery Network Interconnection (CDNI) Parameters" registry. The created
+              namespace defines the valid values for Footprint Object Types, and is already populated with the types
+              described in Section 4.2.2.2 of <xref target="RFC8006"/>.
+          </t>
+          <t>The following table defines a request for the registration of an additional footprint type
+              as defined in <xref target="cdni-metadata-ipv4v6cidr-footprint-type"/>:
+          </t>
+
+           <texttable>
+               <ttcol align="left">Footprint Type</ttcol>
+               <ttcol align="left">Description</ttcol>
+               <ttcol align="left">Specification</ttcol>
+
+               <c>ipv4v6cidr</c>
+               <c>IPv4/IPv6 address block</c>
+               <c>RFCthis</c>
+
+           </texttable>
+
+           <t>[RFC Editor: Please replace RFCthis with the published RFC
+               number for this document.]</t>
        </section>
     </section>
 
