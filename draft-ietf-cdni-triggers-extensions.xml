@@ -112,8 +112,7 @@
          upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN). The Open
          Caching Content Management Operations Specification <xref target="OC-CM" format="default"/>
          defines objects and extensions required by Open Caching architecture for granular content
-         management operations. Specifically, the specification <xref target="OC-CM" format="default"/> 
-         defines new content selection options to the trigger specification. This document adds those 
+         management operations. This document adds those 
          extensions to the  CDNI Control Interface / Triggers <xref target="RFC8007"/> as required for 
          Open Caching content management options. This document also specifies a generic extension 
          mechanism to enable adding future functions for controlling the trigger execution>.
