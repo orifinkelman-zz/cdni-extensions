@@ -84,9 +84,7 @@
 
     <abstract>
       <t>
-         This document updates RFC 8007 to include generic extensions and more
-         granular content matching options, required by the Open Caching architecture.
-         The Open Caching architeccture is a use case of Content Delivery Network 
+         Open Caching architeccture is a use case of Content Delivery Network 
          Interconnection (CDNI) in which the commercial Content Delivery Network (CDN) is  
          the upstream CDN (uCDN) and the ISP caching layer serves as the downstream
          CDN (dCDN). This document defines extensions to the Content Delivery Network 
@@ -114,14 +112,11 @@
          upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN). The Open
          Caching Content Management Operations Specification <xref target="OC-CM" format="default"/>
          defines objects and extensions required by Open Caching architecture for granular content
-         management operations such as new content selection options. 
-         This document defines the objects and extensions required for granular content management
-         operations. For that purpose it extends CDNI Control Interface / Triggers <xref target="RFC8007"/>
-         by adding new content selection options to the trigger specification and specifying a generic
-         extension mechanism that enables adding future functions for controlling the trigger execution.
-         This document also defines and initial set of extension objects. This document gives examples
-         for the extensions specified herein, for complete examples of the trigger interface usage see
-         Section 6 of <xref target="RFC8007"/>.
+         management operations. Specifically, the specification <xref target="OC-CM" format="default"/> 
+         defines new content selection options to the trigger specification. This document adds those 
+         extensions to the  CDNI Control Interface / Triggers <xref target="RFC8007"/> as required for 
+         Open Caching content management options. This document also specifies a generic extension 
+         mechanism to enable adding future functions for controlling the trigger execution>.
       </t>
 
       <t>The CDNI Metadata Interface is described in <xref target="RFC8006"/>.</t>
@@ -196,7 +191,7 @@
           </t>
           <t><list style="symbols">
              <t>
-               Regular Expression - Using regex a uCDN can create more complex rules to select the
+               Regular Expression - Using regex, a uCDN can create more complex rules to select the
                content objects for the cases of "invalidation" and "purge". For example, purging specific
                content within a specific directory path.
              </t>
@@ -314,7 +309,7 @@
               All other properties of the trigger status v2 are as defined in Section 5.1.2 of
               <xref target="RFC8007"/>. The errors array "errors.v2" is a list of all errors that
               occurred in any of the downstream CDNs along the execution path. When a downstream CDN,
-              dCDN-A, propagates a trigger to another downstream CDN, dCDN-B, it MUST also propagated
+              dCDN-A, propagates a trigger to another downstream CDN, dCDN-B, it MUST also propagate
               back all errors reported by dCDN-B in the trigger status resource and add them to its
               own trigger status resource.
            </t>
@@ -413,7 +408,7 @@ RESPONSE:
              Report an error that happened due to an extension object.
              As extension objects are expected to be added to the interface as new requirements
              comes along, it is expected that in some cases a dCDN may receive a trigger that it
-             cannot process or does not understand. It is essential for the trigger caller to be
+             cannot process or does not understand. It is therefore essential for the trigger caller to be
              able to understand when such errors occur so they can take actions to fix them.
              This document adds a mechanism to report extension errors.
           </t>
@@ -421,7 +416,7 @@ RESPONSE:
         <section anchor="error-propagation" title="Error propagation">
           <t>
              Enable the uCDN to traceback an error to the dCDN in which it occurred.
-             CDNI triggers may be propagated over a chain of downstream CDNs. Let us take for example an 
+             CDNI triggers may be propagated over a chain of downstream CDNs. For example, an 
              upstream (uCDN-A) CDN A that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
              to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed 
              from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it might be essential for 
@@ -433,7 +428,7 @@ RESPONSE:
              While propagating back the errors, and depending on the implementation, downstream dCDN-B MAY also 
              specify the dCDN-C CDN identifier, indicating that the error relates spefically to this CDN.
              The trigger originating upstream CDN will receive an array of errors that occurred 
-             in all the CDNs along the execution path, where each error MAY carrying its own CDN identifier.
+             in all the CDNs along the execution path, where each error MAY be carrying its own CDN identifier.
           </t>            
         </section>
       </section>
@@ -517,7 +512,7 @@ RESPONSE:
                  and the query string parameters <xref target="RFC3986"/>. The regular expression
                  string MUST be compatible with <xref target="PCRE841">PCRE</xref>.</t>
 
-              <t>Note: Because '\' has special meaning in JSON <xref target="RFC8259"/> as the escape
+              <t>Note: Because '\' has a special meaning in JSON <xref target="RFC8259"/> as the escape
                  character within JSON strings, the regular expression character '\' MUST be escaped as '\\'.</t>
 
               <t>Mandatory: Yes.</t>
@@ -656,7 +651,7 @@ https://video.example.com/k/movie1/4/013.ts
              with the rest of the CDNI Trigger spec.
            </t>
            <t>
-             Although a CDN MUST NOT execute a trigger command if a
+             Although, a CDN MUST NOT execute a trigger command if a
              mandatory-to-enforce extension cannot be enforced, it could still be
              safe to redistribute that trigger (the "safe-to-redistribute"
              property) to another CDN without modification.  For example, in the
@@ -1150,7 +1145,7 @@ RESPONSE:
             way the trigger is executed. In this example the receiving dCDN identified as "AS64500:0"
             does not support the first extension in the extensions array. dCDN "AS64500:0" further
             distributes this trigger to another downstream CDN that is identified as "AS64501:0", which
-            does not support the second extension in the extensions array. The error is propagate from
+            does not support the second extension in the extensions array. The error is propagated from
             "AS64501:0" to "AS64500:0" and the errors.v2 array reflects both errors.
           </t>
           <figure>
@@ -1281,7 +1276,7 @@ RESPONSE:
                MUST be excluded from a pre-positioning operation.</t>
 
             <t>Purge: In certain cases, content may have been located on servers in regions
-               where the content must not reside. In such cases a purge operation to
+               where the content must not reside. In such cases, a purge operation to
                remove content specifically from that region, is required.</t>
 
         </list></t>
@@ -1924,11 +1919,11 @@ Month Number  Month/Year           Maximum value of date-mday
          <xref target="RFC8008"/> apply to this document as well.
       </t>
 
-      <t>This document defines the capability to use regular expression within the trigger spec for
+      <t>This document defines the capability to use regular expression within the trigger specification for
          more granular content selection. The usage of regex introduced the risk of regex complexity attacks,
          a.k.a ReDos attacks. An attacker may be able to craft a regular expression that can exhaust server
-         resources and may take exponential time in the worst case. An implementation MUST protect itself by
-         at least accept triggers only from an authenticated party over a secured connection. An implementation
+         resources and may take exponential time in the worst case. An implementation MUST protect itself at
+         a minimum by accepting triggers only from an authenticated party over a secured connection. An implementation
          SHOULD also protect itself by using secure programing techniques and decline trigger commands that use
          potentially risky regex, such techniques are readily available in secure programming literature and are
          beyond the scope of this document.</t>
@@ -1939,8 +1934,9 @@ Month Number  Month/Year           Maximum value of date-mday
     </section>
 
     <section anchor="Contributors" title="Contributors">
-      <t>The authors would like to thank all members of the "Streaming Video Alliance" (SVA) Open Caching Working Group for
-         their contribution in support of this document. </t>
+      <t>The authors thank all members of the "Streaming Video Alliance" (SVA) and specifically contributions by members of 
+         Open Caching Working Group in support of this document. The authors also thank Kevin Ma for his guidance and careful and 
+         methodical reviews.</t>
     </section>
 
 
