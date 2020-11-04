@@ -408,17 +408,19 @@ RESPONSE:
            and an Error Description object for reporting errors (see Section 5.2.6 of <xref target="RFC8007"/>).
            This document specifies version 2 of CI/T error handling in order to support the following:
         </t>
-        <t><list style="symbols">
+        <section anchor="extension-errors" title="Extension Errors">
           <t>
-             Extension errors - report an error that happened due to an extension object.
+             Report an error that happened due to an extension object.
              As extension objects are expected to be added to the interface as new requirements
              comes along, it is expected that in some cases a dCDN may receive a trigger that it
              cannot process or does not understand. It is essential for the trigger caller to be
              able to understand when such errors occur so they can take actions to fix them.
              This document adds a mechanism to report extension errors.
           </t>
+        </section>
+        <section anchor="error-propagation" title="Error propagation">
           <t>
-             Error propagation - enable the uCDN to traceback an error to the dCDN in which it occurred.
+             Enable the uCDN to traceback an error to the dCDN in which it occurred.
              CDNI triggers may be propagated over a chain of downstream CDNs. Let us take for example an 
              upstream (uCDN-A) CDN A that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
              to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed 
@@ -433,7 +435,7 @@ RESPONSE:
              The trigger originating upstream CDN will receive an array of errors that occurred 
              in all the CDNs along the execution path, where each error MAY carrying its own CDN identifier.
           </t>            
-        </list></t>       
+        </section>
       </section>
 
       <section anchor="cit-objects-properties-v2" title="Properties of CI/T Version 2 objects">
