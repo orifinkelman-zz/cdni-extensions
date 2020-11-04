@@ -84,7 +84,7 @@
 
     <abstract>
       <t>
-         Open Caching architeccture is a use case of Content Delivery Network 
+         Open Caching architecture is a use case of Content Delivery Network 
          Interconnection (CDNI) in which the commercial Content Delivery Network (CDN) is  
          the upstream CDN (uCDN) and the ISP caching layer serves as the downstream
          CDN (dCDN). This document defines extensions to the Content Delivery Network 
