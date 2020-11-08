@@ -436,59 +436,58 @@ RESPONSE:
           </t>
           <figure anchor="error-propagation-seq" title="CDNI Message Flow for Triggers, Including Error Propagation">
             <artwork><![CDATA[
-uCDN-A                           dCDN-B                                  dCDN-C
- |                                |                                       |    
- | (1) POST                       |                                       |    
- | https://dcdn-b.example.com     |                                       |    
- | /triggers/uCDN-A               |                                       |    
-[ ]----------------------------->[ ]--+                                   |    
- |                               [ ]  | (2)                               |    
- |                               [ ]<-+                                   |    
- | (3) HTTP 201 Response.        [ ]                                      |    
- |<------------------------------[ ]                                      |    
- | Loc:                          [ ]                                      |    
- | https://dcdn-b.example.com    [ ] (4) POST                             |    
- | /triggers/uCDN-A/123          [ ] https://dcdn-c.example.com           |    
- |                               [ ] /triggers/uCDN-A                     | (5)
- |                               [ ]------------------------------------>[ ]--+
- |                                |                                      [ ]  |
- |                                |                                      [ ]<-+
- |                                | (6) HTTP 201 Response.               [ ]   
- |                               [ ]<------------------------------------[ ]   
- |                                |  Loc:                                 |    
- |                                |  https://dcdn-c.example.com           |    
- |                                |  /triggers/dCDN-B/456                 |    
- |                                |                                       |    
- |                               [ ]--+                                   |
- |                               [ ]  | (7.1)                             |
- |                               [ ]<-+                                  [ ]--+
- |                                |                                (7.2) [ ]  |
- |                                |                                      [ ]<-+
- |                                |                                       |    
- .                                .                                       .    
- .                                .                                       .    
- .                                .                                       .    
- |                                | (8) GET                               |    
- |                                | https://dcdn-c.example.com            |    
- |                                | /triggers/dCDN-B/456                  |    
- |                               [ ]------------------------------------>[ ]   
- |                                |                                      [ ]   
- |                                | (9) HTTP 200                         [ ]   
- |                                | Trigger Status Resource              [ ]   
- |                               [ ]<------------------------------------[ ]   
- |                                |                                       |    
- .                                .                                       .    
- .                                .                                       .    
- .                                .                                       .    
- | (10) GET                       |                                       |    
- | https://dcdn-b.example.com     |                                       |    
- | /triggers/uCDN-A/123           |                                       |    
-[ ]----------------------------->[ ]                                      |    
- |                               [ ]                                      |    
- | (11) HTTP 200                 [ ]                                      |    
- | Trigger Status Resource       [ ]                                      |    
-[ ]<-----------------------------[ ]                                      |    
- |                                |                                       |    
+uCDN-A                         dCDN-B                         dCDN-C
+ |                              |                              |    
+ | (1) POST                     |                              |    
+ | https://dcdn-b.example.com   |                              |    
+ | /triggers/uCDN-A             |                              |    
+[ ]--------------------------->[ ]--+                          |    
+ |                             [ ]  | (2)                      |    
+ |                             [ ]<-+                          |    
+ | (3) HTTP 201 Response.      [ ]                             |    
+ |<----------------------------[ ]                             |    
+ | Loc:                        [ ]                             |    
+ | https://dcdn-b.example.com  [ ] (4) POST                    |    
+ | /triggers/uCDN-A/123        [ ] https://dcdn-c.example.com  |    
+ |                             [ ] /triggers/uCDN-A            | (5)
+ |                             [ ]--------------------------->[ ]--+
+ |                              |                             [ ]  |
+ |                              |                             [ ]<-+
+ |                              | (6) HTTP 201 Response.      [ ]   
+ |                             [ ]<---------------------------[ ]   
+ |                              |  Loc:                        |    
+ |                              |  https://dcdn-c.example.com  |    
+ |                              |  /triggers/dCDN-B/456        |    
+ |                              |                              |    
+ |                             [ ]--+                          |
+ |                             [ ]  | (7.1)                    |
+ |                             [ ]<-+                         [ ]--+
+ |                              |                       (7.2) [ ]  |
+ |                              |                             [ ]<-+
+ |                              |                              |    
+ .                              .                              .    
+ .                              .                              .    
+ .                              .                              .    
+ |                              | (8) GET                      |    
+ |                              | https://dcdn-c.example.com   |    
+ |                              | /triggers/dCDN-B/456         |    
+ |                             [ ]--------------------------->[ ]   
+ |                              |                             [ ]   
+ |                              | (9) HTTP 200                [ ]   
+ |                              | Trigger Status Resource     [ ]   
+ |                             [ ]<---------------------------[ ]   
+ |                              |                              |    
+ .                              .                              .    
+ .                              .                              .    
+ .                              .                              .    
+ | (10) GET                     |                              |    
+ | https://dcdn-b.example.com   |                              |    
+ | /triggers/uCDN-A/123         |                              |    
+[ ]--------------------------->[ ]                             |    
+ |                             [ ]                             |    
+ | (11) HTTP 200               [ ]                             |    
+ | Trigger Status Resource     [ ]                             |    
+[ ]<---------------------------[ ]                             |    
          ]]></artwork>
           </figure>
           <t>
