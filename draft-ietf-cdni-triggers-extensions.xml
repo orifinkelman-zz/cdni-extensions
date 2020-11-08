@@ -592,8 +592,8 @@ uCDN-A                           dCDN-B                                  dCDN-C
 
           </list></t>
 
-          <t>Example of an invalidation trigger.v2 with a list of regex objects, a list of playlist
-             objects, and extensions:</t>
+          <t>Example of a JSON serialized invalidation trigger.v2 object with a list of regex objects, 
+          a list of playlist objects, and extensions:</t>
 
           <figure>
             <artwork><![CDATA[
@@ -676,7 +676,7 @@ uCDN-A                           dCDN-B                                  dCDN-C
          ]]></artwork>
           </figure>
 
-          <t>This regex matches URLs of domain video.example.com  where the path structure is
+          <t>This regex matches URLs of domain video.example.com where the path structure is
              /(single lower case letter)/(name-of-title)/(single digit between 1 to 7)/(index.m3u8 or a 3 digit number with ts extension).
              For example:</t>
           <figure>
@@ -714,7 +714,7 @@ https://video.example.com/k/movie1/4/013.ts
                 <t>Mandatory: Yes.</t>
              </list></t>
           </list></t>
-          <t>Example of a HLS playlist:</t>
+          <t>Example of a JSON serialized HLS playlist object:</t>
 
            <figure>
             <artwork><![CDATA[
@@ -975,7 +975,7 @@ https://video.example.com/k/movie1/4/013.ts
               </list></t>
 
             </list></t>
-            <t>Example of a GenericTriggerExtension containing a specific trigger extension object:</t>
+            <t>Example of a JSON serialized GenericTriggerExtension object containing a specific trigger extension object:</t>
 
         <figure>
           <artwork><![CDATA[
@@ -1055,7 +1055,7 @@ https://video.example.com/k/movie1/4/013.ts
             </list></t>
           </list></t>
 
-          <t>Example of an Error Description object reporting a malformed Playlist:
+          <t>Example of a JSON serialized Error Description object reporting a malformed Playlist:
           </t>
 
           <figure>
@@ -1075,7 +1075,7 @@ https://video.example.com/k/movie1/4/013.ts
          ]]></artwork>
           </figure>
 
-          <t>Example of an Error Description object reporting an unsupported extension object:
+          <t>Example of a JSON serialized Error Description object reporting an unsupported extension object:
           </t>
 
           <figure>
@@ -1423,7 +1423,7 @@ RESPONSE:
         </t>
 
 
-        <t>The following is an example of generic trigger extension object containing a location policy
+        <t>The following is an example of a JSON serialized generic trigger extension object containing a location policy
            object that allows the trigger execution in the US but blocks its execution in Canada:
         </t>
 
@@ -1530,7 +1530,7 @@ RESPONSE:
              other constrains and / or obligations.
           </t>
 
-        <t>Example of a generic trigger extension object containing a time policy object that schedules the
+        <t>Example of a JSON serialized generic trigger extension object containing a time policy object that schedules the
            trigger execution to a window between 09:00 01/01/2000 UTC and 17:00 01/01/2000 UTC, using
            the "unix-time-window" property:
         </t>
@@ -1581,7 +1581,7 @@ RESPONSE:
          </list></t>      
          
          <t>
-           Example UTCWindow object that describes a time window from 02:30
+           Example JSON serialized UTCWindow object that describes a time window from 02:30
            01/01/2000 UTC to 04:30 01/01/2000 UTC:
          </t>
 
@@ -1595,7 +1595,7 @@ RESPONSE:
           </figure>
 
          <t>
-           Example UTCWindow object that describes a time window in New York time zone offset
+           Example JSON serialized UTCWindow object that describes a time window in New York time zone offset
            UTC-05:00 from 02:30 01/01/2000 to 04:30 01/01/2000:
          </t>
 
@@ -1643,7 +1643,7 @@ RESPONSE:
          </list></t>      
          
          <t>
-           Example LocalTimeWindow object that describes a local time window from 02:30
+           Example JSON serialized LocalTimeWindow object that describes a local time window from 02:30
            01/01/2000 to 04:30 01/01/2000.
          </t>
 
@@ -1768,7 +1768,7 @@ Month Number  Month/Year           Maximum value of date-mday
         </list></t>
         <section anchor="versions-capability-object" title="CI/T Versions Capability Object Serialization">
           <t>
-             The following shows an example of CI/T Versions Capability object serialization for a dCDN that supports
+             The following shows an example of a JSON serialized CI/T Versions Capability object serialization for a dCDN that supports
              versions 2 and 2.1 of the CI/T interface.
           </t>
 
@@ -1814,7 +1814,7 @@ Month Number  Month/Year           Maximum value of date-mday
         </list></t>
         <section anchor="playlist-protocol-capability-object" title="CI/T Playlist Protocol Capability Object Serialization">
           <t>
-             The following shows an example of CI/T Playlist Protocol Capability object serialization
+             The following shows an example of a JSON serialized CI/T Playlist Protocol Capability object serialization
              for a dCDN that supports "hls" and "dash".
           </t>
 
@@ -1863,7 +1863,7 @@ Month Number  Month/Year           Maximum value of date-mday
         </list></t>
         <section anchor="trigger-extension-capability-object" title="CI/T Trigger Extension Capability Object Serialization">
           <t>
-             The following shows an example of CI/T Trigger Extension Capability object serialization for
+             The following shows an example of a JSON serialized CI/T Trigger Extension Capability object serialization for
              a dCDN that supports the "CIT.LocationPolicy" and the "CIT.TimePolicy" objects.
           </t>
 
