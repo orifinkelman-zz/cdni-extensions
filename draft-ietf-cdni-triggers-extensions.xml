@@ -428,7 +428,123 @@ RESPONSE:
              specify the dCDN-C CDN identifier, indicating that the error relates spefically to this CDN.
              The trigger originating upstream CDN will receive an array of errors that occurred 
              in all the CDNs along the execution path, where each error MAY be carrying its own CDN identifier.
-          </t>            
+          </t>
+          <t>
+            <xref target="error-propagation-seq"/> is an example showing the message flow used by
+            uCDN-A to trigger activity in the dCDN-B, followed by dCDN-C, as well as the discovery of the
+            status of that activity, including the Error Propagation.
+          </t>
+          <figure anchor="error-propagation-seq" title="CDNI Message Flow for Triggers, Including Error Propagation">
+            <artwork><![CDATA[
+uCDN-A                           dCDN-B                                  dCDN-C
+ |                                |                                       |    
+ | (1) POST                       |                                       |    
+ | https://dcdn-b.example.com     |                                       |    
+ | /triggers/uCDN-A               |                                       |    
+[ ]----------------------------->[ ]--+                                   |    
+ |                               [ ]  | (2)                               |    
+ |                               [ ]<-+                                   |    
+ | (3) HTTP 201 Response.        [ ]                                      |    
+ |<------------------------------[ ]                                      |    
+ | Loc:                          [ ]                                      |    
+ | https://dcdn-b.example.com    [ ] (4) POST                             |    
+ | /triggers/uCDN-A/123          [ ] https://dcdn-c.example.com           |    
+ |                               [ ] /triggers/uCDN-A                     | (5)
+ |                               [ ]------------------------------------>[ ]--+
+ |                                |                                      [ ]  |
+ |                                |                                      [ ]<-+
+ |                                | (6) HTTP 201 Response.               [ ]   
+ |                               [ ]<------------------------------------[ ]   
+ |                                |  Loc:                                 |    
+ |                                |  https://dcdn-c.example.com           |    
+ |                                |  /triggers/dCDN-B/456                 |    
+ |                                |                                       |    
+ |                               [ ]--+                                   |
+ |                               [ ]  | (7.1)                             |
+ |                               [ ]<-+                                  [ ]--+
+ |                                |                                (7.2) [ ]  |
+ |                                |                                      [ ]<-+
+ |                                |                                       |    
+ .                                .                                       .    
+ .                                .                                       .    
+ .                                .                                       .    
+ |                                | (8) GET                               |    
+ |                                | https://dcdn-c.example.com            |    
+ |                                | /triggers/dCDN-B/456                  |    
+ |                               [ ]------------------------------------>[ ]   
+ |                                |                                      [ ]   
+ |                                | (9) HTTP 200                         [ ]   
+ |                                | Trigger Status Resource              [ ]   
+ |                               [ ]<------------------------------------[ ]   
+ |                                |                                       |    
+ .                                .                                       .    
+ .                                .                                       .    
+ .                                .                                       .    
+ | (10) GET                       |                                       |    
+ | https://dcdn-b.example.com     |                                       |    
+ | /triggers/uCDN-A/123           |                                       |    
+[ ]----------------------------->[ ]                                      |    
+ |                               [ ]                                      |    
+ | (11) HTTP 200                 [ ]                                      |    
+ | Trigger Status Resource       [ ]                                      |    
+[ ]<-----------------------------[ ]                                      |    
+ |                                |                                       |    
+         ]]></artwork>
+          </figure>
+          <t>
+          The steps in <xref target="error-propagation-seq"/> are as follows:
+          </t>
+					<t>
+						<list style="numbers">
+							<t>
+								The uCDN-A triggers action in the dCDN-B by POSTing a CI/T Command to a collection of
+								Trigger Status Resources "https://dcdn-b.example.com/triggers/uCDN-A". This URL was given to
+								the uCDN-A when the CI/T interface was established.
+							</t>
+							<t>
+								The dCDN-B authenticates the request, validates the CI/T Command, and, if it accepts the request, creates a new Trigger Status Resource.
+							</t>
+							<t>
+								The dCDN-B responds to the uCDN-A with an HTTP 201 response status
+								and the location of the Trigger Status Resource.
+							</t>
+							<t>
+								The dCDN-B triggers the action in the dCDN-C by POSTing a CI/T Command to
+								a collection of Trigger Status Resources
+								"https://dcdn-c.example.com/triggers/dCDN-B".  This URL was given to
+								the uCDN-A when the CI/T interface was established.
+							</t>
+							<t>
+								The dCDN-C authenticates the request, validates the CI/T Command,
+								and, if it accepts the request, creates a new Trigger Status Resource.
+							</t>
+							<t>
+								The dCDN-C responds to the dCDN-B with an HTTP 201 response status and
+								the location of the Trigger Status Resource.
+							</t>
+							<t>
+								The dCDN-C acts upon the CI/T Command. However, the command fails at dCDN-C as,
+								for example, the Tigger Specification contains a "type" that is not supported by dCDN-C.
+							</t>
+							<t>
+								The dCDN-B can poll, possibly repeatedly, the Trigger Status Resource in dCDN-C.
+							</t>
+							<t>
+								The dCDN-C responds with the Trigger Status Resource, describing the progress or results
+								of the CI/T Trigger Command. In the described flow, the returned Status is "failed",
+								with an Error Description Object holding an "eunsupported" Error Code reflecting the status response.
+							</t>
+							<t>
+								The uCDN-A can poll, possibly repeatedly, the Trigger Status Resource in dCDN-B.
+							</t>
+							<t>
+								The dCDN-B responds with the Trigger Status Resource, describing the progress or results of
+								the CI/T Trigger Command. In the flow described above, the returned Status is "failed",
+								and the "eunsupported" error received in the trigger status resource from dCDN-C is propagated by
+								adding it to the errors array in dCDN-B own status resource to be sent back to the originating uCDN-A.
+							</t>
+						</list>
+					</t>
         </section>
       </section>
 
