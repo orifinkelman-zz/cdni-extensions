@@ -324,36 +324,36 @@
           <artwork><![CDATA[
 REQUEST:
 
-    POST /triggers HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
-    Content-Type: application/cdni; ptype=ci-trigger-command.v2
-    {
-      "trigger.v2": { <properties of a trigger.v2 object> },
-      "cdn-path": [ "AS64496:0" ]
-    }
+  POST /triggers HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
+  Content-Type: application/cdni; ptype=ci-trigger-command.v2
+  {
+    "trigger.v2": { <properties of a trigger.v2 object> },
+    "cdn-path": [ "AS64496:0" ]
+  }
 
 RESPONSE:
 
-    HTTP/1.1 201 Created
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Length: 467
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
-    Location: https://triggers.dcdn.example.com/triggers/0
-    Server: example-server/0.1
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
 
-    {
-       "errors.v2": [ { <properties of 1st error.v2 object> },
-                        ...,
-                      { <properties of Nth error.v2 object> }
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "pending",
-       "trigger.v2": { <properties of a trigger.v2 object> }
-    }
+  {
+     "errors.v2": [ { <properties of 1st error.v2 object> },
+                      ...,
+                    { <properties of Nth error.v2 object> }
+     ],
+     "ctime": 1462351690,
+     "etime": 1462351698,
+     "mtime": 1462351690,
+     "status": "pending",
+     "trigger.v2": { <properties of a trigger.v2 object> }
+  }
        ]]></artwork>
         </figure>
 
@@ -364,33 +364,33 @@ RESPONSE:
           <artwork><![CDATA[
 REQUEST:
 
-    GET /triggers/0 HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
+  GET /triggers/0 HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
 
 RESPONSE:
 
-    HTTP/1.1 200 OK
-    Content-Length: 467
-    Expires: Wed, 04 May 2016 08:49:10 GMT
-    Server: example-server/0.1
-    ETag: "6990548174277557683"
-    Cache-Control: max-age=60
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  HTTP/1.1 200 OK
+  Content-Length: 467
+  Expires: Wed, 04 May 2016 08:49:10 GMT
+  Server: example-server/0.1
+  ETag: "6990548174277557683"
+  Cache-Control: max-age=60
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
 
-    {
-       "errors.v2": [ { <properties of 1st error.v2 object> },
-                        ...,
-                      { <properties of Nth error.v2 object> }
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "pending",
-       "trigger.v2": { <properties of a trigger.v2 object> }
-    }
+  {
+     "errors.v2": [ { <properties of 1st error.v2 object> },
+                      ...,
+                    { <properties of Nth error.v2 object> }
+     ],
+     "ctime": 1462351690,
+     "etime": 1462351698,
+     "mtime": 1462351690,
+     "status": "pending",
+     "trigger.v2": { <properties of a trigger.v2 object> }
+  }
 
        ]]></artwork>
         </figure>
@@ -1083,15 +1083,15 @@ https://video.example.com/k/movie1/4/013.ts
   "errors.v2": [
    {
      "extensions": [
-        {
-          "generic-trigger-extension-type":
-             <Type of this erroneous trigger extension object>,
-          "generic-trigger-extension-value":
-              {
-                <properties of this erroneous trigger extension object>
-              },
-        }
-      ],
+       {
+        "generic-trigger-extension-type":
+          <Type of this erroneous trigger extension object>,
+        "generic-trigger-extension-value":
+          {
+           <properties of this erroneous trigger extension object>
+          },
+       }
+     ],
      "description": "unrecognized extension <type>",
      "error": "eextension",
      "cdn": "AS64500:0"
@@ -1131,14 +1131,41 @@ https://video.example.com/k/movie1/4/013.ts
             <artwork><![CDATA[
 REQUEST:
 
-    POST /triggers HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
-    Content-Type: application/cdni; ptype=ci-trigger-command.v2
-    {
-      "trigger.v2": {
-        "type": "invalidate",
+  POST /triggers HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
+  Content-Type: application/cdni; ptype=ci-trigger-command.v2
+  {
+    "trigger.v2": {
+      "type": "invalidate",
+      "content.regexs": [
+        {
+          "regex": "^(https:\\/\\/video\\.example\\.com)\\/
+          ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+          "case-sensitive": true,
+          "match-query-string": false
+        },
+        { <RegexMatch #2> },
+        ...
+        { <RegexMatch #N> },
+      ],
+    },
+    "cdn-path": [ "AS64496:0" ]
+  }
+
+RESPONSE:
+
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
+
+  {
+    "errors.v2": [
+      {
         "content.regexs": [
           {
             "regex": "^(https:\\/\\/video\\.example\\.com)\\/
@@ -1146,45 +1173,18 @@ REQUEST:
             "case-sensitive": true,
             "match-query-string": false
           },
-          { <RegexMatch #2> },
-          ...
-          { <RegexMatch #N> },
         ],
+        "description": "The dCDN rejected a regex due to complexity",
+        "error": "ereject",
+        "cdn": "AS64500:0"
       },
-      "cdn-path": [ "AS64496:0" ]
-    }
-
-RESPONSE:
-
-    HTTP/1.1 201 Created
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Length: 467
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
-    Location: https://triggers.dcdn.example.com/triggers/0
-    Server: example-server/0.1
-
-    {
-       "errors.v2": [
-         {
-           "content.regexs": [
-              {
-                "regex": "^(https:\\/\\/video\\.example\\.com)\\/
-                ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
-                "case-sensitive": true,
-                "match-query-string": false
-              },
-            ],
-           "description": "The dCDN rejected a regex due to complexity",
-           "error": "ereject",
-           "cdn": "AS64500:0"
-         },
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "failed",
-       "trigger.v2": { <content of trigger object from the command> }
-    }
+    ],
+    "ctime": 1462351690,
+    "etime": 1462351698,
+    "mtime": 1462351690,
+    "status": "failed",
+    "trigger.v2": { <content of trigger object from the command> }
+  }
          ]]></artwork>
           </figure>
         </section>
@@ -1199,56 +1199,56 @@ RESPONSE:
             <artwork><![CDATA[
 REQUEST:
 
-    POST /triggers HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
-    Content-Type: application/cdni; ptype=ci-trigger-command.v2
-    {
-      "trigger.v2": {
-        "type": "preposition",
-        "content.playlists": [
-         {
-          "playlist": "https://www.example.com/hls/title/index.m3u8",
-          "media-protocol": "hls"
-         },
-         { <Playlist #2> },
-         ...
-         { <Playlist #N> },
-        ],
-      },
-      "cdn-path": [ "AS64496:0" ]
-    }
+  POST /triggers HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
+  Content-Type: application/cdni; ptype=ci-trigger-command.v2
+  {
+    "trigger.v2": {
+      "type": "preposition",
+      "content.playlists": [
+       {
+        "playlist": "https://www.example.com/hls/title/index.m3u8",
+        "media-protocol": "hls"
+       },
+       { <Playlist #2> },
+       ...
+       { <Playlist #N> },
+      ],
+    },
+    "cdn-path": [ "AS64496:0" ]
+  }
 
 RESPONSE:
 
-    HTTP/1.1 201 Created
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Length: 467
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
-    Location: https://triggers.dcdn.example.com/triggers/0
-    Server: example-server/0.1
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
 
-    {
-       "errors.v2": [ 
-         {
-           "content.playlists": [
-              { 
-                "playlist": "https://www.example.com/hls/title/index.m3u8",    
-                "media-protocol": "hls"
-              },                
-            ],
-           "description": "The dCDN was not able to parse the playlist",
-           "error": "econtent",
-           "cdn": "AS64500:0"
-         },
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "failed",       
-       "trigger.v2": { <content of trigger object from the command> }
-    }
+  {
+    "errors.v2": [ 
+      {
+       "content.playlists": [
+         { 
+          "playlist": "https://www.example.com/hls/title/index.m3u8",
+          "media-protocol": "hls"
+         },                
+        ],
+       "description": "The dCDN was not able to parse the playlist",
+       "error": "econtent",
+       "cdn": "AS64500:0"
+      },
+    ],
+    "ctime": 1462351690,
+    "etime": 1462351698,
+    "mtime": 1462351690,
+    "status": "failed",       
+    "trigger.v2": { <content of trigger object from the command> }
+  }
          ]]></artwork>
           </figure>
         </section>
@@ -1266,21 +1266,59 @@ RESPONSE:
             <artwork><![CDATA[
 REQUEST:
 
-    POST /triggers HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
-    Content-Type: application/cdni; ptype=ci-trigger-command.v2
-    {
-      "trigger.v2": {
-        "type": "preposition",
-        "content.playlists": [
-         {
-           "playlist": "https://www.example.com/hls/title/index.m3u8",
-           "media-protocol": "hls"
-         },
-        ],
-        "extensions": [
+  POST /triggers HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
+  Content-Type: application/cdni; ptype=ci-trigger-command.v2
+  {
+    "trigger.v2": {
+      "type": "preposition",
+      "content.playlists": [
+       {
+         "playlist": "https://www.example.com/hls/title/index.m3u8",
+         "media-protocol": "hls"
+       },
+      ],
+      "extensions": [
+          {
+            "generic-trigger-extension-type":
+               <Type of trigger extension object #1>,
+            "generic-trigger-extension-value":
+                {
+                  <properties of trigger extension object #1>
+                },
+            "mandatory-to-enforce": true,
+            "safe-to-redistribute": true,
+          },
+          {
+            "generic-trigger-extension-type":
+               <Type of trigger extension object #2>,
+            "generic-trigger-extension-value":
+                {
+                  <properties of trigger extension object #2>
+                },
+            "mandatory-to-enforce": true,
+            "safe-to-redistribute": true,
+          },
+      ],
+    },
+    "cdn-path": [ "AS64496:0" ]
+  }
+
+RESPONSE:
+
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
+
+  {
+     "errors.v2": [
+       {
+         "extensions": [
             {
               "generic-trigger-extension-type":
                  <Type of trigger extension object #1>,
@@ -1291,6 +1329,13 @@ REQUEST:
               "mandatory-to-enforce": true,
               "safe-to-redistribute": true,
             },
+          ],
+         "description": "unrecognized extension <type>",
+         "error": "eextension",
+         "cdn": "AS64500:0"
+       },
+       {
+         "extensions": [
             {
               "generic-trigger-extension-type":
                  <Type of trigger extension object #2>,
@@ -1301,63 +1346,18 @@ REQUEST:
               "mandatory-to-enforce": true,
               "safe-to-redistribute": true,
             },
-        ],
-      },
-      "cdn-path": [ "AS64496:0" ]
-    }
-
-RESPONSE:
-
-    HTTP/1.1 201 Created
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Length: 467
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
-    Location: https://triggers.dcdn.example.com/triggers/0
-    Server: example-server/0.1
-
-    {
-       "errors.v2": [
-         {
-           "extensions": [
-              {
-                "generic-trigger-extension-type":
-                   <Type of trigger extension object #1>,
-                "generic-trigger-extension-value":
-                    {
-                      <properties of trigger extension object #1>
-                    },
-                "mandatory-to-enforce": true,
-                "safe-to-redistribute": true,
-              },
-            ],
-           "description": "unrecognized extension <type>",
-           "error": "eextension",
-           "cdn": "AS64500:0"
-         },
-         {
-           "extensions": [
-              {
-                "generic-trigger-extension-type":
-                   <Type of trigger extension object #2>,
-                "generic-trigger-extension-value":
-                    {
-                      <properties of trigger extension object #2>
-                    },
-                "mandatory-to-enforce": true,
-                "safe-to-redistribute": true,
-              },
-            ],
-           "description": "unrecognized extension <type>",
-           "error": "eextension",
-           "cdn": "AS64501:0"
-         },        
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "failed",
-       "trigger.v2": { <content of trigger object from the command> }
-    }
+          ],
+         "description": "unrecognized extension <type>",
+         "error": "eextension",
+         "cdn": "AS64501:0"
+       },        
+     ],
+     "ctime": 1462351690,
+     "etime": 1462351698,
+     "mtime": 1462351690,
+     "status": "failed",
+     "trigger.v2": { <content of trigger object from the command> }
+  }
          ]]></artwork>
           </figure>
         </section>
