@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="4"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<rfc category="std" docName="draft-ietf-cdni-footprint-types-extensions-01" ipr="trust200902">
+    <front>
+        <title abbrev="CDNI Footprint Types Extensions">
+            CDNI Request Routing Extensions
+        </title>
+        <author fullname="Nir B. Sopher" initials="N." surname="Sopher">
+            <organization>
+                Qwilt
+            </organization>
+            <address>
+                <postal>
+                    <street>
+                        6, Ha'harash
+                    </street>
+                    <city>
+                        Hod HaSharon
+                    </city>
+                    <region>
+                    </region>
+                    <code>
+                        4524079
+                    </code>
+                    <country>
+                        Israel
+                    </country>
+                </postal>
+                <email>
+                    nir@apache.org
+                </email>
+            </address>
+        </author>
+        <date />
+        <abstract>
+            <t>
+                Open Caching architecture is a use case of Content Delivery Networks Interconnection (CDNI) in which the
+                commercial Content Delivery Network (CDN) is the upstream CDN (uCDN) and the ISP caching layer serves as the
+                downstream CDN (dCDN). The extensions specified in this document to
+                the Footprint and Capabilities Interface (FCI) are derived from requirements raised by Open Caching but
+                are also applicable to CDNI use cases in general.
+            </t>
+        </abstract>
+    </front>
+    <middle>
+        <section title="Introduction">
+            <t>
+                The Streaming Video Alliance <xref target="SVA" format="default" /> is a global association
+                that works to solve streaming video challenges in an effort to improve end-user experience
+                and adoption. The Open Caching Working Group <xref target="OCWG" format="default" /> of the
+                Streaming Video Alliance <xref target="SVA" format="default" /> is focused on the delegation
+                of video delivery requests from commerical CDNs to a caching layer at the ISP's network.
+                Open Caching architecture is a specific use case of CDNI where the commercial CDN is the
+                upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN).
+                The TBD REPLACE REF TO THE COVERAGE/LOAD API(?)<xref target="OC-RR"> Open Caching Request Routing Specification </xref>
+                defines the Request Routing process and the interfaces that are required for its provisioning.
+                This document defines and registers CDNI Footprint and Capabilities objects<xref target="RFC8008" />
+                that are required for Open Caching Request Routing. For consistency with other CDNI documents this document follows the
+                CDNI convention of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the commercial CDN and ISP caching
+                layer respectively.
+            </t>
+            <t>
+                This document also registers CDNI Metadata Footprint Types (section 7.2 of
+                <xref target="RFC8006" />) for the defined objects:
+                <list style="symbols">
+                    <t>
+                        IPv4v6CIDR Footprint Type (for dCDN advertising a footprint that consists of both
+                        IPv4 and IPv6 client addresses)
+                    </t>
+                    <t>
+                        ISO3166Code Footprint Type (e.g. for dCDN advertising a footprint that is specific to
+                        a State in the USA)
+                    </t>
+                </list>
+            </t>
+            <section anchor="terminology" title="Terminology">
+                <t>
+                    The following terms are used throughout this document:
+                    <list style="symbols">
+                        <t>
+                            CDN - Content Delivery Network
+                        </t>
+                    </list>
+                </t>
+                <t>
+                    Additionally, this document reuses the terminology defined in
+                    <xref target="RFC6707" />
+                    ,
+                    <xref target="RFC7336" />
+                    ,
+                    <xref target="RFC8006" />
+                    ,
+                    <xref target="RFC8007" />
+                    ,
+                    <xref target="RFC8008" />
+                    , and
+                    <xref target="RFC8804" />
+                    .
+                    Specifically, we use the following CDNI acronyms:
+                    <list style="symbols">
+                        <t>
+                            uCDN, dCDN - Upstream CDN and Downstream CDN respectively (see
+                            <xref target="RFC7336" />
+                            )
+                        </t>
+                    </list>
+                </t>
+            </section>
+            <section title="Requirements Language">
+                <t>
+                    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+                    "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
+                    document are to be interpreted as described in BCP 14
+                    <xref target="RFC2119" />
+                    <xref target="RFC8174" />
+                    when, and only when, they appear in all capitals, as shown here.
+                </t>
+            </section>
+        </section>
+        <section anchor="cdni-metadata-additional-footprint-types" title="CDNI Metadata Additonal Footprint Types">
+            <t>
+                Section 5 of <xref target="RFC8008" /> describes the FCI Capability Advertisement Object, which
+                is includes of an array of CDNI Footprint Objects. Each such object has a footprint-type and
+                a footprint-value, as described in section 4.2.2.2 of <xref target="RFC8006" />.
+                This document defines additional footprint types, beyond those mentioned in <xref target="RFC8006" />,
+                which needed for Open Caching request routing. For that purpose it extends CDNI metadata
+                <xref target="RFC8006" />.
+                For consistency, this document follows the CDNI notation of uCDN
+                (the commercial CDN) and dCDN (the ISP caching layer).
+            </t>
+            <section anchor="cdni-metadata-ipv4v6cidr-footprint-type" title="CDNI Metadata IPv4v6CIDR Footprint Type">
+                <t>
+                    As described in section 5 of <xref target="RFC8008" />, 
+                    the FCI Capability Advertisement Object includes an array of CDNI Footprint Objects. 
+                    Appendix B of <xref target="RFC8008" /> specifies that the
+                    semantics of Footprint Objects array is of a multiple, additive, footprint constraints.
+                    Meaning, the advertisement of different footprint types narrows
+                    the dCDN's candidacy cumulatively.
+                </t>
+                <t>
+                    Sections 4.3.5 and 4.3.6 of <xref target="RFC8006" /> specify the "IPv4CIDR" and "IPv6CIDR"
+                    footprint types (respectively), for listing IP addresses blocks. Using Footprint Objects of these
+                    types, one can define a FCI Capability Advertisement Object footprint constraints that match IPv4
+                    or IPv6 clients. However, the described "narrowing" semantic of the Footprint Objects array prevents
+                    the usage of these objects together in order to create a footprint constraint that matches IPv4
+                    clients together with IPv6 clients.
+                </t>
+                <t>
+                    Below is an example for an attempt creating an object matching
+                    IPv4 clients of subnet "192.0.2.0/24", as well as IPv6 clients of subnet "2001:db8::/32".
+                    Such definition results with an empty list of clients, as the constraints are additives and
+                    a client address cannot be both IPv4 and IPv6.
+                </t>
+                <figure>
+                    <artwork>
+<![CDATA[
+{
+  "capabilities": [
+    {
+      "capability-type": <CDNI capability object type>,
+      "capability-value": <CDNI capability object>,
+      },
+      "footprints": [
+          {
+              "footprint-type": "ipv4cidr",
+              "footprint-value": ["192.0.2.0/24"]
+          },
+          {
+              "footprint-type": "ipv6cidr",
+              "footprint-value": ["2001:db8::/32"]
+          }
+      ]
+    }
+  ]
+}
+]]>
+                    </artwork>
+                </figure>
+                <t>
+                    To overcome the described limitation and allow a list of footprint constraints that
+                    matches both IPv4 and IPv6 client addresses, we introduce below the "IPv4v6CIDR" simple data type as well as
+                    a derived footprint type.
+                </t>
+                <section anchor="cdni-metadata-ipv4v6cidr-data-type" title="CDNI Metadata IPv4v6CIDR Data Type">
+                    <t>
+                        The "IPv4v6CIDR" data type specified in <xref target="cdni-metadata-ipv4v6cidr-data-type-description" />,
+                        can be either IPv4 or IPv6 address blocks. The data type is added to the list of data types
+                        described in section 4.3 of <xref target="RFC8006" />
+                        that are used as properties of CDNI Metadata objects.
+                    </t>
+                    <section anchor="cdni-metadata-ipv4v6cidr-data-type-description" title="CDNI Metadata IPv4v6CIDR Data Type Description">
+                        <t>
+                            Either a IPv4CIDR property or IPv6CIDR property, as described in sections 4.3.5 and 4.3.6 of
+                            <xref target="RFC8006" /> respectively.
+                        </t>
+                        <t>
+                            <list style="empty">
+                                <t>
+                                    Type: String
+                                </t>
+                                <t>
+                                    Example IPv4v6CIDRs:
+                                </t>
+                                <t>
+                                    "192.0.2.0/24"
+                                </t>
+                                <t>
+                                    "2001:db8::/32"
+                                </t>
+                            </list>
+                        </t>
+                    </section>
+                </section>
+                <section anchor="cdni-metadata-ipv4v6cidr-footprint-type-description" title="CDNI Metadata IPv4v6CIDR Footprint Type Description">
+                    <t>
+                        The "IPv4v6CIDR" simple data type specified in <xref target="cdni-metadata-ipv4v6cidr-data-type" />, 
+                        is added to the data types listed as footprint types in section 4.2.2.2 of <xref target="RFC8006" />.
+                    </t>
+                    <t>
+                        Below is an adjustment for the example in <xref target="cdni-metadata-ipv4v6cidr-data-type" />,
+                        now embedding a footprint object of type "IPv4v6CIDR".
+                    </t>
+                    <figure>
+                        <artwork>
+<![CDATA[
+{
+  "capabilities": [
+    {
+      "capability-type": <CDNI capability object type>,
+      "capability-value": <CDNI capability object>,
+      },
+      "footprints": [
+          {
+              "footprint-type": "ipv4v6cidr",
+              "footprint-value": ["192.0.2.0/24", "2001:db8::/32"]
+          }
+      ]
+    }
+  ]
+}
+]]>
+                        </artwork>
+                    </figure>
+                </section>
+            </section>
+            <section anchor="cdni-metadata-iso3166code-footprint-type" title="CDNI Metadata ISO3166Code Footprint Type">
+                <t>
+                    Sections 4.3.8 of <xref target="RFC8006" />
+                    specify the "Country Code" footprint types (respectively),
+                    for listing <xref target="ISO3166-1"/> alpha-2 codes. Using Footprint Objects of these types, one can define a
+                    FCI Capability Advertisement Object footprint constraints that match a specific country.
+                    Here we define the iso3166code simple data type, as well as footprint type
+                    allowing the dCDN to define constraints matching geographic areas
+                    with better granularity, specifically using the <xref target="ISO3166-2"/> Country Subdivision codes.
+                </t>
+                <section anchor="cdni-metadata-iso3166code-data-type" title="CDNI Metadata ISO3166Code Data Type">
+                    <t>
+                        The "ISO3166Code" data type specified in
+                        <xref target="cdni-metadata-iso3166code-data-type-description" />,
+                        can either describe a country based on an <xref target="ISO3166-1"/> alpha-2 code, 
+                        or describe a more specific subdivision using <xref target="ISO3166-2"/> code. 
+                        The data type is added to the list of data types  described in section 4.3 of
+                        <xref target="RFC8006" /> that are used as properties of CDNI Metadata objects.
+                    </t>
+                    <section anchor="cdni-metadata-iso3166code-data-type-description" title="CDNI Metadata ISO3166Code Data Type Description">
+                        <t>
+                            Either an <xref target="ISO3166-1"/> alpha-2 code in lowercase, or such a code followed by a dash as well as a
+                            more specific subdivision <xref target="ISO3166-2"/> alphanumeric code in lowercase.
+                        </t>
+                        <t>
+                            <list style="empty">
+                                <t>
+                                    Type: String
+                                </t>
+                                <t>
+                                    Example ISO3166Codes:
+                                </t>
+                                <t>
+                                    "ca"
+                                </t>
+                                <t>
+                                    "us-ny"
+                                </t>
+                            </list>
+                        </t>
+                    </section>
+                </section>
+                <section anchor="cdni-metadata-iso3166code-footprint-type-description" title="CDNI Metadata ISO3166Code Footprint Type Description">
+                    <t>
+                        The "ISO3166Code" simple data type specified in
+                        <xref target="cdni-metadata-iso3166code-data-type" />
+                        , is added
+                        to the data types listed as footprint types in section 4.2.2.2 of
+                        <xref target="RFC8006" />
+                        .
+                    </t>
+                    <t>
+                        Below is an adjustment for the example in
+                        <xref target="cdni-metadata-iso3166code-data-type" />
+                        ,
+                        now embedding a footprint object of type "ISO3166Code". The Footrint Object in example creates
+                        a constraints matching clients both in Canada (ISO <xref target="ISO3166-1"/> alpha-2 code "CA") as well as in the state of
+                        New-York (ISO <xref target="ISO3166-2"/> Subdivision code "NY") in the (ISO <xref target="ISO3166-1"/> alpha-2 code "US").
+                    </t>
+                    <figure>
+                        <artwork>
+<![CDATA[
+{
+  "capabilities": [
+    {
+      "capability-type": <CDNI capability object type>,
+      "capability-value": <CDNI capability object>,
+      },
+      "footprints": [
+          {
+              "footprint-type": "iso3166code",
+              "footprint-value": ["ca", "us-ny"]
+          }
+      ]
+    }
+  ]
+}
+]]>
+                        </artwork>
+                    </figure>
+                </section>
+            </section>
+        </section>
+        <section anchor="IANA" title="IANA Considerations">
+            <section anchor="IANA.cdni.metadata.footprint.types" title="CDNI Metadata Footprint Types">
+                <t>
+                    As described in section 7.2 of
+                    <xref target="RFC8006" />
+                    , the "CDNI Metadata Footprint Types" subregistry
+                    was created within the "Content Delivery Network Interconnection (CDNI) Parameters" registry. The created
+                    namespace defines the valid values for Footprint Object Types, and is already populated with the types
+                    described in Section 4.2.2.2 of
+                    <xref target="RFC8006" />
+                    .
+                </t>
+                <t>
+                    This document requests the registration  of an additional footprint type
+                    as defined in
+                    <xref target="cdni-metadata-ipv4v6cidr-footprint-type" />
+                    and
+                    <xref target="cdni-metadata-iso3166code-footprint-type" />
+                    :
+                </t>
+                <texttable>
+                    <ttcol align="left">
+                        Footprint Type
+                    </ttcol>
+                    <ttcol align="left">
+                        Description
+                    </ttcol>
+                    <ttcol align="left">
+                        Specification
+                    </ttcol>
+                    <c>
+                        ipv4v6cidr
+                    </c>
+                    <c>
+                        IPv4/IPv6 address block
+                    </c>
+                    <c>
+                        RFCthis
+                    </c>
+                    <c>
+                        iso3166code
+                    </c>
+                    <c>
+                        ISO 3166-1/2 Country or Subdivision Code
+                    </c>
+                    <c>
+                        RFCthis
+                    </c>
+                </texttable>
+                <t>
+                    [RFC Editor: Please replace RFCthis with the published RFC
+                    number for this document.]
+                </t>
+            </section>
+        </section>
+        <section anchor="Security" title="Security Considerations">
+            <t>
+                This specification is in accordance with the CDNI Request Routing:
+                Footprint and Capabilities Semantics. As such, it is subject to the security and privacy considerations as
+                defined in Section 8 of
+                <xref target="RFC8006" />
+                and in Section 7 of
+                <xref target="RFC8008" />
+                respectively.
+            </t>
+            <section anchor="Privacy" title="Confidentiality and Privacy">
+                <t>
+                    The Redirect Target FCI object potentially reveals information about the internal structure of the dCDN network.
+                    A third party could intercept the FCI transactions and use the information to attack the dCDN.
+                    Implementations of the FCI MUST therefore use strong authentication
+                    and encryption and strictly follow the directions for securing the interface as defined for the Metadata Interface
+                    in Section 8.3 of
+                    <xref target="RFC8006" />
+                    .
+                </t>
+            </section>
+        </section>
+        <section anchor="Acknowledgements" title="Acknowledgements">
+            <t>
+                TBD.
+            </t>
+        </section>
+    </middle>
+    <back>
+        <references title="Normative References">
+            <?rfc include="reference.RFC.2119"?>
+            <?rfc include="reference.RFC.6707"?>
+            <?rfc include="reference.RFC.7336"?>
+            <?rfc include="reference.RFC.8006"?>
+            <?rfc include="reference.RFC.8007"?>
+            <?rfc include="reference.RFC.8008"?>
+            <?rfc include="reference.RFC.8174"?>
+            <?rfc include="reference.RFC.8804"?>
+            <reference anchor="ISO3166-1" target="https://www.iso.org/standard/72482.html">
+                <front>
+                <title>
+                    Codes for the representation of names of countries and their subdivisions -- Part 1: Country code
+                </title>
+                <author>
+                    <organization>ISO</organization>
+                </author>
+                <date month="08" year="2020"/>
+                </front>
+                <seriesInfo name="ISO" value="3166-1:2020"/>
+                <seriesInfo name="Edition" value="4"/>
+            </reference>
+
+            <reference anchor="ISO3166-2" target="https://www.iso.org/standard/72483.html">
+                <front>
+                <title>
+                    Codes for the representation of names of countries and their subdivisions -- Part 2: Country subdivision code
+                </title>
+                <author>
+                    <organization>ISO</organization>
+                </author>
+                <date month="08" year="2020"/>
+                </front>
+                <seriesInfo name="ISO" value="3166-2:2020"/>
+                <seriesInfo name="Edition" value="4"/>
+            </reference>
+        </references>
+
+        <references title="Informative References">
+            <reference anchor="SVA" target="https://www.streamingvideoalliance.org">
+                <front>
+                    <title>
+                        Streaming Video Alliance Home Page
+                    </title>
+                    <author />
+                    <date />
+                </front>
+            </reference>
+            <reference anchor="OCWG" target="https://www.streamingvideoalliance.org/technical-groups/open-caching/">
+                <front>
+                    <title>
+                        Open Caching Home Page
+                    </title>
+                    <author />
+                    <date />
+                </front>
+            </reference>
+            <reference anchor="OC-RR" target="https://www.streamingvideoalliance.org/books/open-cache-request-routing-functional-specification/">
+                <front>
+                    <title>
+                        Open Caching - Request Routing Functional Specification
+                    </title>
+                    <author initials="O." surname="Finkelman" fullname="Ori Finkelman" role="editor">
+                        <organization>
+                            Qwilt
+                        </organization>
+                    </author>
+                    <author initials="J." surname="Hofmann" fullname="Jason Hofmann">
+                        <organization>
+                            Limelight Networks
+                        </organization>
+                    </author>
+                    <author initials="E." surname="Klein" fullname="Eric Klein">
+                        <organization>
+                            Disney Streaming Services
+                        </organization>
+                    </author>
+                    <author initials="S." surname="Mishra" fullname="Sanjay Mishra">
+                        <organization>
+                            Verizon
+                        </organization>
+                    </author>
+                    <author initials="K." surname="Ma" fullname="Kevin J. Ma">
+                        <organization>
+                            Disney Streaming Services
+                        </organization>
+                    </author>
+                    <author initials="D." surname="Sahar" fullname="Dan Sahar">
+                        <organization>
+                            Qwilt
+                        </organization>
+                    </author>
+                    <author initials="B." surname="Zurat" fullname="Bill Zurat">
+                        <organization>
+                            Disney Streaming Services
+                        </organization>
+                    </author>
+                    <date day="4" month="October" year="2019" />
+                </front>
+                <seriesInfo name="Version" value="1.1" />
+            </reference>
+        </references>
+    </back>
+</rfc>
