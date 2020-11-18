@@ -540,8 +540,8 @@ uCDN-A                         dCDN-B                         dCDN-C
 							<t>
 								The dCDN-B responds with the Trigger Status Resource, describing the progress or results of
 								the CI/T Trigger Command. In the flow described above, the returned Status is "failed",
-								and the "eunsupported" error received in the trigger status resource from dCDN-C is propagated by
-								adding it to the errors array in dCDN-B own status resource to be sent back to the originating uCDN-A.
+								and the "eunsupported" error received in the trigger status resource from dCDN-C is propagated along with dCDN-C PID
+                by	adding it to the errors array in dCDN-B's own status resource to be sent back to the originating uCDN-A.
 							</t>
 						</list>
 					</t>
