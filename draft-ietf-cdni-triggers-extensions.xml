@@ -123,7 +123,7 @@
       <t>The CDNI Control Interface / Triggers is described in <xref target="RFC8007"/>.</t>
 
        <t>For consistency with other CDNI documents, this document follows the CDNI convention 
-        of uCDN (upstream CDN) and dCDN downstream CDN) to represent the commercial CDN and 
+        of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the commercial CDN and 
         ISP caching layer, respectively.</t>    
            
       <section anchor="terminology" title="Terminology">
@@ -404,33 +404,34 @@ RESPONSE:
         </t>
         <section anchor="extension-errors" title="Extension Errors">
           <t>
-             Report an error that happened due to an extension object.
-             As extension objects are expected to be added to the interface as new requirements
+             Report an error that occures due to an extension object.
+             As extension objects are expected to be added to the interface whenever new requirement
              comes along, it is expected that in some cases a dCDN may receive a trigger that it
-             cannot process or does not understand. It is therefore essential for the trigger caller to be
-             able to understand when such errors occur so they can take actions to fix them.
+             cannot process or it does not understand. It is therefore essential for the trigger caller to be
+             able to know when such errors occur so they can take actions to fix them.
              This document adds a mechanism to report extension errors.
           </t>
         </section>
         <section anchor="error-propagation" title="Error propagation">
           <t>
-             Enable the uCDN to traceback an error to the dCDN in which it occurred.
+             This subsection explains the mechanism for enabling the uCDN to traceback an error to the dCDN in which it occurred.
              CDNI triggers may be propagated over a chain of downstream CDNs. For example, an 
-             upstream (uCDN-A) CDN A that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
+             upstream CDN A (uCDN-A) that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
              to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed 
-             from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it might be essential for 
+             from dCDN-B to dCDN-C and errors can occur anywhere along the path. Therefore, it might be essential for 
              uCDN-A that sets the trigger, to be able to trace back an error to the downstream CDN where it occurred. 
-             This document adds a mechanism to propagate the ID of the faulty dCDN back to the uCDN by adding the CDN ID 
-             to the error description. When a downstream dCDN-B propagates a trigger to another downstream 
-             dCDN-C, it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
+             This document adds a mechanism to propagate the CDN Provider ID (PID) of the dCDN where the fault occured, back to the 
+             uCDN by adding the PID
+             to the error description. When dCDN-B propagates a trigger to the further downstream dCDN-C, 
+             it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
              them to the errors array in its own status resource to be sent back to the originating uCDN-A.
-             While propagating back the errors, and depending on the implementation, downstream dCDN-B MAY also 
-             specify the dCDN-C CDN identifier, indicating that the error relates spefically to this CDN.
+             While propagating back the errors, and depending on the implementation, dCDN-B MAY also 
+             specify the dCDN-C PID, indicating to which CDN the error relates spefically.
              The trigger originating upstream CDN will receive an array of errors that occurred 
              in all the CDNs along the execution path, where each error MAY be carrying its own CDN identifier.
           </t>
           <t>
-            <xref target="error-propagation-seq"/> is an example showing the message flow used by
+            <xref target="error-propagation-seq"/> below is an example showing the message flow used by
             uCDN-A to trigger activity in the dCDN-B, followed by dCDN-C, as well as the discovery of the
             status of that activity, including the Error Propagation.
           </t>
