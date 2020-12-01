@@ -123,11 +123,11 @@
       <t>The CDNI Control Interface / Triggers is described in <xref target="RFC8007"/>.</t>
 
        <t>For consistency with other CDNI documents, this document follows the CDNI convention 
-        of uCDN (upstream CDN) and dCDN downstream CDN) to represent the commercial CDN and 
+        of uCDN (upstream CDN) and dCDN (downstream CDN) as described in <xref target="RFC6707"/> to represent the commercial CDN and 
         ISP caching layer, respectively.</t>    
            
       <section anchor="terminology" title="Terminology">
-        <t>This document reuses the terminology defined in <xref target="RFC6707"/>,
+        <t>This document reuses the terminology defined in <xref target="RFC6707"/>, <xref target=RFC7736" />
            <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
 
         <t>Additionally, the following terms are used throughout this document
@@ -137,7 +137,7 @@
             <t>HLS - HTTP Live Streaming</t>
             <t>DASH - Dynamic Adaptive Streaming Over HTTP</t>
             <t>MSS - Microsoft Smooth Streaming</t>
-        </list></t>
+	    </list></t>
       </section>
 
       <section anchor="structure" title="Structure of this document">
@@ -324,36 +324,36 @@
           <artwork><![CDATA[
 REQUEST:
 
-    POST /triggers HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
-    Content-Type: application/cdni; ptype=ci-trigger-command.v2
-    {
-      "trigger.v2": { <properties of a trigger.v2 object> },
-      "cdn-path": [ "AS64496:0" ]
-    }
+  POST /triggers HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
+  Content-Type: application/cdni; ptype=ci-trigger-command.v2
+  {
+    "trigger.v2": { <properties of a trigger.v2 object> },
+    "cdn-path": [ "AS64496:0" ]
+  }
 
 RESPONSE:
 
-    HTTP/1.1 201 Created
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Length: 467
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
-    Location: https://triggers.dcdn.example.com/triggers/0
-    Server: example-server/0.1
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
 
-    {
-       "errors.v2": [ { <properties of 1st error.v2 object> },
-                        ...,
-                      { <properties of Nth error.v2 object> }
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "pending",
-       "trigger.v2": { <properties of a trigger.v2 object> }
-    }
+  {
+     "errors.v2": [ { <properties of 1st error.v2 object> },
+                      ...,
+                    { <properties of Nth error.v2 object> }
+     ],
+     "ctime": 1462351690,
+     "etime": 1462351698,
+     "mtime": 1462351690,
+     "status": "pending",
+     "trigger.v2": { <properties of a trigger.v2 object> }
+  }
        ]]></artwork>
         </figure>
 
@@ -364,33 +364,33 @@ RESPONSE:
           <artwork><![CDATA[
 REQUEST:
 
-    GET /triggers/0 HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
+  GET /triggers/0 HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
 
 RESPONSE:
 
-    HTTP/1.1 200 OK
-    Content-Length: 467
-    Expires: Wed, 04 May 2016 08:49:10 GMT
-    Server: example-server/0.1
-    ETag: "6990548174277557683"
-    Cache-Control: max-age=60
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  HTTP/1.1 200 OK
+  Content-Length: 467
+  Expires: Wed, 04 May 2016 08:49:10 GMT
+  Server: example-server/0.1
+  ETag: "6990548174277557683"
+  Cache-Control: max-age=60
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
 
-    {
-       "errors.v2": [ { <properties of 1st error.v2 object> },
-                        ...,
-                      { <properties of Nth error.v2 object> }
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "pending",
-       "trigger.v2": { <properties of a trigger.v2 object> }
-    }
+  {
+     "errors.v2": [ { <properties of 1st error.v2 object> },
+                      ...,
+                    { <properties of Nth error.v2 object> }
+     ],
+     "ctime": 1462351690,
+     "etime": 1462351698,
+     "mtime": 1462351690,
+     "status": "pending",
+     "trigger.v2": { <properties of a trigger.v2 object> }
+  }
 
        ]]></artwork>
         </figure>
@@ -404,31 +404,147 @@ RESPONSE:
         </t>
         <section anchor="extension-errors" title="Extension Errors">
           <t>
-             Report an error that happened due to an extension object.
-             As extension objects are expected to be added to the interface as new requirements
+             Report an error that occures due to an extension object.
+             As extension objects are expected to be added to the interface whenever new requirement
              comes along, it is expected that in some cases a dCDN may receive a trigger that it
-             cannot process or does not understand. It is therefore essential for the trigger caller to be
-             able to understand when such errors occur so they can take actions to fix them.
+             cannot process or it does not understand. It is therefore essential for the trigger caller to be
+             able to know when such errors occur so they can take actions to fix them.
              This document adds a mechanism to report extension errors.
           </t>
         </section>
         <section anchor="error-propagation" title="Error propagation">
           <t>
-             Enable the uCDN to traceback an error to the dCDN in which it occurred.
+             This subsection explains the mechanism for enabling the uCDN to traceback an error to the dCDN in which it occurred.
              CDNI triggers may be propagated over a chain of downstream CDNs. For example, an 
-             upstream (uCDN-A) CDN A that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
+             upstream CDN A (uCDN-A) that is delegating to a downstream CDN B (dCDN-B) and dCDN-B is delegating 
              to a downstream CDN C (dCDN-C). Triggers sent from uCDN-A to dCDN-B may be redistributed 
-             from dCDN-B to dCDN-C and errors can happen anywhere along the path. Therefore, it might be essential for 
+             from dCDN-B to dCDN-C and errors can occur anywhere along the path. Therefore, it might be essential for 
              uCDN-A that sets the trigger, to be able to trace back an error to the downstream CDN where it occurred. 
-             This document adds a mechanism to propagate the ID of the faulty dCDN back to the uCDN by adding the CDN ID 
-             to the error description. When a downstream dCDN-B propagates a trigger to another downstream 
-             dCDN-C, it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
+             This document adds a mechanism to propagate the CDN Provider ID (PID) of the dCDN where the fault occured, back to the 
+             uCDN by adding the PID
+             to the error description. When dCDN-B propagates a trigger to the further downstream dCDN-C, 
+             it MUST also propagate back the errors received in the trigger status resource from dCDN-C by adding
              them to the errors array in its own status resource to be sent back to the originating uCDN-A.
-             While propagating back the errors, and depending on the implementation, downstream dCDN-B MAY also 
-             specify the dCDN-C CDN identifier, indicating that the error relates spefically to this CDN.
+             While propagating back the errors, and depending on the implementation, dCDN-B MAY also 
+             specify the dCDN-C PID, indicating to which CDN the error relates spefically.
              The trigger originating upstream CDN will receive an array of errors that occurred 
              in all the CDNs along the execution path, where each error MAY be carrying its own CDN identifier.
-          </t>            
+          </t>
+          <t>
+            <xref target="error-propagation-seq"/> below is an example showing the message flow used by
+            uCDN-A to trigger activity in the dCDN-B, followed by dCDN-C, as well as the discovery of the
+            status of that activity, including the Error Propagation.
+          </t>
+          <figure anchor="error-propagation-seq" title="CDNI Message Flow for Triggers, Including Error Propagation">
+            <artwork><![CDATA[
+uCDN-A                         dCDN-B                         dCDN-C
+ |                              |                              |    
+ | (1) POST                     |                              |    
+ | https://dcdn-b.example.com   |                              |    
+ | /triggers/uCDN-A             |                              |    
+[ ]--------------------------->[ ]--+                          |    
+ |                             [ ]  | (2)                      |    
+ |                             [ ]<-+                          |    
+ | (3) HTTP 201 Response.      [ ]                             |    
+ |<----------------------------[ ]                             |    
+ | Loc:                        [ ]                             |    
+ | https://dcdn-b.example.com  [ ] (4) POST                    |    
+ | /triggers/uCDN-A/123        [ ] https://dcdn-c.example.com  |    
+ |                             [ ] /triggers/uCDN-A            | (5)
+ |                             [ ]--------------------------->[ ]--+
+ |                              |                             [ ]  |
+ |                              |                             [ ]<-+
+ |                              | (6) HTTP 201 Response.      [ ]   
+ |                             [ ]<---------------------------[ ]   
+ |                              |  Loc:                        |    
+ |                              |  https://dcdn-c.example.com  |    
+ |                              |  /triggers/dCDN-B/456        |    
+ |                              |                              |    
+ |                             [ ]--+                          |
+ |                             [ ]  | (7.1)                    |
+ |                             [ ]<-+                         [ ]--+
+ |                              |                       (7.2) [ ]  |
+ |                              |                             [ ]<-+
+ |                              |                              |    
+ .                              .                              .    
+ .                              .                              .    
+ .                              .                              .    
+ |                              | (8) GET                      |    
+ |                              | https://dcdn-c.example.com   |    
+ |                              | /triggers/dCDN-B/456         |    
+ |                             [ ]--------------------------->[ ]   
+ |                              |                             [ ]   
+ |                              | (9) HTTP 200                [ ]   
+ |                              | Trigger Status Resource     [ ]   
+ |                             [ ]<---------------------------[ ]   
+ |                              |                              |    
+ .                              .                              .    
+ .                              .                              .    
+ .                              .                              .    
+ | (10) GET                     |                              |    
+ | https://dcdn-b.example.com   |                              |    
+ | /triggers/uCDN-A/123         |                              |    
+[ ]--------------------------->[ ]                             |    
+ |                             [ ]                             |    
+ | (11) HTTP 200               [ ]                             |    
+ | Trigger Status Resource     [ ]                             |    
+[ ]<---------------------------[ ]                             |    
+         ]]></artwork>
+          </figure>
+          <t>
+          The steps in <xref target="error-propagation-seq"/> are as follows:
+          </t>
+					<t>
+						<list style="numbers">
+							<t>
+								The uCDN-A triggers action in the dCDN-B by POSTing a CI/T Command to a collection of
+								Trigger Status Resources "https://dcdn-b.example.com/triggers/uCDN-A". This URL was given to
+								the uCDN-A when the CI/T interface was established.
+							</t>
+							<t>
+								The dCDN-B authenticates the request, validates the CI/T Command, and, if it accepts the request, creates a new Trigger Status Resource.
+							</t>
+							<t>
+								The dCDN-B responds to the uCDN-A with an HTTP 201 response status
+								and the location of the Trigger Status Resource.
+							</t>
+							<t>
+								The dCDN-B triggers the action in the dCDN-C by POSTing a CI/T Command to
+								a collection of Trigger Status Resources
+								"https://dcdn-c.example.com/triggers/dCDN-B".  This URL was given to
+								the uCDN-A when the CI/T interface was established.
+							</t>
+							<t>
+								The dCDN-C authenticates the request, validates the CI/T Command,
+								and, if it accepts the request, creates a new Trigger Status Resource.
+							</t>
+							<t>
+								The dCDN-C responds to the dCDN-B with an HTTP 201 response status and
+								the location of the Trigger Status Resource.
+							</t>
+							<t>
+								The dCDN-C acts upon the CI/T Command. However, the command fails at dCDN-C as,
+								for example, the Tigger Specification contains a "type" that is not supported by dCDN-C.
+							</t>
+							<t>
+								The dCDN-B can poll, possibly repeatedly, the Trigger Status Resource in dCDN-C.
+							</t>
+							<t>
+								The dCDN-C responds with the Trigger Status Resource, describing the progress or results
+								of the CI/T Trigger Command. In the described flow, the returned Status is "failed",
+								with an Error Description Object holding an "eunsupported" Error Code reflecting the status response.
+							</t>
+							<t>
+								The uCDN-A can poll, possibly repeatedly, the Trigger Status Resource in dCDN-B.
+							</t>
+							<t>
+								The dCDN-B responds with the Trigger Status Resource, describing the progress or results of
+								the CI/T Trigger Command. In the flow described above, the returned Status is "failed",
+								and the "eunsupported" error received in the trigger status resource from dCDN-C is propagated along with dCDN-C PID
+                by	adding it to the errors array in dCDN-B's own status resource to be sent back to the originating uCDN-A.
+							</t>
+						</list>
+					</t>
         </section>
       </section>
 
@@ -476,8 +592,8 @@ RESPONSE:
 
           </list></t>
 
-          <t>Example of an invalidation trigger.v2 with a list of regex objects, a list of playlist
-             objects, and extensions:</t>
+          <t>Example of a JSON serialized invalidation trigger.v2 object with a list of regex objects, 
+          a list of playlist objects, and extensions:</t>
 
           <figure>
             <artwork><![CDATA[
@@ -560,7 +676,7 @@ RESPONSE:
          ]]></artwork>
           </figure>
 
-          <t>This regex matches URLs of domain video.example.com  where the path structure is
+          <t>This regex matches URLs of domain video.example.com where the path structure is
              /(single lower case letter)/(name-of-title)/(single digit between 1 to 7)/(index.m3u8 or a 3 digit number with ts extension).
              For example:</t>
           <figure>
@@ -598,7 +714,7 @@ https://video.example.com/k/movie1/4/013.ts
                 <t>Mandatory: Yes.</t>
              </list></t>
           </list></t>
-          <t>Example of a HLS playlist:</t>
+          <t>Example of a JSON serialized HLS playlist object:</t>
 
            <figure>
             <artwork><![CDATA[
@@ -859,7 +975,7 @@ https://video.example.com/k/movie1/4/013.ts
               </list></t>
 
             </list></t>
-            <t>Example of a GenericTriggerExtension containing a specific trigger extension object:</t>
+            <t>Example of a JSON serialized GenericTriggerExtension object containing a specific trigger extension object:</t>
 
         <figure>
           <artwork><![CDATA[
@@ -939,7 +1055,7 @@ https://video.example.com/k/movie1/4/013.ts
             </list></t>
           </list></t>
 
-          <t>Example of an Error Description object reporting a malformed Playlist:
+          <t>Example of a JSON serialized Error Description object reporting a malformed Playlist:
           </t>
 
           <figure>
@@ -959,7 +1075,7 @@ https://video.example.com/k/movie1/4/013.ts
          ]]></artwork>
           </figure>
 
-          <t>Example of an Error Description object reporting an unsupported extension object:
+          <t>Example of a JSON serialized Error Description object reporting an unsupported extension object:
           </t>
 
           <figure>
@@ -968,15 +1084,15 @@ https://video.example.com/k/movie1/4/013.ts
   "errors.v2": [
    {
      "extensions": [
-        {
-          "generic-trigger-extension-type":
-             <Type of this erroneous trigger extension object>,
-          "generic-trigger-extension-value":
-              {
-                <properties of this erroneous trigger extension object>
-              },
-        }
-      ],
+       {
+        "generic-trigger-extension-type":
+          <Type of this erroneous trigger extension object>,
+        "generic-trigger-extension-value":
+          {
+           <properties of this erroneous trigger extension object>
+          },
+       }
+     ],
      "description": "unrecognized extension <type>",
      "error": "eextension",
      "cdn": "AS64500:0"
@@ -1016,14 +1132,41 @@ https://video.example.com/k/movie1/4/013.ts
             <artwork><![CDATA[
 REQUEST:
 
-    POST /triggers HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
-    Content-Type: application/cdni; ptype=ci-trigger-command.v2
-    {
-      "trigger.v2": {
-        "type": "invalidate",
+  POST /triggers HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
+  Content-Type: application/cdni; ptype=ci-trigger-command.v2
+  {
+    "trigger.v2": {
+      "type": "invalidate",
+      "content.regexs": [
+        {
+          "regex": "^(https:\\/\\/video\\.example\\.com)\\/
+          ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
+          "case-sensitive": true,
+          "match-query-string": false
+        },
+        { <RegexMatch #2> },
+        ...
+        { <RegexMatch #N> },
+      ],
+    },
+    "cdn-path": [ "AS64496:0" ]
+  }
+
+RESPONSE:
+
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
+
+  {
+    "errors.v2": [
+      {
         "content.regexs": [
           {
             "regex": "^(https:\\/\\/video\\.example\\.com)\\/
@@ -1031,45 +1174,18 @@ REQUEST:
             "case-sensitive": true,
             "match-query-string": false
           },
-          { <RegexMatch #2> },
-          ...
-          { <RegexMatch #N> },
         ],
+        "description": "The dCDN rejected a regex due to complexity",
+        "error": "ereject",
+        "cdn": "AS64500:0"
       },
-      "cdn-path": [ "AS64496:0" ]
-    }
-
-RESPONSE:
-
-    HTTP/1.1 201 Created
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Length: 467
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
-    Location: https://triggers.dcdn.example.com/triggers/0
-    Server: example-server/0.1
-
-    {
-       "errors.v2": [
-         {
-           "content.regexs": [
-              {
-                "regex": "^(https:\\/\\/video\\.example\\.com)\\/
-                ([a-z])\\/movie1\\/([1-7])\\/*(index.m3u8|\\d{3}.ts)$",
-                "case-sensitive": true,
-                "match-query-string": false
-              },
-            ],
-           "description": "The dCDN rejected a regex due to complexity",
-           "error": "ereject",
-           "cdn": "AS64500:0"
-         },
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "failed",
-       "trigger.v2": { <content of trigger object from the command> }
-    }
+    ],
+    "ctime": 1462351690,
+    "etime": 1462351698,
+    "mtime": 1462351690,
+    "status": "failed",
+    "trigger.v2": { <content of trigger object from the command> }
+  }
          ]]></artwork>
           </figure>
         </section>
@@ -1084,56 +1200,56 @@ RESPONSE:
             <artwork><![CDATA[
 REQUEST:
 
-    POST /triggers HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
-    Content-Type: application/cdni; ptype=ci-trigger-command.v2
-    {
-      "trigger.v2": {
-        "type": "preposition",
-        "content.playlists": [
-         {
-          "playlist": "https://www.example.com/hls/title/index.m3u8",
-          "media-protocol": "hls"
-         },
-         { <Playlist #2> },
-         ...
-         { <Playlist #N> },
-        ],
-      },
-      "cdn-path": [ "AS64496:0" ]
-    }
+  POST /triggers HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
+  Content-Type: application/cdni; ptype=ci-trigger-command.v2
+  {
+    "trigger.v2": {
+      "type": "preposition",
+      "content.playlists": [
+       {
+        "playlist": "https://www.example.com/hls/title/index.m3u8",
+        "media-protocol": "hls"
+       },
+       { <Playlist #2> },
+       ...
+       { <Playlist #N> },
+      ],
+    },
+    "cdn-path": [ "AS64496:0" ]
+  }
 
 RESPONSE:
 
-    HTTP/1.1 201 Created
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Length: 467
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
-    Location: https://triggers.dcdn.example.com/triggers/0
-    Server: example-server/0.1
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
 
-    {
-       "errors.v2": [ 
-         {
-           "content.playlists": [
-              { 
-                "playlist": "https://www.example.com/hls/title/index.m3u8",    
-                "media-protocol": "hls"
-              },                
-            ],
-           "description": "The dCDN was not able to parse the playlist",
-           "error": "econtent",
-           "cdn": "AS64500:0"
-         },
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "failed",       
-       "trigger.v2": { <content of trigger object from the command> }
-    }
+  {
+    "errors.v2": [ 
+      {
+       "content.playlists": [
+         { 
+          "playlist": "https://www.example.com/hls/title/index.m3u8",
+          "media-protocol": "hls"
+         },                
+        ],
+       "description": "The dCDN was not able to parse the playlist",
+       "error": "econtent",
+       "cdn": "AS64500:0"
+      },
+    ],
+    "ctime": 1462351690,
+    "etime": 1462351698,
+    "mtime": 1462351690,
+    "status": "failed",       
+    "trigger.v2": { <content of trigger object from the command> }
+  }
          ]]></artwork>
           </figure>
         </section>
@@ -1151,21 +1267,59 @@ RESPONSE:
             <artwork><![CDATA[
 REQUEST:
 
-    POST /triggers HTTP/1.1
-    User-Agent: example-user-agent/0.1
-    Host: triggers.dcdn.example.com
-    Accept: */*
-    Content-Type: application/cdni; ptype=ci-trigger-command.v2
-    {
-      "trigger.v2": {
-        "type": "preposition",
-        "content.playlists": [
-         {
-           "playlist": "https://www.example.com/hls/title/index.m3u8",
-           "media-protocol": "hls"
-         },
-        ],
-        "extensions": [
+  POST /triggers HTTP/1.1
+  User-Agent: example-user-agent/0.1
+  Host: triggers.dcdn.example.com
+  Accept: */*
+  Content-Type: application/cdni; ptype=ci-trigger-command.v2
+  {
+    "trigger.v2": {
+      "type": "preposition",
+      "content.playlists": [
+       {
+         "playlist": "https://www.example.com/hls/title/index.m3u8",
+         "media-protocol": "hls"
+       },
+      ],
+      "extensions": [
+          {
+            "generic-trigger-extension-type":
+               <Type of trigger extension object #1>,
+            "generic-trigger-extension-value":
+                {
+                  <properties of trigger extension object #1>
+                },
+            "mandatory-to-enforce": true,
+            "safe-to-redistribute": true,
+          },
+          {
+            "generic-trigger-extension-type":
+               <Type of trigger extension object #2>,
+            "generic-trigger-extension-value":
+                {
+                  <properties of trigger extension object #2>
+                },
+            "mandatory-to-enforce": true,
+            "safe-to-redistribute": true,
+          },
+      ],
+    },
+    "cdn-path": [ "AS64496:0" ]
+  }
+
+RESPONSE:
+
+  HTTP/1.1 201 Created
+  Date: Wed, 04 May 2016 08:48:10 GMT
+  Content-Length: 467
+  Content-Type: application/cdni; ptype=ci-trigger-status.v2
+  Location: https://triggers.dcdn.example.com/triggers/0
+  Server: example-server/0.1
+
+  {
+     "errors.v2": [
+       {
+         "extensions": [
             {
               "generic-trigger-extension-type":
                  <Type of trigger extension object #1>,
@@ -1176,6 +1330,13 @@ REQUEST:
               "mandatory-to-enforce": true,
               "safe-to-redistribute": true,
             },
+          ],
+         "description": "unrecognized extension <type>",
+         "error": "eextension",
+         "cdn": "AS64500:0"
+       },
+       {
+         "extensions": [
             {
               "generic-trigger-extension-type":
                  <Type of trigger extension object #2>,
@@ -1186,63 +1347,18 @@ REQUEST:
               "mandatory-to-enforce": true,
               "safe-to-redistribute": true,
             },
-        ],
-      },
-      "cdn-path": [ "AS64496:0" ]
-    }
-
-RESPONSE:
-
-    HTTP/1.1 201 Created
-    Date: Wed, 04 May 2016 08:48:10 GMT
-    Content-Length: 467
-    Content-Type: application/cdni; ptype=ci-trigger-status.v2
-    Location: https://triggers.dcdn.example.com/triggers/0
-    Server: example-server/0.1
-
-    {
-       "errors.v2": [
-         {
-           "extensions": [
-              {
-                "generic-trigger-extension-type":
-                   <Type of trigger extension object #1>,
-                "generic-trigger-extension-value":
-                    {
-                      <properties of trigger extension object #1>
-                    },
-                "mandatory-to-enforce": true,
-                "safe-to-redistribute": true,
-              },
-            ],
-           "description": "unrecognized extension <type>",
-           "error": "eextension",
-           "cdn": "AS64500:0"
-         },
-         {
-           "extensions": [
-              {
-                "generic-trigger-extension-type":
-                   <Type of trigger extension object #2>,
-                "generic-trigger-extension-value":
-                    {
-                      <properties of trigger extension object #2>
-                    },
-                "mandatory-to-enforce": true,
-                "safe-to-redistribute": true,
-              },
-            ],
-           "description": "unrecognized extension <type>",
-           "error": "eextension",
-           "cdn": "AS64501:0"
-         },        
-       ],
-       "ctime": 1462351690,
-       "etime": 1462351698,
-       "mtime": 1462351690,
-       "status": "failed",
-       "trigger.v2": { <content of trigger object from the command> }
-    }
+          ],
+         "description": "unrecognized extension <type>",
+         "error": "eextension",
+         "cdn": "AS64501:0"
+       },        
+     ],
+     "ctime": 1462351690,
+     "etime": 1462351698,
+     "mtime": 1462351690,
+     "status": "failed",
+     "trigger.v2": { <content of trigger object from the command> }
+  }
          ]]></artwork>
           </figure>
         </section>
@@ -1307,7 +1423,7 @@ RESPONSE:
         </t>
 
 
-        <t>The following is an example of generic trigger extension object containing a location policy
+        <t>The following is an example of a JSON serialized generic trigger extension object containing a location policy
            object that allows the trigger execution in the US but blocks its execution in Canada:
         </t>
 
@@ -1414,7 +1530,7 @@ RESPONSE:
              other constrains and / or obligations.
           </t>
 
-        <t>Example of a generic trigger extension object containing a time policy object that schedules the
+        <t>Example of a JSON serialized generic trigger extension object containing a time policy object that schedules the
            trigger execution to a window between 09:00 01/01/2000 UTC and 17:00 01/01/2000 UTC, using
            the "unix-time-window" property:
         </t>
@@ -1465,7 +1581,7 @@ RESPONSE:
          </list></t>      
          
          <t>
-           Example UTCWindow object that describes a time window from 02:30
+           Example JSON serialized UTCWindow object that describes a time window from 02:30
            01/01/2000 UTC to 04:30 01/01/2000 UTC:
          </t>
 
@@ -1479,7 +1595,7 @@ RESPONSE:
           </figure>
 
          <t>
-           Example UTCWindow object that describes a time window in New York time zone offset
+           Example JSON serialized UTCWindow object that describes a time window in New York time zone offset
            UTC-05:00 from 02:30 01/01/2000 to 04:30 01/01/2000:
          </t>
 
@@ -1527,7 +1643,7 @@ RESPONSE:
          </list></t>      
          
          <t>
-           Example LocalTimeWindow object that describes a local time window from 02:30
+           Example JSON serialized LocalTimeWindow object that describes a local time window from 02:30
            01/01/2000 to 04:30 01/01/2000.
          </t>
 
@@ -1652,7 +1768,7 @@ Month Number  Month/Year           Maximum value of date-mday
         </list></t>
         <section anchor="versions-capability-object" title="CI/T Versions Capability Object Serialization">
           <t>
-             The following shows an example of CI/T Versions Capability object serialization for a dCDN that supports
+             The following shows an example of a JSON serialized CI/T Versions Capability object serialization for a dCDN that supports
              versions 2 and 2.1 of the CI/T interface.
           </t>
 
@@ -1698,7 +1814,7 @@ Month Number  Month/Year           Maximum value of date-mday
         </list></t>
         <section anchor="playlist-protocol-capability-object" title="CI/T Playlist Protocol Capability Object Serialization">
           <t>
-             The following shows an example of CI/T Playlist Protocol Capability object serialization
+             The following shows an example of a JSON serialized CI/T Playlist Protocol Capability object serialization
              for a dCDN that supports "hls" and "dash".
           </t>
 
@@ -1747,7 +1863,7 @@ Month Number  Month/Year           Maximum value of date-mday
         </list></t>
         <section anchor="trigger-extension-capability-object" title="CI/T Trigger Extension Capability Object Serialization">
           <t>
-             The following shows an example of CI/T Trigger Extension Capability object serialization for
+             The following shows an example of a JSON serialized CI/T Trigger Extension Capability object serialization for
              a dCDN that supports the "CIT.LocationPolicy" and the "CIT.TimePolicy" objects.
           </t>
 
@@ -1961,6 +2077,10 @@ Month Number  Month/Year           Maximum value of date-mday
 
       <?rfc include="reference.RFC.8259" ?>
 
+      <?rfc include="reference.RFC.6707" ?> 
+	    
+      <?rfc include="reference.RFC.7736" ?>
+
       <reference anchor="ABNF" target="https://www.rfc-editor.org/info/rfc5234">
         <front>
           <title>Augmented BNF for Syntax Specifications: ABNF</title>
@@ -1983,11 +2103,8 @@ Month Number  Month/Year           Maximum value of date-mday
     </references>
 
     <references title="Informative References">
-      <?rfc include="reference.RFC.6707" ?>
-
-      <?rfc include="reference.RFC.7736" ?>
-
-      <?rfc include="reference.RFC.8216" ?>
+      
+     <?rfc include="reference.RFC.8216" ?>
 
       <reference anchor="PCRE841" target="http://www.pcre.org/">
         <front>
