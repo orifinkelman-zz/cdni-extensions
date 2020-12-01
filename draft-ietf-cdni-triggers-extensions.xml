@@ -123,11 +123,11 @@
       <t>The CDNI Control Interface / Triggers is described in <xref target="RFC8007"/>.</t>
 
        <t>For consistency with other CDNI documents, this document follows the CDNI convention 
-        of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the commercial CDN and 
+        of uCDN (upstream CDN) and dCDN (downstream CDN) as described in <xref target="RFC6707"/> to represent the commercial CDN and 
         ISP caching layer, respectively.</t>    
            
       <section anchor="terminology" title="Terminology">
-        <t>This document reuses the terminology defined in <xref target="RFC6707"/>,
+        <t>This document reuses the terminology defined in <xref target="RFC6707"/>, <xref target=RFC7736" />
            <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
 
         <t>Additionally, the following terms are used throughout this document
@@ -137,7 +137,7 @@
             <t>HLS - HTTP Live Streaming</t>
             <t>DASH - Dynamic Adaptive Streaming Over HTTP</t>
             <t>MSS - Microsoft Smooth Streaming</t>
-        </list></t>
+	    </list></t>
       </section>
 
       <section anchor="structure" title="Structure of this document">
@@ -2077,6 +2077,10 @@ Month Number  Month/Year           Maximum value of date-mday
 
       <?rfc include="reference.RFC.8259" ?>
 
+      <?rfc include="reference.RFC.6707" ?> 
+	    
+      <?rfc include="reference.RFC.7736" ?>
+
       <reference anchor="ABNF" target="https://www.rfc-editor.org/info/rfc5234">
         <front>
           <title>Augmented BNF for Syntax Specifications: ABNF</title>
@@ -2099,11 +2103,8 @@ Month Number  Month/Year           Maximum value of date-mday
     </references>
 
     <references title="Informative References">
-      <?rfc include="reference.RFC.6707" ?>
-
-      <?rfc include="reference.RFC.7736" ?>
-
-      <?rfc include="reference.RFC.8216" ?>
+      
+     <?rfc include="reference.RFC.8216" ?>
 
       <reference anchor="PCRE841" target="http://www.pcre.org/">
         <front>
