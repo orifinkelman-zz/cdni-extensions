@@ -67,8 +67,8 @@
             <t>
                 Open Caching architecture is a use case of Content Delivery Networks Interconnection (CDNI) in which the
                 commercial Content Delivery Network (CDN) is the upstream CDN (uCDN) and the ISP caching layer serves as the
-                downstream CDN (dCDN). The extensions specified in this document to
-                the Footprint and Capabilities Interface (FCI) are derived from requirements raised by Open Caching but
+                downstream CDN (dCDN). The document specifies extensions to
+                the Footprint and Capabilities Interface (FCI) that are derived from requirements raised by Open Caching but
                 are also applicable to CDNI use cases in general.
             </t>
         </abstract>
@@ -86,7 +86,10 @@
                 The TBD REPLACE REF TO THE COVERAGE/LOAD API(?)<xref target="OC-RR"> Open Caching Request Routing Specification </xref>
                 defines the Request Routing process and the interfaces that are required for its provisioning.
                 This document defines and registers CDNI Footprint and Capabilities objects<xref target="RFC8008" />
-                that are required for Open Caching Request Routing. For consistency with other CDNI documents this document follows the
+                that are required for Open Caching Request Routing. 
+            </t>
+            <t>
+                For consistency with other CDNI documents this document follows the
                 CDNI convention of uCDN (upstream CDN) and dCDN (downstream CDN) to represent the commercial CDN and ISP caching
                 layer respectively.
             </t>
