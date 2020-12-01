@@ -127,7 +127,7 @@
         ISP caching layer, respectively.</t>    
            
       <section anchor="terminology" title="Terminology">
-        <t>This document reuses the terminology defined in <xref target="RFC6707"/>, <xref target=RFC7736" />
+        <t>This document reuses the terminology defined in <xref target="RFC6707"/>, <xref target="RFC7736"/>
            <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
 
         <t>Additionally, the following terms are used throughout this document
