@@ -154,12 +154,11 @@
         <section anchor="cdni-metadata-additional-footprint-types" title="CDNI Metadata Additonal Footprint Types">
             <t>
                 Section 5 of <xref target="RFC8008" /> describes the FCI Capability Advertisement Object, which
-                is includes of an array of CDNI Footprint Objects. Each such object has a footprint-type and
+                 includes an array of CDNI Footprint Objects. Each such object has a footprint-type and
                 a footprint-value, as described in section 4.2.2.2 of <xref target="RFC8006" />.
-                This document defines additional footprint types, beyond those mentioned in <xref target="RFC8006" />,
-                which needed for Open Caching request routing. For that purpose it extends CDNI metadata
+                This document defines additional footprint types, beyond those mentionthis document extends CDNI metadata
                 <xref target="RFC8006" />.
-                For consistency, this document follows the CDNI notation of uCDN
+                For consistency, this document follows the CDNI notation of uCDN for
                 (the commercial CDN) and dCDN (the ISP caching layer).
             </t>
             <section anchor="cdni-metadata-ipv4v6cidr-footprint-type" title="CDNI Metadata IPv4v6CIDR Footprint Type">
@@ -332,7 +331,7 @@
                         Below is an adjustment for the example in
                         <xref target="cdni-metadata-iso3166code-data-type" />
                         ,
-                        now embedding a footprint object of type "ISO3166Code". The Footrint Object in example creates
+                        now embedding a footprint object of type "ISO3166Code". The Footrint Object in this example creates
                         a constraints matching clients both in Canada (ISO <xref target="ISO3166-1"/> alpha-2 code "CA") as well as in the state of
                         New-York (ISO <xref target="ISO3166-2"/> Subdivision code "NY") in the (ISO <xref target="ISO3166-1"/> alpha-2 code "US").
                     </t>
