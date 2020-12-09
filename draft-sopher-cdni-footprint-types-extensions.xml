@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-footprint-types-extensions-01" ipr="trust200902">
+<rfc category="std" docName="draft-sopher-cdni-footprint-types-extensions-01" ipr="trust200902">
     <front>
         <title abbrev="CDNI Footprint Types Extensions">
             CDNI Request Routing Extensions
