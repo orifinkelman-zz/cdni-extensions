@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-07" updates='8007' ipr="trust200902">
+<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-08" updates='8007' ipr="trust200902">
   <front>
     <title abbrev="CDNI Control Interface / Triggers Extensions">CDNI Control Triggers Interface Extensions</title>
 
@@ -2046,15 +2046,9 @@ Month Number  Month/Year           Maximum value of date-mday
     </section>
 
     <section anchor="Acknowledgments" title="Acknowledgments">
-      <t>TBD</t>
+      <t>The authors thank Kevin J. Ma for his guidance as well as careful and
+         methodical reviews and feedback.</t>
     </section>
-
-    <section anchor="Contributors" title="Contributors">
-      <t>The authors thank all members of the "Streaming Video Alliance" (SVA) and specifically contributions by members of 
-         Open Caching Working Group in support of this document. The authors also thank Kevin Ma for his guidance and careful and 
-         methodical reviews.</t>
-    </section>
-
 
   </middle>
 
