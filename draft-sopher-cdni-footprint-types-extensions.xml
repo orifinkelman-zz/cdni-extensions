@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-sopher-cdni-footprint-types-extensions-00" ipr="trust200902">
+<rfc category="std" docName="draft-sopher-cdni-footprint-types-extensions-00" updates='8006,8008' ipr="trust200902">
     <front>
         <title abbrev="CDNI Footprint Types Extensions">
             CDNI Request Routing Extensions
@@ -67,9 +67,10 @@
             <t>
                 Open Caching architecture is a use case of Content Delivery Networks Interconnection (CDNI) in which the
                 commercial Content Delivery Network (CDN) is the upstream CDN (uCDN) and the ISP caching layer serves as the
-                downstream CDN (dCDN). The document specifies extensions to
-                the Footprint and Capabilities Interface (FCI) that are derived from requirements raised by Open Caching but
-                are also applicable to CDNI use cases in general.
+                downstream CDN (dCDN). This document supplements to the CDNI Metadata Footprint Types defined in RFC 8006.
+                The Footprint Types defined in this document can be used for Footprint objects as part of 
+                the Footprint &amp; Capabilities Advertisement interface (FCI) defined in RFC 8008. The defined Footprint Types 
+                are derived from requirements raised by Open Caching but are also applicable to CDNI use cases in general.
             </t>
         </abstract>
     </front>
