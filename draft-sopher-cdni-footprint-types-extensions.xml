@@ -430,8 +430,6 @@
     <back>
         <references title="Normative References">
             <?rfc include="reference.RFC.2119"?>
-            <?rfc include="reference.RFC.6707"?>
-            <?rfc include="reference.RFC.7336"?>
             <?rfc include="reference.RFC.8006"?>
             <?rfc include="reference.RFC.8007"?>
             <?rfc include="reference.RFC.8008"?>
@@ -467,6 +465,8 @@
         </references>
 
         <references title="Informative References">
+            <?rfc include="reference.RFC.6707"?>
+            <?rfc include="reference.RFC.7336"?>
             <reference anchor="SVA" target="https://www.streamingvideoalliance.org">
                 <front>
                     <title>
