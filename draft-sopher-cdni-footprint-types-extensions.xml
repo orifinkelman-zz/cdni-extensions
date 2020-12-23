@@ -83,7 +83,7 @@
                 of video delivery requests from commerical CDNs to a caching layer at the ISP's network.
                 Open Caching architecture is a specific use case of CDNI where the commercial CDN is the
                 upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN).
-                The TBD REPLACE REF TO THE COVERAGE/LOAD API(?)<xref target="OC-RR"> Open Caching Request Routing Specification </xref>
+                The <xref target="OC-RR"> Open Caching Request Routing Specification </xref>
                 defines the Request Routing process and the interfaces that are required for its provisioning.
                 This document defines and registers CDNI Footprint and Capabilities objects<xref target="RFC8008" />
                 that are required for Open Caching Request Routing. 
