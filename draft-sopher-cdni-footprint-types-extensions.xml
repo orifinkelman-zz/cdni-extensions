@@ -94,7 +94,7 @@
                 layer respectively.
             </t>
             <t>
-                This document also registers CDNI Metadata Footprint Types (section 7.2 of
+                This document registers two CDNI Metadata Footprint Types (section 7.2 of
                 <xref target="RFC8006" />) for the defined objects:
                 <list style="symbols">
                     <t>
@@ -118,18 +118,12 @@
                 </t>
                 <t>
                     Additionally, this document reuses the terminology defined in
-                    <xref target="RFC6707" />
-                    ,
-                    <xref target="RFC7336" />
-                    ,
-                    <xref target="RFC8006" />
-                    ,
-                    <xref target="RFC8007" />
-                    ,
-                    <xref target="RFC8008" />
-                    , and
-                    <xref target="RFC8804" />
-                    .
+                    <xref target="RFC6707" />,
+                    <xref target="RFC7336" />,
+                    <xref target="RFC8006" />,
+                    <xref target="RFC8007" />,
+                    <xref target="RFC8008" />, and
+                    <xref target="RFC8804" />.
                     Specifically, we use the following CDNI acronyms:
                     <list style="symbols">
                         <t>
@@ -165,8 +159,8 @@
                 <t>
                     As described in section 5 of <xref target="RFC8008" />, 
                     the FCI Capability Advertisement Object includes an array of CDNI Footprint Objects. 
-                    Appendix B of <xref target="RFC8008" /> specifies that the
-                    semantics of Footprint Objects array is of a multiple, additive, footprint constraints.
+                    Appendix B of <xref target="RFC8008" /> specifies the
+                    semantics of a Footprint Objects array as a multiple, additive, footprint constraints.
                     Meaning, the advertisement of different footprint types narrows
                     the dCDN's candidacy cumulatively.
                 </t>
