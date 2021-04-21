@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-06" updates='8007' ipr="trust200902">
+<rfc category="std" docName="draft-ietf-cdni-triggers-extensions-08" updates='8007' ipr="trust200902">
   <front>
     <title abbrev="CDNI Control Interface / Triggers Extensions">CDNI Control Triggers Interface Extensions</title>
 
@@ -88,7 +88,8 @@
          Interconnection (CDNI) in which the commercial Content Delivery Network (CDN) is  
          the upstream CDN (uCDN) and the ISP caching layer serves as the downstream
          CDN (dCDN). This document defines extensions to the Content Delivery Network 
-         Interconnection (CDNI) Control Interface/Triggers. These extensions are derived 
+         Interconnection (CDNI) Control Interface/Triggers defined in RFC 8007.
+         These extensions are derived
          from requirements raised by Open Caching architecture but are also applicable 
          to CDNI use cases in general.</t>
     </abstract>
@@ -127,7 +128,7 @@
         ISP caching layer, respectively.</t>    
            
       <section anchor="terminology" title="Terminology">
-        <t>This document reuses the terminology defined in <xref target="RFC6707"/>, <xref target=RFC7736" />
+        <t>This document reuses the terminology defined in <xref target="RFC6707"/>, <xref target="RFC7736"/>
            <xref target="RFC8006"/>, <xref target="RFC8007"/>, and <xref target="RFC8008"/>.</t>
 
         <t>Additionally, the following terms are used throughout this document
@@ -2045,15 +2046,9 @@ Month Number  Month/Year           Maximum value of date-mday
     </section>
 
     <section anchor="Acknowledgments" title="Acknowledgments">
-      <t>TBD</t>
+      <t>The authors thank Kevin J. Ma for his guidance as well as careful and
+         methodical reviews and feedback.</t>
     </section>
-
-    <section anchor="Contributors" title="Contributors">
-      <t>The authors thank all members of the "Streaming Video Alliance" (SVA) and specifically contributions by members of 
-         Open Caching Working Group in support of this document. The authors also thank Kevin Ma for his guidance and careful and 
-         methodical reviews.</t>
-    </section>
-
 
   </middle>
 

@@ -9,7 +9,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<rfc category="std" docName="draft-ietf-cdni-footprint-types-extensions-01" ipr="trust200902">
+<rfc category="std" docName="draft-sopher-cdni-footprint-types-extensions-01" updates='8006,8008' ipr="trust200902">
     <front>
         <title abbrev="CDNI Footprint Types Extensions">
             CDNI Request Routing Extensions
@@ -67,9 +67,10 @@
             <t>
                 Open Caching architecture is a use case of Content Delivery Networks Interconnection (CDNI) in which the
                 commercial Content Delivery Network (CDN) is the upstream CDN (uCDN) and the ISP caching layer serves as the
-                downstream CDN (dCDN). The document specifies extensions to
-                the Footprint and Capabilities Interface (FCI) that are derived from requirements raised by Open Caching but
-                are also applicable to CDNI use cases in general.
+                downstream CDN (dCDN). This document supplements to the CDNI Metadata Footprint Types defined in RFC 8006.
+                The Footprint Types defined in this document can be used for Footprint objects as part of 
+                the Footprint &amp; Capabilities Advertisement interface (FCI) defined in RFC 8008. The defined Footprint Types 
+                are derived from requirements raised by Open Caching but are also applicable to CDNI use cases in general.
             </t>
         </abstract>
     </front>
@@ -83,7 +84,7 @@
                 of video delivery requests from commerical CDNs to a caching layer at the ISP's network.
                 Open Caching architecture is a specific use case of CDNI where the commercial CDN is the
                 upstream CDN (uCDN) and the ISP caching layer is the downstream CDN (dCDN).
-                The TBD REPLACE REF TO THE COVERAGE/LOAD API(?)<xref target="OC-RR"> Open Caching Request Routing Specification </xref>
+                The <xref target="OC-RR"> Open Caching Request Routing Specification </xref>
                 defines the Request Routing process and the interfaces that are required for its provisioning.
                 This document defines and registers CDNI Footprint and Capabilities objects<xref target="RFC8008" />
                 that are required for Open Caching Request Routing. 
@@ -94,7 +95,7 @@
                 layer respectively.
             </t>
             <t>
-                This document also registers CDNI Metadata Footprint Types (section 7.2 of
+                This document registers two CDNI Metadata Footprint Types (section 7.2 of
                 <xref target="RFC8006" />) for the defined objects:
                 <list style="symbols">
                     <t>
@@ -118,18 +119,12 @@
                 </t>
                 <t>
                     Additionally, this document reuses the terminology defined in
-                    <xref target="RFC6707" />
-                    ,
-                    <xref target="RFC7336" />
-                    ,
-                    <xref target="RFC8006" />
-                    ,
-                    <xref target="RFC8007" />
-                    ,
-                    <xref target="RFC8008" />
-                    , and
-                    <xref target="RFC8804" />
-                    .
+                    <xref target="RFC6707" />,
+                    <xref target="RFC7336" />,
+                    <xref target="RFC8006" />,
+                    <xref target="RFC8007" />,
+                    <xref target="RFC8008" />, and
+                    <xref target="RFC8804" />.
                     Specifically, we use the following CDNI acronyms:
                     <list style="symbols">
                         <t>
@@ -156,7 +151,7 @@
                 Section 5 of <xref target="RFC8008" /> describes the FCI Capability Advertisement Object, which
                  includes an array of CDNI Footprint Objects. Each such object has a footprint-type and
                 a footprint-value, as described in section 4.2.2.2 of <xref target="RFC8006" />.
-                This document defines additional footprint types, beyond those mentionthis document extends CDNI metadata
+                This document defines additional footprint types, beyond those mentioned in CDNI metadata
                 <xref target="RFC8006" />.
                 For consistency, this document follows the CDNI notation of uCDN for
                 (the commercial CDN) and dCDN (the ISP caching layer).
@@ -165,23 +160,23 @@
                 <t>
                     As described in section 5 of <xref target="RFC8008" />, 
                     the FCI Capability Advertisement Object includes an array of CDNI Footprint Objects. 
-                    Appendix B of <xref target="RFC8008" /> specifies that the
-                    semantics of Footprint Objects array is of a multiple, additive, footprint constraints.
+                    Appendix B of <xref target="RFC8008" /> specifies the
+                    semantics of a Footprint Objects array as a multiple, additive, footprint constraints.
                     Meaning, the advertisement of different footprint types narrows
                     the dCDN's candidacy cumulatively.
                 </t>
                 <t>
                     Sections 4.3.5 and 4.3.6 of <xref target="RFC8006" /> specify the "IPv4CIDR" and "IPv6CIDR"
-                    footprint types (respectively), for listing IP addresses blocks. Using Footprint Objects of these
-                    types, one can define a FCI Capability Advertisement Object footprint constraints that match IPv4
+                    footprint types, respectively, for listing IP addresses blocks. Using Footprint Objects of these
+                    types, one can define an FCI Capability Advertisement Object footprint constraints that match IPv4
                     or IPv6 clients. However, the described "narrowing" semantic of the Footprint Objects array prevents
                     the usage of these objects together in order to create a footprint constraint that matches IPv4
                     clients together with IPv6 clients.
                 </t>
                 <t>
-                    Below is an example for an attempt creating an object matching
+                    Below is an example for an attempt at creating an object matching
                     IPv4 clients of subnet "192.0.2.0/24", as well as IPv6 clients of subnet "2001:db8::/32".
-                    Such definition results with an empty list of clients, as the constraints are additives and
+                    Such a definition results with an empty list of clients, as the constraints are additives and
                     a client address cannot be both IPv4 and IPv6.
                 </t>
                 <figure>
@@ -223,7 +218,7 @@
                     </t>
                     <section anchor="cdni-metadata-ipv4v6cidr-data-type-description" title="CDNI Metadata IPv4v6CIDR Data Type Description">
                         <t>
-                            Either a IPv4CIDR property or IPv6CIDR property, as described in sections 4.3.5 and 4.3.6 of
+                            Either an IPv4CIDR property or IPv6CIDR property, as described in sections 4.3.5 and 4.3.6 of
                             <xref target="RFC8006" /> respectively.
                         </t>
                         <t>
@@ -278,11 +273,11 @@
             </section>
             <section anchor="cdni-metadata-iso3166code-footprint-type" title="CDNI Metadata ISO3166Code Footprint Type">
                 <t>
-                    Sections 4.3.8 of <xref target="RFC8006" />
-                    specify the "Country Code" footprint types (respectively),
-                    for listing <xref target="ISO3166-1"/> alpha-2 codes. Using Footprint Objects of these types, one can define a
+                    Section 4.3.8 of <xref target="RFC8006" />
+                    specifies the "Country Code" footprint type
+                    for listing <xref target="ISO3166-1"/> alpha-2 codes. Using Footprint Objects of this type, one can define an
                     FCI Capability Advertisement Object footprint constraints that match a specific country.
-                    Here we define the iso3166code simple data type, as well as footprint type
+                    Here we define the iso3166code simple data type, as well as a footprint type
                     allowing the dCDN to define constraints matching geographic areas
                     with better granularity, specifically using the <xref target="ISO3166-2"/> Country Subdivision codes.
                 </t>
@@ -291,7 +286,7 @@
                         The "ISO3166Code" data type specified in
                         <xref target="cdni-metadata-iso3166code-data-type-description" />,
                         can either describe a country based on an <xref target="ISO3166-1"/> alpha-2 code, 
-                        or describe a more specific subdivision using <xref target="ISO3166-2"/> code. 
+                        or describe a more specific subdivision using an <xref target="ISO3166-2"/> code. 
                         The data type is added to the list of data types  described in section 4.3 of
                         <xref target="RFC8006" /> that are used as properties of CDNI Metadata objects.
                     </t>
@@ -331,7 +326,7 @@
                         Below is an adjustment for the example in
                         <xref target="cdni-metadata-iso3166code-data-type" />
                         ,
-                        now embedding a footprint object of type "ISO3166Code". The Footrint Object in this example creates
+                        now embedding a footprint object of type "ISO3166Code". The Footprint Object in this example creates
                         a constraints matching clients both in Canada (ISO <xref target="ISO3166-1"/> alpha-2 code "CA") as well as in the state of
                         New-York (ISO <xref target="ISO3166-2"/> Subdivision code "NY") in the (ISO <xref target="ISO3166-1"/> alpha-2 code "US").
                     </t>
@@ -372,7 +367,7 @@
                     .
                 </t>
                 <t>
-                    This document requests the registration  of an additional footprint type
+                    This document requests the registration of the two additional footprint type
                     as defined in
                     <xref target="cdni-metadata-ipv4v6cidr-footprint-type" />
                     and
@@ -424,29 +419,18 @@
                 <xref target="RFC8008" />
                 respectively.
             </t>
-            <section anchor="Privacy" title="Confidentiality and Privacy">
-                <t>
-                    The Redirect Target FCI object potentially reveals information about the internal structure of the dCDN network.
-                    A third party could intercept the FCI transactions and use the information to attack the dCDN.
-                    Implementations of the FCI MUST therefore use strong authentication
-                    and encryption and strictly follow the directions for securing the interface as defined for the Metadata Interface
-                    in Section 8.3 of
-                    <xref target="RFC8006" />
-                    .
-                </t>
-            </section>
         </section>
         <section anchor="Acknowledgements" title="Acknowledgements">
             <t>
-                TBD.
+                The authors would like to express their gratitude to Ori Finkelman and
+                Kevin J. Ma for their guidance and reviews throughout the development of this
+                document.
             </t>
         </section>
     </middle>
     <back>
         <references title="Normative References">
             <?rfc include="reference.RFC.2119"?>
-            <?rfc include="reference.RFC.6707"?>
-            <?rfc include="reference.RFC.7336"?>
             <?rfc include="reference.RFC.8006"?>
             <?rfc include="reference.RFC.8007"?>
             <?rfc include="reference.RFC.8008"?>
@@ -482,6 +466,8 @@
         </references>
 
         <references title="Informative References">
+            <?rfc include="reference.RFC.6707"?>
+            <?rfc include="reference.RFC.7336"?>
             <reference anchor="SVA" target="https://www.streamingvideoalliance.org">
                 <front>
                     <title>
